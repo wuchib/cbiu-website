@@ -1,0 +1,25 @@
+{
+  "HomePage": {
+    "welcomeBadge": "欢迎",
+    "titlePart1": "欢迎来到",
+    "titlePart2": "我的个人空间",
+    "description": "分享我的思考，构建开源项目，精选最佳音乐。这是一个极简的数字花园。",
+    "readArticles": "阅读文章",
+    "viewProjects": "查看项目"
+  },
+  "Navigation": {
+    "home": "首页",
+    "articles": "文章",
+    "projects": "项目",
+    "music": "音乐",
+    "about": "关于"
+  },
+  "About": {
+    "title": "关于我",
+    "description": "我是一名热情的开发者，致力于构建开源软件并分享我的旅程。"
+  },
+  "Common": {
+    "toggleTheme": "切换主题",
+    "language": "语言"
+  }
+}

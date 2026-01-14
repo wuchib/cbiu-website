@@ -1,0 +1,25 @@
+{
+  "HomePage": {
+    "welcomeBadge": "Welcome",
+    "titlePart1": "Welcome to",
+    "titlePart2": "My Personal Space",
+    "description": "Sharing my thoughts, building open source, and curating the best music. A minimalist digital garden.",
+    "readArticles": "Read Articles",
+    "viewProjects": "View Projects"
+  },
+  "Navigation": {
+    "home": "Home",
+    "articles": "Articles",
+    "projects": "Projects",
+    "music": "Music",
+    "about": "About"
+  },
+  "About": {
+    "title": "About Me",
+    "description": "I'm a passionate developer building open source software and sharing my journey."
+  },
+  "Common": {
+    "toggleTheme": "Toggle theme",
+    "language": "Language"
+  }
+}

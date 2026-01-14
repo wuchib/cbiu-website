@@ -1,0 +1,127 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  username      String
+  email         String    @unique
+  passwordHash  String    @map("password_hash")
+  role          String    @default("admin")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Article {
+  id          String    @id @default(uuid())
+  slug        String    @unique
+  title       String
+  description String?   @db.Text
+  content     String    @db.LongText
+  coverImage  String?   @map("cover_image")
+  published   Boolean   @default(false)
+  viewCount   Int       @default(0) @map("view_count")
+  publishedAt DateTime? @map("published_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  tags        ArticleTag[]
+
+  @@map("articles")
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  slug        String   @unique
+  title       String
+  description String   @db.Text
+  content     String?  @db.LongText
+  thumbnail   String?
+  demoUrl     String?  @map("demo_url")
+  githubUrl   String?  @map("github_url")
+  featured    Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  tags        ProjectTag[]
+
+  @@map("projects")
+}
+
+model ShareResource {
+  id          String   @id @default(uuid())
+  title       String
+  description String   @db.Text
+  link        String
+  iconName    String?  @map("icon_name")
+  categoryKey String   @map("category_key")
+  order       Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  category    ShareCategory @relation(fields: [categoryKey], references: [key])
+
+  @@map("share_resources")
+}
+
+model ShareCategory {
+  key         String   @id
+  name        String
+  description String?
+  icon        String?
+  color       String?
+  sortOrder   Int?     @map("sort_order")
+
+  resources   ShareResource[]
+
+  @@map("share_categories")
+}
+
+model Tag {
+  id    String @id @default(uuid())
+  name  String
+  slug  String @unique
+
+  articles ArticleTag[]
+  projects ProjectTag[]
+
+  @@map("tags")
+}
+
+model ArticleTag {
+  articleId String @map("article_id")
+  tagId     String @map("tag_id")
+
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([articleId, tagId])
+  @@map("article_tags")
+}
+
+model ProjectTag {
+  projectId String @map("project_id")
+  tagId     String @map("tag_id")
+
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([projectId, tagId])
+  @@map("project_tags")
+}
+
+model GlobalSetting {
+  key   String @id
+  value String @db.Text
+  type  String?
+
+  @@map("global_settings")
+}
