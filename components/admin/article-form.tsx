@@ -1,11 +1,28 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
 import { createArticle, updateArticle } from '@/actions/articles';
 import Link from "next/link"
+import { Icon } from "@iconify/react"
 
 export default function ArticleForm({ article }: { article?: any }) {
+  const [tags, setTags] = useState<string[]>(article?.tags || []);
   const initialState = { message: '', errors: {} };
+
+  function handleTagKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const value = e.currentTarget.value.trim();
+      if (value && !tags.includes(value)) {
+        setTags([...tags, value]);
+        e.currentTarget.value = '';
+      }
+    }
+  }
+
+  function removeTag(tagToRemove: string) {
+    setTags(tags.filter(tag => tag !== tagToRemove));
+  }
   const updateWithId = article ? updateArticle.bind(null, article.id) : createArticle;
   // @ts-ignore
   const [state, dispatch, isPending] = useActionState(updateWithId, initialState);
@@ -96,17 +113,32 @@ export default function ArticleForm({ article }: { article?: any }) {
             />
           </div>
 
-          {/* Cover Image */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium" htmlFor="coverImage">Cover Image URL</label>
-            <input
-              id="coverImage"
-              name="coverImage"
-              defaultValue={article?.coverImage}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              placeholder="https://..."
-            />
+        </div>
+
+        {/* Tags */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium" htmlFor="tag-input">Tags</label>
+          <div className="flex flex-wrap gap-2 mb-2">
+            {tags.map((tag) => (
+              <span key={tag} className="inline-flex items-center gap-1 rounded-md bg-secondary px-2 py-1 text-xs font-medium text-secondary-foreground">
+                {tag}
+                <button
+                  type="button"
+                  onClick={() => removeTag(tag)}
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
+                </button>
+              </span>
+            ))}
           </div>
+          <input
+            id="tag-input"
+            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            placeholder="Add tag and press Enter..."
+            onKeyDown={handleTagKeyDown}
+          />
+          <input type="hidden" name="tags" value={JSON.stringify(tags)} />
         </div>
 
         <div className="flex gap-4">

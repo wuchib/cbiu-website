@@ -5,6 +5,11 @@ import { revalidatePath } from "next/cache"
 import { z } from "zod"
 import { redirect } from "next/navigation"
 
+// Helper to slugify tags
+function slugify(text: string) {
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+}
+
 // Schema for validation
 const ArticleSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -13,7 +18,8 @@ const ArticleSchema = z.object({
   description: z.string().optional(),
   content: z.string().min(1, "Content is required"),
   coverImage: z.string().optional(),
-  published: z.coerce.boolean(), // Handle checkbox value
+  published: z.coerce.boolean(),
+  tags: z.string().optional(), // Received as JSON string
 })
 
 export async function createArticle(prevState: any, formData: FormData) {
@@ -24,6 +30,7 @@ export async function createArticle(prevState: any, formData: FormData) {
     content: formData.get('content'),
     coverImage: formData.get('coverImage') || undefined,
     published: formData.get('published') === 'on',
+    tags: formData.get('tags') || undefined,
   })
 
   if (!validatedFields.success) {
@@ -33,7 +40,9 @@ export async function createArticle(prevState: any, formData: FormData) {
     }
   }
 
-  const { title, slug, description, content, coverImage, published } = validatedFields.data
+  const { title, slug, description, content, coverImage, published, tags } = validatedFields.data
+  
+  const tagsList: string[] = tags ? JSON.parse(tags) : [];
 
   try {
     // Check for unique slug
@@ -54,6 +63,16 @@ export async function createArticle(prevState: any, formData: FormData) {
         coverImage,
         published,
         publishedAt: published ? new Date() : null,
+        tags: {
+            create: tagsList.map(tag => ({
+                tag: {
+                    connectOrCreate: {
+                        where: { slug: slugify(tag) },
+                        create: { name: tag, slug: slugify(tag) }
+                    }
+                }
+            }))
+        }
       },
     })
   } catch (error) {
@@ -64,7 +83,7 @@ export async function createArticle(prevState: any, formData: FormData) {
   }
 
   revalidatePath('/admin/articles')
-  revalidatePath('/blog') // Assuming main blog page
+  revalidatePath('/blog')
   redirect('/admin/articles')
 }
 
@@ -76,6 +95,7 @@ export async function updateArticle(id: string, prevState: any, formData: FormDa
     content: formData.get('content'),
     coverImage: formData.get('coverImage') || undefined,
     published: formData.get('published') === 'on',
+    tags: formData.get('tags') || undefined,
   })
 
   if (!validatedFields.success) {
@@ -85,10 +105,10 @@ export async function updateArticle(id: string, prevState: any, formData: FormDa
     }
   }
 
-  const { title, slug, description, content, coverImage, published } = validatedFields.data
+  const { title, slug, description, content, coverImage, published, tags } = validatedFields.data
+  const tagsList: string[] = tags ? JSON.parse(tags) : [];
 
   try {
-     // Check for unique slug excluding current article
      const existing = await prisma.article.findUnique({ where: { slug } })
      if (existing && existing.id !== id) {
          return {
@@ -106,12 +126,22 @@ export async function updateArticle(id: string, prevState: any, formData: FormDa
         content,
         coverImage,
         published,
-        // Update publishedAt only if it wasn't published before and now is? 
-        // Or keep original date. Let's keep simple: update if switching to true.
-        publishedAt: published ? (existing?.published ? existing.publishedAt : new Date()) : null
+        publishedAt: published ? (existing?.published ? existing.publishedAt : new Date()) : null,
+        tags: {
+            deleteMany: {}, // Remove existing relations
+            create: tagsList.map(tag => ({
+                tag: {
+                    connectOrCreate: {
+                        where: { slug: slugify(tag) },
+                        create: { name: tag, slug: slugify(tag) }
+                    }
+                }
+            }))
+        }
       },
     })
   } catch (error) {
+    console.error(error)
     return {
       message: 'Database Error: Failed to Update Article.',
     }
