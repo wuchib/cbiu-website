@@ -2,24 +2,29 @@ import { prisma } from "@/lib/prisma"
 import { Icon } from "@iconify/react"
 import Link from "next/link"
 import { deleteProject } from "@/actions/projects"
+import { getTranslations } from "next-intl/server"
+import { cookies } from "next/headers"
 
 export const dynamic = 'force-dynamic'
 
 export default async function ProjectsAdminPage() {
+  const cookieStore = await cookies();
+  const locale = cookieStore.get('NEXT_LOCALE')?.value || 'en';
+  const t = await getTranslations({ locale, namespace: 'Admin' });
   const projects = await prisma.project.findMany({
     orderBy: { order: 'asc' }, // Order by manual order first
   })
 
   return (
-    <div className="space-y-6">
+    <div className="p-8 max-w-7xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold tracking-tight">Projects</h2>
+        <h2 className="text-2xl font-bold tracking-tight">{t('projects')}</h2>
         <Link
           href="/admin/projects/new"
           className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90"
         >
           <Icon icon="ph:plus" className="mr-2 h-4 w-4" />
-          Add Project
+          {t('actions.new')}
         </Link>
       </div>
 
@@ -29,10 +34,10 @@ export default async function ProjectsAdminPage() {
             <thead className="[&_tr]:border-b">
               <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                 <th className="h-12 px-4 align-middle font-medium text-muted-foreground w-[50px]">Img</th>
-                <th className="h-12 px-4 align-middle font-medium text-muted-foreground w-[40%]">Title</th>
-                <th className="h-12 px-4 align-middle font-medium text-muted-foreground">Links</th>
-                <th className="h-12 px-4 align-middle font-medium text-muted-foreground">Featured</th>
-                <th className="h-12 px-4 align-middle font-medium text-muted-foreground text-right">Actions</th>
+                <th className="h-12 px-4 align-middle font-medium text-muted-foreground w-[40%]">{t('list.title')}</th>
+                <th className="h-12 px-4 align-middle font-medium text-muted-foreground">{t('projectForm.links')}</th>
+                <th className="h-12 px-4 align-middle font-medium text-muted-foreground">{t('list.featured')}</th>
+                <th className="h-12 px-4 align-middle font-medium text-muted-foreground text-right">{t('list.actions')}</th>
               </tr>
             </thead>
             <tbody className="[&_tr:last-child]:border-0">
@@ -56,7 +61,7 @@ export default async function ProjectsAdminPage() {
                   <td className="p-4 align-middle">
                     {project.featured && (
                       <span className="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-semibold text-yellow-800">
-                        Star
+                        {t('list.featured')}
                       </span>
                     )}
                   </td>
@@ -80,7 +85,7 @@ export default async function ProjectsAdminPage() {
               {projects.length === 0 && (
                 <tr>
                   <td colSpan={5} className="p-8 text-center text-muted-foreground">
-                    No projects found. Add your portfolio item!
+                    {t('list.noData')}
                   </td>
                 </tr>
               )}

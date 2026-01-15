@@ -40,7 +40,7 @@ export async function createProject(prevState: any, formData: FormData) {
     }
   }
 
-  const { title, slug, description, content, thumbnail, demoUrl, githubUrl, featured, order } = validatedFields.data
+  const { title, slug, description, content, thumbnail, demoUrl, githubUrl, stars, featured, order } = validatedFields.data
 
   try {
      // Check slug
@@ -67,6 +67,7 @@ export async function createProject(prevState: any, formData: FormData) {
       },
     })
   } catch (error) {
+    console.error('Create Project Error:', error);
     return {
       message: 'Database Error: Failed to Create Project.',
     }

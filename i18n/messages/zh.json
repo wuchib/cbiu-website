@@ -21,5 +21,70 @@
   "Common": {
     "toggleTheme": "切换主题",
     "language": "语言"
+  },
+  "Admin": {
+    "title": "管理面板",
+    "dashboard": "仪表盘",
+    "content": "内容管理",
+    "share": "分享资源",
+    "articles": "文章管理",
+    "projects": "项目管理",
+    "settings": "系统设置",
+    "globalSettings": "全局设置",
+    "logout": "退出登录",
+    "welcome": "欢迎，管理员",
+    "articleForm": {
+      "pageTitle": "新建文章",
+      "editTitle": "编辑文章",
+      "settingsTitle": "文章设置",
+      "title": "标题",
+      "titlePlaceholder": "文章标题",
+      "slug": "别名",
+      "slugPlaceholder": "url-friendly-id",
+      "content": "内容",
+      "contentPlaceholder": "在这里撰写文章...",
+      "description": "摘要",
+      "descriptionPlaceholder": "简短描述文章内容...",
+      "published": "发布",
+      "publishedDesc": "对公众可见。",
+      "tags": "标签",
+      "tagsPlaceholder": "按回车添加"
+    },
+    "actions": {
+      "save": "保存",
+      "saving": "保存中...",
+      "cancel": "取消",
+      "close": "关闭",
+      "new": "新建",
+      "edit": "编辑",
+      "delete": "删除"
+    },
+    "list": {
+      "title": "标题",
+      "status": "状态",
+      "views": "浏览量",
+      "createdAt": "创建时间",
+      "actions": "操作",
+      "published": "已发布",
+      "draft": "草稿",
+      "noData": "暂无数据",
+      "category": "分类"
+    },
+    "projectForm": {
+      "title": "项目名称",
+      "description": "描述",
+      "thumbnail": "缩略图 URL",
+      "links": "链接",
+      "demo": "演示链接",
+      "github": "源码链接",
+      "featured": "首页精选"
+    },
+    "shareForm": {
+      "title": "资源标题",
+      "link": "资源链接",
+      "category": "分类",
+      "description": "描述",
+      "icon": "图标 (Iconify)"
+    }
   }
 }

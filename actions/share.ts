@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
 import { z } from "zod"
 
 const ShareSchema = z.object({
@@ -42,6 +43,7 @@ export async function createShareResource(prevState: any, formData: FormData) {
       },
     })
   } catch (error) {
+    console.error('Create Share Resource Error:', error);
     return {
       message: 'Database Error: Failed to Create Resource.',
     }
@@ -49,7 +51,7 @@ export async function createShareResource(prevState: any, formData: FormData) {
 
   revalidatePath('/admin/share')
   revalidatePath('/share')
-  return { message: 'Created Resource' }
+  redirect('/admin/share')
 }
 
 export async function deleteShareResource(id: string) {
@@ -102,7 +104,7 @@ export async function updateShareResource(id: string, prevState: any, formData: 
   
     revalidatePath('/admin/share')
     revalidatePath('/share')
-    return { message: 'Updated Resource' }
+    redirect('/admin/share')
 }
 
 export async function fetchRepoInfo(url: string) {

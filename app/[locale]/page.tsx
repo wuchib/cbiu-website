@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 import { Icon } from "@iconify/react"
 import { getTranslations } from "next-intl/server"
-import * as Motion from "@/components/motion-client" // Helper for client-side motion
+import { div as MotionDiv } from "@/components/motion-client" // Helper for client-side motion
 import { prisma } from "@/lib/prisma"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -37,21 +37,21 @@ export default async function Home() {
 
       {/* Hero Section */}
       <div className="relative mx-auto flex min-h-screen max-w-5xl flex-col justify-center px-4">
-        <Motion.div
+        <MotionDiv
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="flex flex-col items-center text-center gap-8 z-10"
         >
           {/* Badge */}
-          <Motion.div
+          <MotionDiv
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
             className="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary backdrop-blur-sm"
           >
             <span className="mr-2">✨</span> {t("welcomeBadge")}
-          </Motion.div>
+          </MotionDiv>
 
           {/* Main Title */}
           <h1 className="max-w-4xl text-5xl font-extrabold tracking-tight md:text-7xl lg:text-8xl">
@@ -70,7 +70,7 @@ export default async function Home() {
           </p>
 
           {/* Buttons */}
-          <Motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
@@ -86,8 +86,8 @@ export default async function Home() {
                 {t("viewProjects")}
               </Button>
             </Link>
-          </Motion.div>
-        </Motion.div>
+          </MotionDiv>
+        </MotionDiv>
 
         {/* Floating Elements */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -95,7 +95,7 @@ export default async function Home() {
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20" />
 
           {/* Existing Code Snippet Decoration */}
-          <Motion.div
+          <MotionDiv
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 0.4, x: 0 }}
             transition={{ delay: 0.6, duration: 1 }}
@@ -114,10 +114,10 @@ export default async function Home() {
                 <div className="h-2 w-28 rounded-full bg-primary/20" />
               </div>
             </div>
-          </Motion.div>
+          </MotionDiv>
 
           {/* Glassmorphism Stats Card */}
-          <Motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
@@ -127,7 +127,7 @@ export default async function Home() {
             }}
             className="absolute top-[20%] left-[10%] hidden lg:block"
           >
-            <Motion.div
+            <MotionDiv
               animate={{ y: [0, 10, 0] }}
               transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
               className="relative rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(31,38,135,0.07)]"
@@ -152,7 +152,7 @@ export default async function Home() {
               {/* Fake Chart */}
               <div className="flex items-end gap-1 h-16 w-48">
                 {[40, 70, 45, 90, 60, 80, 50, 95].map((h, i) => (
-                  <Motion.div
+                  <MotionDiv
                     key={i}
                     initial={{ height: 0 }}
                     animate={{ height: `${h}%` }}
@@ -161,8 +161,8 @@ export default async function Home() {
                   />
                 ))}
               </div>
-            </Motion.div>
-          </Motion.div>
+            </MotionDiv>
+          </MotionDiv>
         </div>
       </div>
 
@@ -180,13 +180,13 @@ export default async function Home() {
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {recentArticles.map((article: any, index: number) => (
-              <Motion.div
+              <MotionDiv
                 key={article.id}
                 initial={{ opacity: 0, y: 20 }}
                 // whileInView={{ opacity: 1, y: 0 }} // requires client comp, skipping for server comp loop or using wrapper
                 // Just use animate on load for now, or assume below fold
                 // Actually server comp cannot pass func to client. using style/className is safer.
-                // But Motion.div maps to motion.div.
+                // But MotionDiv maps to motion.div.
                 // Let's rely on simple CSS fade or no animation for now for list items to avoid hydration mismatch if not careful.
                 // Or just use standard div.
                 className="flex flex-col"
@@ -216,7 +216,7 @@ export default async function Home() {
                     </CardFooter>
                   </Card>
                 </Link>
-              </Motion.div>
+              </MotionDiv>
             ))}
           </div>
         </div>

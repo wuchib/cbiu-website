@@ -4,6 +4,7 @@ import { useActionState, useState } from 'react';
 import { createShareResource, updateShareResource, fetchRepoInfo } from '@/actions/share';
 import Link from "next/link"
 import { Icon } from '@iconify/react';
+import { useTranslations } from 'next-intl';
 
 // Simplified type for categories passed from server
 type Category = {
@@ -18,6 +19,7 @@ export default function ShareForm({
   categories: Category[],
   resource?: any
 }) {
+  const t = useTranslations('Admin');
   const initialState = { message: null, errors: {} };
   const updateWithId = resource ? updateShareResource.bind(null, resource.id) : createShareResource;
   // @ts-ignore
@@ -67,7 +69,7 @@ export default function ShareForm({
 
         {/* Link - Moved to top for Auto-Fill workflow */}
         <div className="space-y-2">
-          <label className="text-sm font-medium" htmlFor="link">URL (GitHub / Gitee preferred)</label>
+          <label className="text-sm font-medium" htmlFor="link">{t('shareForm.url')}</label>
           <div className="flex gap-2">
             <input
               id="link"
@@ -85,7 +87,7 @@ export default function ShareForm({
               className="inline-flex shrink-0 items-center justify-center rounded-md border border-input bg-background px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground disabled:opacity-50"
             >
               {isFetching ? <Icon icon="ph:spinner" className="animate-spin w-4 h-4" /> : <Icon icon="ph:magic-wand" className="w-4 h-4 mr-2" />}
-              {isFetching ? ' ' : 'Auto Fill'}
+              {isFetching ? ' ' : t('actions.autoFill')}
             </button>
           </div>
           {state?.errors?.link && (
@@ -95,7 +97,7 @@ export default function ShareForm({
 
         {/* Title */}
         <div className="space-y-2">
-          <label className="text-sm font-medium" htmlFor="title">Title</label>
+          <label className="text-sm font-medium" htmlFor="title">{t('shareForm.title')}</label>
           <input
             id="title"
             name="title"
@@ -112,7 +114,7 @@ export default function ShareForm({
 
         {/* Description */}
         <div className="space-y-2">
-          <label className="text-sm font-medium" htmlFor="description">Description (Short)</label>
+          <label className="text-sm font-medium" htmlFor="description">{t('shareForm.description')}</label>
           <input
             id="description"
             name="description"
@@ -129,7 +131,7 @@ export default function ShareForm({
         <div className="grid grid-cols-2 gap-4">
           {/* Category */}
           <div className="space-y-2">
-            <label className="text-sm font-medium" htmlFor="categoryKey">Category</label>
+            <label className="text-sm font-medium" htmlFor="categoryKey">{t('shareForm.category')}</label>
             <select
               id="categoryKey"
               name="categoryKey"
@@ -137,7 +139,7 @@ export default function ShareForm({
               onChange={handleChange}
               className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              <option value="" disabled>Select a category</option>
+              <option value="" disabled>{t('shareForm.selectCategory')}</option>
               {categories.map((cat) => (
                 <option key={cat.key} value={cat.key}>{cat.name}</option>
               ))}
@@ -149,7 +151,7 @@ export default function ShareForm({
 
           {/* Icon Name */}
           <div className="space-y-2">
-            <label className="text-sm font-medium" htmlFor="iconName">Iconify Name (Optional)</label>
+            <label className="text-sm font-medium" htmlFor="iconName">{t('shareForm.iconName')}</label>
             <div className="flex gap-2">
               <input
                 id="iconName"
@@ -171,14 +173,14 @@ export default function ShareForm({
 
       <div className="flex items-center gap-4">
         <Link href="/admin/share" className="inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground">
-          Cancel
+          {t('actions.cancel')}
         </Link>
         <button
           type="submit"
           disabled={isPending}
           className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground ring-offset-background transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
         >
-          {isPending ? 'Saving...' : 'Save Resource'}
+          {isPending ? t('actions.saving') : t('actions.save')}
         </button>
       </div>
     </form>

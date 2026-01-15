@@ -29,47 +29,50 @@ export default async function ProjectsPage() {
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((project, i) => (
-            <Card key={project.id} className="flex flex-col overflow-hidden">
+            <Card key={project.id} className="flex flex-col overflow-hidden group transition-all duration-300 border-border/60 hover:border-primary/30 hover:shadow-xl hover:bg-accent/5">
               {project.thumbnail && (
-                <div className="h-40 w-full overflow-hidden border-b bg-muted">
+                <div className="h-32 w-full overflow-hidden border-b bg-muted relative">
                   <img
                     src={project.thumbnail}
                     alt={project.title}
-                    className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                </div>
-              )}
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <CardTitle className="line-clamp-1">{project.title}</CardTitle>
-                  {project.featured && (
-                    <div className="flex items-center gap-1 text-sm text-yellow-500">
-                      <Icon icon="ph:star-fill" />
+                  {/* @ts-ignore */}
+                  {project.stars > 0 && (
+                    <div className="absolute top-2 right-2 flex items-center gap-1 rounded-full bg-black/60 px-2 py-0.5 text-xs font-medium text-white backdrop-blur-sm">
+                      <Icon icon="ph:star-fill" className="text-yellow-400 w-3 h-3" />
+                      {/* @ts-ignore */}
+                      {project.stars}
                     </div>
                   )}
                 </div>
-                <CardDescription className="line-clamp-2">{project.description}</CardDescription>
+              )}
+              <CardHeader className="p-4 pb-2">
+                <div className="flex items-start justify-between gap-2">
+                  <CardTitle className="line-clamp-1 text-base font-medium">{project.title}</CardTitle>
+                </div>
+                <CardDescription className="line-clamp-2 text-xs">{project.description}</CardDescription>
               </CardHeader>
-              <CardContent className="flex-1">
-                <div className="flex flex-wrap gap-2">
-                  {/* Tags placeholder - ideally fetch distinct tags or from relation */}
+              <CardContent className="flex-1 p-4 pt-2">
+                <div className="flex flex-wrap gap-1">
+                  {/* Tags placeholder */}
                   {['project'].map(tag => (
-                    <Badge key={tag} variant="secondary">{tag}</Badge>
+                    <Badge key={tag} variant="secondary" className="text-[10px] h-5 px-1.5 font-normal bg-secondary/50">{tag}</Badge>
                   ))}
                 </div>
               </CardContent>
-              <CardFooter>
+              <CardFooter className="p-4 pt-0">
                 <div className="flex gap-2 w-full">
                   {project.githubUrl && (
                     <Link href={project.githubUrl} target="_blank" className="flex-1">
-                      <Button variant="outline" className="w-full gap-2">
+                      <Button variant="outline" size="sm" className="w-full gap-2 h-8 text-xs">
                         <Icon icon="mdi:github" /> Source
                       </Button>
                     </Link>
                   )}
                   {project.demoUrl && (
                     <Link href={project.demoUrl} target="_blank" className="flex-1">
-                      <Button variant="default" className="w-full gap-2">
+                      <Button variant="default" size="sm" className="w-full gap-2 h-8 text-xs">
                         <Icon icon="ph:desktop" /> Demo
                       </Button>
                     </Link>

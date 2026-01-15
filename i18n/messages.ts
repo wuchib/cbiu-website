@@ -26,6 +26,63 @@ export const messages = {
     "Common": {
       "toggleTheme": "Toggle theme",
       "language": "Language"
+    },
+    "Admin": {
+      "title": "Admin Panel",
+      "dashboard": "Dashboard",
+      "content": "Content",
+      "share": "Share Resources",
+      "articles": "Articles",
+      "projects": "Projects",
+      "settings": "Settings",
+      "globalSettings": "Global Settings",
+      "logout": "Log Out",
+      "welcome": "Welcome, Admin",
+      "actions": {
+        "pageTitle": "New Article",
+        "editTitle": "Edit Article",
+        "settingsTitle": "Article Settings",
+        "title": "Title",
+        "slug": "Slug",
+        "description": "Description",
+        "content": "Content (Markdown)",
+        "coverImage": "Cover Image URL",
+        "published": "Published",
+        "publishedDesc": "Visible to the public.",
+        "tags": "Tags",
+        "tagsPlaceholder": "Type and press Enter to add tag",
+        "slugPlaceholder": "article-slug",
+        "titlePlaceholder": "Article Title",
+        "descriptionPlaceholder": "Brief description...",
+        "contentPlaceholder": "# Your article content...",
+        "previewPlaceholder": "Preview will appear here..."
+      },
+      "projectForm": {
+        "pageTitle": "New Project",
+        "editTitle": "Edit Project",
+        "title": "Title",
+        "slug": "Slug",
+        "description": "Description",
+        "content": "Case Study Content (Markdown, Optional)",
+        "thumbnail": "Thumbnail URL",
+        "demoUrl": "Demo URL",
+        "githubUrl": "GitHub / Gitee URL (Auto Fill Settings)",
+        "githubUrlHint": "Enter a repository URL and click \"Auto Fill\" to automatically populate Title, Description, Demo URL, and Stars.",
+        "featured": "Featured (Show on Home)",
+        "order": "Sort Order",
+        "stars": "Stars",
+        "links": "Links"
+      },
+      "shareForm": {
+        "pageTitle": "New Resource",
+        "editTitle": "Edit Resource",
+        "title": "Title",
+        "description": "Description (Short)",
+        "url": "URL (GitHub / Gitee preferred)",
+        "category": "Category",
+        "iconName": "Iconify Name (Optional)",
+        "selectCategory": "Select a category"
+      }
     }
   },
   zh: {
@@ -55,6 +112,89 @@ export const messages = {
     "Common": {
       "toggleTheme": "切换主题",
       "language": "语言"
+    },
+    "Admin": {
+      "title": "管理面板",
+      "dashboard": "仪表盘",
+      "content": "内容管理",
+      "share": "分享资源",
+      "articles": "文章管理",
+      "projects": "项目管理",
+      "settings": "系统设置",
+      "globalSettings": "全局设置",
+      "logout": "退出登录",
+      "welcome": "欢迎，管理员",
+      "actions": {
+        "new": "新建",
+        "edit": "编辑",
+        "delete": "删除",
+        "save": "保存",
+        "cancel": "取消",
+        "saving": "保存中...",
+        "publish": "发布",
+        "unpublish": "取消发布",
+        "autoFill": "自动填充",
+        "filling": "填充中...",
+        "close": "关闭"
+      },
+      "list": {
+        "title": "标题",
+        "slug": "别名",
+        "status": "状态",
+        "views": "浏览量",
+        "createdAt": "创建时间",
+        "actions": "操作",
+        "published": "已发布",
+        "draft": "草稿",
+        "featured": "精选",
+        "category": "分类",
+        "noData": "暂无数据"
+      },
+      "articleForm": {
+        "pageTitle": "新建文章",
+        "editTitle": "编辑文章",
+        "settingsTitle": "文章设置",
+        "title": "标题",
+        "slug": "别名",
+        "description": "摘要",
+        "content": "内容 (Markdown)",
+        "coverImage": "封面图片 URL",
+        "published": "发布",
+        "publishedDesc": "对公众可见。",
+        "tags": "标签",
+        "tagsPlaceholder": "输入后按回车添加标签",
+        "slugPlaceholder": "文章别名",
+        "titlePlaceholder": "文章标题",
+        "descriptionPlaceholder": "简短描述...",
+        "contentPlaceholder": "# 在这里撰写文章...",
+        "previewPlaceholder": "预览将显示在这里..."
+      },
+      "projectForm": {
+        "pageTitle": "新建项目",
+        "editTitle": "编辑项目",
+        "title": "标题",
+        "slug": "别名",
+        "description": "描述",
+        "content": "案例内容 (Markdown, 可选)",
+        "thumbnail": "缩略图 URL",
+        "demoUrl": "演示链接",
+        "githubUrl": "GitHub / Gitee 链接 (自动填充)",
+        "githubUrlHint": "输入仓库链接后点击\"自动填充\"，将自动填写标题、描述、演示链接和 Star 数。",
+        "featured": "精选 (显示在首页)",
+        "order": "排序",
+        "stars": "Star 数",
+        "links": "链接"
+      },
+      "shareForm": {
+        "pageTitle": "新建资源",
+        "editTitle": "编辑资源",
+        "title": "标题",
+        "description": "简介",
+        "url": "链接 (推荐 GitHub / Gitee)",
+        "category": "分类",
+        "iconName": "Iconify 图标名 (可选)",
+        "selectCategory": "选择分类"
+      }
     }
   }
 } as const;

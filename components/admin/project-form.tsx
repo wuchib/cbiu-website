@@ -4,8 +4,10 @@ import { useActionState, useState } from 'react';
 import { createProject, updateProject, fetchRepoInfo } from '@/actions/projects';
 import Link from "next/link"
 import { Icon } from '@iconify/react';
+import { useTranslations } from 'next-intl';
 
 export default function ProjectForm({ project }: { project?: any }) {
+  const t = useTranslations('Admin');
   const initialState = { message: null, errors: {} };
   const updateWithId = project ? updateProject.bind(null, project.id) : createProject;
   // @ts-ignore
@@ -76,7 +78,7 @@ export default function ProjectForm({ project }: { project?: any }) {
         <div className="space-y-4 rounded-xl border bg-card p-6 shadow-sm">
           {/* GitHub Auto-Fill */}
           <div className="space-y-2">
-            <label className="text-sm font-medium" htmlFor="githubUrl">GitHub / Gitee URL (Auto Fill Settings)</label>
+            <label className="text-sm font-medium" htmlFor="githubUrl">{t('projectForm.githubUrl')}</label>
             <div className="flex gap-2">
               <input
                 id="githubUrl"
@@ -94,11 +96,11 @@ export default function ProjectForm({ project }: { project?: any }) {
                 className="inline-flex shrink-0 items-center justify-center rounded-md border border-input bg-background px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground disabled:opacity-50 min-w-[100px]"
               >
                 {isFetching ? <Icon icon="ph:spinner" className="animate-spin w-4 h-4 mr-2" /> : <Icon icon="ph:magic-wand" className="w-4 h-4 mr-2" />}
-                {isFetching ? 'Filling...' : 'Auto Fill'}
+                {isFetching ? t('actions.filling') : t('actions.autoFill')}
               </button>
             </div>
             {state?.errors?.githubUrl && <p className="text-sm text-destructive">{state.errors.githubUrl}</p>}
-            <p className="text-xs text-muted-foreground">Enter a repository URL and click "Auto Fill" to automatically populate Title, Description, Demo URL, and Stars.</p>
+            <p className="text-xs text-muted-foreground">{t('projectForm.githubUrlHint')}</p>
           </div>
 
           <div className="h-px bg-border/50 my-4" />
@@ -106,7 +108,7 @@ export default function ProjectForm({ project }: { project?: any }) {
           {/* Title & Slug */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium" htmlFor="title">Title</label>
+              <label className="text-sm font-medium" htmlFor="title">{t('projectForm.title')}</label>
               <input
                 id="title"
                 name="title"
@@ -119,7 +121,7 @@ export default function ProjectForm({ project }: { project?: any }) {
               {state?.errors?.title && <p className="text-sm text-destructive">{state.errors.title}</p>}
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium" htmlFor="slug">Slug</label>
+              <label className="text-sm font-medium" htmlFor="slug">{t('projectForm.slug')}</label>
               <input
                 id="slug"
                 name="slug"
@@ -135,7 +137,7 @@ export default function ProjectForm({ project }: { project?: any }) {
 
           {/* Description */}
           <div className="space-y-2">
-            <label className="text-sm font-medium" htmlFor="description">Description</label>
+            <label className="text-sm font-medium" htmlFor="description">{t('projectForm.description')}</label>
             <textarea
               id="description"
               name="description"
@@ -150,7 +152,7 @@ export default function ProjectForm({ project }: { project?: any }) {
 
           {/* Content */}
           <div className="space-y-2">
-            <label className="text-sm font-medium" htmlFor="content">Case Study Content (Markdown, Optional)</label>
+            <label className="text-sm font-medium" htmlFor="content">{t('projectForm.content')}</label>
             <textarea
               id="content"
               name="content"
@@ -177,10 +179,10 @@ export default function ProjectForm({ project }: { project?: any }) {
                 onChange={handleChange}
                 className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
               />
-              <label htmlFor="featured" className="text-sm font-medium">Featured (Show on Home)</label>
+              <label htmlFor="featured" className="text-sm font-medium">{t('projectForm.featured')}</label>
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium" htmlFor="order">Sort Order</label>
+              <label className="text-sm font-medium" htmlFor="order">{t('projectForm.order')}</label>
               <input
                 type="number"
                 id="order"
@@ -192,7 +194,7 @@ export default function ProjectForm({ project }: { project?: any }) {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium" htmlFor="stars">Stars</label>
+              <label className="text-sm font-medium" htmlFor="stars">{t('projectForm.stars')}</label>
               <div className="relative">
                 <input
                   type="number"
@@ -210,10 +212,10 @@ export default function ProjectForm({ project }: { project?: any }) {
           </div>
 
           <div className="border-t pt-4 space-y-4">
-            <h4 className="font-semibold text-xs text-muted-foreground uppercase">Links</h4>
+            <h4 className="font-semibold text-xs text-muted-foreground uppercase">{t('projectForm.links')}</h4>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium" htmlFor="demoUrl">Demo URL</label>
+              <label className="text-sm font-medium" htmlFor="demoUrl">{t('projectForm.demoUrl')}</label>
               <input
                 id="demoUrl"
                 name="demoUrl"
@@ -228,7 +230,7 @@ export default function ProjectForm({ project }: { project?: any }) {
           </div>
 
           <div className="border-t pt-4 space-y-2">
-            <label className="text-sm font-medium" htmlFor="thumbnail">Thumbnail URL</label>
+            <label className="text-sm font-medium" htmlFor="thumbnail">{t('projectForm.thumbnail')}</label>
             <input
               id="thumbnail"
               name="thumbnail"
@@ -242,14 +244,14 @@ export default function ProjectForm({ project }: { project?: any }) {
 
         <div className="flex gap-4">
           <Link href="/admin/projects" className="flex-1 inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground">
-            Cancel
+            {t('actions.cancel')}
           </Link>
           <button
             type="submit"
             disabled={isPending}
             className="flex-1 inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground ring-offset-background transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
           >
-            {isPending ? 'Saving...' : (project ? 'Update Project' : 'Create Project')}
+            {isPending ? t('actions.saving') : t('actions.save')}
           </button>
         </div>
         {state?.message && (

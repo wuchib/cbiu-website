@@ -21,5 +21,70 @@
   "Common": {
     "toggleTheme": "Toggle theme",
     "language": "Language"
+  },
+  "Admin": {
+    "title": "Admin Panel",
+    "dashboard": "Dashboard",
+    "content": "Content",
+    "share": "Share Resources",
+    "articles": "Articles",
+    "projects": "Projects",
+    "settings": "Settings",
+    "globalSettings": "Global Settings",
+    "logout": "Log Out",
+    "welcome": "Welcome, Admin",
+    "articleForm": {
+      "pageTitle": "New Article",
+      "editTitle": "Edit Article",
+      "settingsTitle": "Article Settings",
+      "title": "Title",
+      "titlePlaceholder": "Article Title",
+      "slug": "Slug",
+      "slugPlaceholder": "url-friendly-id",
+      "content": "Content",
+      "contentPlaceholder": "Write your story...",
+      "description": "Description",
+      "descriptionPlaceholder": "Short description...",
+      "published": "Publish",
+      "publishedDesc": "Visible to the public.",
+      "tags": "Tags",
+      "tagsPlaceholder": "Press Enter to add"
+    },
+    "actions": {
+      "save": "Save",
+      "saving": "Saving...",
+      "cancel": "Cancel",
+      "close": "Close",
+      "new": "New",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "list": {
+      "title": "Title",
+      "status": "Status",
+      "views": "Views",
+      "createdAt": "Created At",
+      "actions": "Actions",
+      "published": "Published",
+      "draft": "Draft",
+      "noData": "No data found",
+      "category": "Category"
+    },
+    "projectForm": {
+      "title": "Project Name",
+      "description": "Description",
+      "thumbnail": "Thumbnail URL",
+      "links": "Links",
+      "demo": "Demo URL",
+      "github": "Source URL",
+      "featured": "Featured"
+    },
+    "shareForm": {
+      "title": "Resource Title",
+      "link": "Resource Link",
+      "category": "Category",
+      "description": "Description",
+      "icon": "Icon (Iconify)"
+    }
   }
 }
