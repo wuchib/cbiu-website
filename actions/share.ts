@@ -103,4 +103,53 @@ export async function updateShareResource(id: string, prevState: any, formData: 
     revalidatePath('/admin/share')
     revalidatePath('/share')
     return { message: 'Updated Resource' }
+}
+
+export async function fetchRepoInfo(url: string) {
+  try {
+    const cleanUrl = url.endsWith('/') ? url.slice(0, -1) : url;
+    
+    // GitHub
+    if (cleanUrl.includes('github.com')) {
+      const match = cleanUrl.match(/github\.com\/([^/]+)\/([^/]+)/);
+      if (match) {
+        const [_, owner, repo] = match;
+        const res = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
+        if (!res.ok) throw new Error('Failed to fetch GitHub repo');
+        const data = await res.json();
+        return {
+           success: true,
+           data: {
+             title: data.name,
+             description: data.description || '',
+             iconName: 'mdi:github',
+           }
+        }
+      }
+    }
+
+    // Gitee
+    if (cleanUrl.includes('gitee.com')) {
+      const match = cleanUrl.match(/gitee\.com\/([^/]+)\/([^/]+)/);
+      if (match) {
+        const [_, owner, repo] = match;
+        const res = await fetch(`https://gitee.com/api/v5/repos/${owner}/${repo}`);
+        if (!res.ok) throw new Error('Failed to fetch Gitee repo');
+        const data = await res.json();
+        return {
+           success: true,
+           data: {
+             title: data.name,
+             description: data.description || '',
+             iconName: 'simple-icons:gitee',
+           }
+        }
+      }
+    }
+
+    return { success: false, message: 'Not a supported repository URL (GitHub/Gitee)' };
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: 'Failed to fetch repository info' };
   }
+}

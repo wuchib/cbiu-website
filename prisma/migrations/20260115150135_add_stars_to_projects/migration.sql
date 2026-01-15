@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `projects` ADD COLUMN `stars` INTEGER NOT NULL DEFAULT 0;

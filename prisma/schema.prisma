@@ -47,6 +47,7 @@ model Project {
   thumbnail   String?
   demoUrl     String?  @map("demo_url")
   githubUrl   String?  @map("github_url")
+  stars       Int      @default(0)
   featured    Boolean  @default(false)
   order       Int      @default(0)
   createdAt   DateTime @default(now()) @map("created_at")
