@@ -40,6 +40,7 @@ export const messages = {
       "welcome": "Welcome, Admin",
       "actions": {
         "save": "Save",
+        "saved": "Saved successfully",
         "saving": "Saving...",
         "cancel": "Cancel",
         "close": "Close",
@@ -47,7 +48,17 @@ export const messages = {
         "edit": "Edit",
         "delete": "Delete",
         "autoFill": "Auto Fill",
-        "filling": "Filling..."
+        "filling": "Filling...",
+        "continue": "Continue",
+        "back": "Back",
+        "upload": {
+          "errorSize": "File too large (max 5MB)",
+          "errorGeneric": "Upload failed. Please try again.",
+          "FILE_TOO_LARGE": "File too large (max 5MB)",
+          "INVALID_TYPE": "Invalid file type (images only)",
+          "SAVE_FAILED": "Server failed to save file",
+          "NO_FILE": "No file detected"
+        }
       },
       "list": {
         "title": "Title",
@@ -190,6 +201,7 @@ export const messages = {
       "welcome": "欢迎，管理员",
       "actions": {
         "save": "保存",
+        "saved": "保存成功",
         "saving": "保存中...",
         "cancel": "取消",
         "close": "关闭",
@@ -197,7 +209,17 @@ export const messages = {
         "edit": "编辑",
         "delete": "删除",
         "autoFill": "自动填充",
-        "filling": "获取中..."
+        "filling": "获取中...",
+        "continue": "下一步",
+        "back": "返回",
+        "upload": {
+          "errorSize": "文件过大 (最大 5MB)",
+          "errorGeneric": "上传失败，请重试",
+          "FILE_TOO_LARGE": "文件过大 (最大 5MB)",
+          "INVALID_TYPE": "文件格式不支持 (仅支持图片)",
+          "SAVE_FAILED": "服务器保存失败",
+          "NO_FILE": "未检测到文件"
+        }
       },
       "list": {
         "title": "标题",

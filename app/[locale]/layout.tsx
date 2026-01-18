@@ -5,6 +5,7 @@ import { routing } from "@/i18n/routing";
 import { ThemeProvider } from "@/components/theme-provider";
 import { MainNav } from "@/components/layout/main-nav";
 import { Footer } from "@/components/layout/footer";
+import { Toaster } from "@/components/ui/sonner";
 import "../globals.css";
 
 // Generate static params for static export if needed, 
@@ -45,6 +46,7 @@ export default async function LocaleLayout({
               <MainNav />
               <main className="flex-1">{children}</main>
               <Footer />
+              <Toaster />
             </div>
           </ThemeProvider>
         </NextIntlClientProvider>

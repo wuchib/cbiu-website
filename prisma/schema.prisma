@@ -68,8 +68,8 @@ model ShareResource {
   order       Int      @default(0)
   createdAt   DateTime @default(now()) @map("created_at")
 
+  customData  Json?    @map("custom_data")
   category    ShareCategory @relation(fields: [categoryKey], references: [key])
-
   @@map("share_resources")
 }
 
@@ -80,6 +80,7 @@ model ShareCategory {
   icon        String?
   color       String?
   sortOrder   Int?     @map("sort_order")
+  fieldsSchema Json?   @map("fields_schema")
 
   resources   ShareResource[]
 

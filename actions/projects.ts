@@ -160,6 +160,11 @@ export async function fetchRepoInfo(url: string) {
         const res = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
         if (!res.ok) throw new Error('Failed to fetch GitHub repo');
         const data = await res.json();
+        
+        // Construct Open Graph Image URL (Social Preview)
+        // Format: https://opengraph.githubassets.com/1/owner/repo
+        const socialPreviewUrl = `https://opengraph.githubassets.com/1/${owner}/${repo}`;
+
         return {
            success: true,
            data: {
@@ -168,6 +173,8 @@ export async function fetchRepoInfo(url: string) {
              demoUrl: data.homepage || '',
              githubUrl: cleanUrl,
              stars: data.stargazers_count || 0,
+             thumbnail: socialPreviewUrl, // Default to social preview
+             avatarUrl: data.owner?.avatar_url || '', // Return avatar separately if needed later
            }
         }
       }

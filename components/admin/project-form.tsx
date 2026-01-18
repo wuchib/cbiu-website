@@ -1,7 +1,8 @@
 'use client';
 
-import { useActionState, useState } from 'react';
+import { useActionState, useState, useRef } from 'react';
 import { createProject, updateProject, fetchRepoInfo } from '@/actions/projects';
+import { uploadImage } from '@/actions/upload';
 import Link from "next/link"
 import { Icon } from '@iconify/react';
 import { useTranslations } from 'next-intl';
@@ -27,6 +28,8 @@ export default function ProjectForm({ project }: { project?: any }) {
   });
 
   const [isFetching, setIsFetching] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -61,24 +64,72 @@ export default function ProjectForm({ project }: { project?: any }) {
           description: res.data.description || prev.description,
           demoUrl: res.data.demoUrl || prev.demoUrl,
           githubUrl: res.data.githubUrl || prev.githubUrl,
-          stars: res.data.stars !== undefined ? res.data.stars : prev.stars
+          stars: res.data.stars !== undefined ? res.data.stars : prev.stars,
+          // @ts-ignore
+          thumbnail: !prev.thumbnail && res.data.thumbnail ? res.data.thumbnail : prev.thumbnail
         }));
       }
-    } catch (e) {
-      console.error(e);
     } finally {
       setIsFetching(false);
     }
   }
 
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Reset error
+    setUploadError(null);
+
+    // Client-side validation (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setUploadError(t('actions.upload.errorSize'));
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    }
+
+    setIsUploading(true);
+    const formDataUpload = new FormData();
+    formDataUpload.append('file', file);
+
+    try {
+      const result = await uploadImage(formDataUpload);
+
+      if (result.url) {
+        setFormData(prev => ({ ...prev, thumbnail: result.url }));
+      } else {
+        setUploadError(result.error || t('actions.upload.errorGeneric'));
+      }
+    } catch (e) {
+      setUploadError(t('actions.upload.errorGeneric'));
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
   return (
     <form action={dispatch} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
       {/* Main Content */}
       <div className="lg:col-span-2 space-y-6">
-        <div className="space-y-4 rounded-xl border bg-card p-6 shadow-sm">
-          {/* GitHub Auto-Fill */}
+        {uploadError && (
+          <div className="rounded-xl border border-destructive/20 bg-destructive/10 p-4 text-sm text-destructive flex items-center gap-2 animate-in fade-in slide-in-from-top-2">
+            <Icon icon="ph:warning-circle-duotone" className="w-5 h-5" />
+            {uploadError}
+            <button type="button" onClick={() => setUploadError(null)} className="ml-auto hover:opacity-70">
+              <Icon icon="ph:x" className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+        {/* GitHub Auto-Fill Card */}
+        <div className="rounded-2xl border bg-card/50 backdrop-blur-sm shadow-sm overflow-hidden p-6 space-y-4">
+          <h3 className="font-semibold flex items-center gap-2 border-b pb-3 mb-2">
+            <Icon icon="ph:github-logo-duotone" className="w-5 h-5 text-primary" />
+            {t('projectForm.githubUrl')}
+          </h3>
           <div className="space-y-2">
-            <label className="text-sm font-medium" htmlFor="githubUrl">{t('projectForm.githubUrl')}</label>
             <div className="flex gap-2">
               <input
                 id="githubUrl"
@@ -86,14 +137,14 @@ export default function ProjectForm({ project }: { project?: any }) {
                 value={formData.githubUrl}
                 onChange={handleChange}
                 type="url"
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
+                className="flex h-10 w-full rounded-xl border border-input/50 bg-background/50 px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 transition-all font-mono placeholder:text-muted-foreground/50"
                 placeholder={t('projectForm.githubUrlPlaceholder')}
               />
               <button
                 type="button"
                 onClick={handleAutoFill}
                 disabled={isFetching || !formData.githubUrl}
-                className="inline-flex shrink-0 items-center justify-center rounded-md border border-input bg-background px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground disabled:opacity-50 min-w-[100px]"
+                className="inline-flex shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary hover:bg-primary/20 px-4 py-2 text-sm font-medium transition-colors disabled:opacity-50 min-w-[100px]"
               >
                 {isFetching ? <Icon icon="ph:spinner" className="animate-spin w-4 h-4 mr-2" /> : <Icon icon="ph:magic-wand" className="w-4 h-4 mr-2" />}
                 {isFetching ? t('actions.filling') : t('actions.autoFill')}
@@ -102,11 +153,17 @@ export default function ProjectForm({ project }: { project?: any }) {
             {state?.errors?.githubUrl && <p className="text-sm text-destructive">{state.errors.githubUrl}</p>}
             <p className="text-xs text-muted-foreground">{t('projectForm.githubUrlHint')}</p>
           </div>
+        </div>
 
-          <div className="h-px bg-border/50 my-4" />
+        {/* Basic Info Card */}
+        <div className="rounded-2xl border bg-card/50 backdrop-blur-sm shadow-sm overflow-hidden p-6 space-y-6">
+          <h3 className="font-semibold flex items-center gap-2 border-b pb-3">
+            <Icon icon="ph:info-duotone" className="w-5 h-5 text-indigo-500" />
+            Basic Information
+          </h3>
 
           {/* Title & Slug */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <label className="text-sm font-medium" htmlFor="title">{t('projectForm.title')}</label>
               <input
@@ -114,7 +171,7 @@ export default function ProjectForm({ project }: { project?: any }) {
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
+                className="flex h-10 w-full rounded-xl border border-input/50 bg-background/50 px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted-foreground/50"
                 placeholder={t('projectForm.titlePlaceholder')}
                 required
               />
@@ -127,7 +184,7 @@ export default function ProjectForm({ project }: { project?: any }) {
                 name="slug"
                 value={formData.slug}
                 onChange={handleChange}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
+                className="flex h-10 w-full rounded-xl border border-input/50 bg-background/50 px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 transition-all font-mono placeholder:text-muted-foreground/50"
                 placeholder={t('projectForm.slugPlaceholder')}
                 required
               />
@@ -143,7 +200,7 @@ export default function ProjectForm({ project }: { project?: any }) {
               name="description"
               value={formData.description}
               onChange={handleChange}
-              className="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
+              className="flex min-h-[100px] w-full rounded-xl border border-input/50 bg-background/50 px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 transition-all resize-none leading-relaxed placeholder:text-muted-foreground/50"
               placeholder={t('projectForm.descriptionPlaceholder')}
               required
             />
@@ -158,7 +215,7 @@ export default function ProjectForm({ project }: { project?: any }) {
               name="content"
               value={formData.content}
               onChange={handleChange}
-              className="flex min-h-[300px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-mono ring-offset-background"
+              className="flex min-h-[300px] w-full rounded-xl border border-input/50 bg-background/50 px-3 py-2 text-sm font-mono focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted-foreground/50"
               placeholder={t('projectForm.contentPlaceholder')}
             />
           </div>
@@ -167,20 +224,98 @@ export default function ProjectForm({ project }: { project?: any }) {
 
       {/* Sidebar */}
       <div className="space-y-6">
-        <div className="rounded-xl border bg-card p-6 shadow-sm space-y-6">
+
+        {/* Cover Image Card */}
+        <div className="rounded-2xl border bg-card/50 backdrop-blur-sm shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b bg-muted/20 flex items-center justify-between">
+            <h3 className="font-semibold flex items-center gap-2">
+              <Icon icon="ph:image-duotone" className="w-5 h-5 text-pink-500" />
+              {t('projectForm.thumbnail')}
+            </h3>
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isUploading}
+              className="text-xs bg-muted hover:bg-muted/80 px-2 py-1 rounded transition-colors flex items-center gap-1"
+            >
+              {isUploading ? <Icon icon="ph:spinner" className="animate-spin" /> : <Icon icon="ph:upload-simple" />}
+              Upload
+            </button>
+            <input
+              type="file"
+              ref={fileInputRef}
+              className="hidden"
+              accept="image/*"
+              onChange={handleImageUpload}
+            />
+          </div>
+
+          <div className="p-6">
+            <div className="space-y-4">
+              <div className="relative group">
+                <Icon icon="ph:link" className="absolute left-3 top-3 h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                <input
+                  id="thumbnail"
+                  name="thumbnail"
+                  value={formData.thumbnail}
+                  onChange={handleChange}
+                  className="flex h-10 w-full rounded-xl border border-input/50 bg-background/50 pl-10 pr-3 py-1 text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:border-primary focus-visible:bg-background shadow-sm placeholder:text-muted-foreground/50"
+                  placeholder={t('projectForm.thumbnailPlaceholder')}
+                />
+              </div>
+
+              {/* Image Preview */}
+              <div className="aspect-video w-full rounded-xl border-2 border-dashed border-muted/50 bg-muted/10 flex items-center justify-center overflow-hidden relative group">
+                {formData.thumbnail ? (
+                  <>
+                    <img src={formData.thumbnail} className="w-full h-full object-cover" alt="Thumbnail" />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <button
+                        type="button"
+                        onClick={() => setFormData(prev => ({ ...prev, thumbnail: '' }))}
+                        className="bg-destructive text-white p-2 rounded-full hover:bg-destructive/90 transition-transform hover:scale-105"
+                      >
+                        <Icon icon="ph:trash" className="w-5 h-5" />
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-center p-4 cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+                    <Icon icon="ph:image" className="w-10 h-10 text-muted-foreground/30 mx-auto mb-2" />
+                    <span className="text-xs text-muted-foreground/50">
+                      Click upload or enter URL
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Status & Links */}
+        <div className="rounded-2xl border bg-card/50 backdrop-blur-sm shadow-sm overflow-hidden p-6 space-y-6">
+          <h3 className="font-semibold flex items-center gap-2 border-b pb-3">
+            <Icon icon="ph:faders-duotone" className="w-5 h-5 text-orange-500" />
+            Settings
+          </h3>
+
           {/* Featured & Order */}
           <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id="featured"
-                name="featured"
-                checked={formData.featured}
-                onChange={handleChange}
-                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-              />
-              <label htmlFor="featured" className="text-sm font-medium">{t('projectForm.featured')}</label>
+            <div className="flex items-center justify-between rounded-xl border border-border/50 p-3 bg-background/50">
+              <label htmlFor="featured" className="text-sm font-medium cursor-pointer">{t('projectForm.featured')}</label>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  id="featured"
+                  name="featured"
+                  checked={formData.featured}
+                  onChange={handleChange}
+                  className="peer sr-only"
+                />
+                <div className="w-9 h-5 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary shadow-sm"></div>
+              </label>
             </div>
+
             <div className="space-y-2">
               <label className="text-sm font-medium" htmlFor="order">{t('projectForm.order')}</label>
               <input
@@ -189,7 +324,7 @@ export default function ProjectForm({ project }: { project?: any }) {
                 name="order"
                 value={formData.order}
                 onChange={handleChange}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                className="flex h-10 w-full rounded-xl border border-input/50 bg-background/50 px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 transition-all"
               />
             </div>
 
@@ -202,17 +337,13 @@ export default function ProjectForm({ project }: { project?: any }) {
                   name="stars"
                   value={formData.stars}
                   onChange={handleChange}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm pl-8"
+                  className="flex h-10 w-full rounded-xl border border-input/50 bg-background/50 px-3 py-2 text-sm pl-9 focus:ring-2 focus:ring-primary/20 transition-all"
                 />
-                <div className="absolute left-2.5 top-2.5 text-muted-foreground">
+                <div className="absolute left-3 top-2.5 text-muted-foreground">
                   <Icon icon="ph:star-duotone" className="w-4 h-4" />
                 </div>
               </div>
             </div>
-          </div>
-
-          <div className="border-t pt-4 space-y-4">
-            <h4 className="font-semibold text-xs text-muted-foreground uppercase">{t('projectForm.links')}</h4>
 
             <div className="space-y-2">
               <label className="text-sm font-medium" htmlFor="demoUrl">{t('projectForm.demoUrl')}</label>
@@ -222,40 +353,31 @@ export default function ProjectForm({ project }: { project?: any }) {
                 value={formData.demoUrl}
                 onChange={handleChange}
                 type="url"
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                className="flex h-10 w-full rounded-xl border border-input/50 bg-background/50 px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 transition-all"
                 placeholder={t('projectForm.demoUrlPlaceholder')}
               />
               {state?.errors?.demoUrl && <p className="text-sm text-destructive">{state.errors.demoUrl}</p>}
             </div>
           </div>
-
-          <div className="border-t pt-4 space-y-2">
-            <label className="text-sm font-medium" htmlFor="thumbnail">{t('projectForm.thumbnail')}</label>
-            <input
-              id="thumbnail"
-              name="thumbnail"
-              value={formData.thumbnail}
-              onChange={handleChange}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-              placeholder={t('projectForm.thumbnailPlaceholder')}
-            />
-          </div>
         </div>
 
-        <div className="flex gap-4">
-          <Link href="/admin/projects" className="flex-1 inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground">
+        {/* Actions */}
+        <div className="flex gap-4 pt-4 border-t">
+          <Link href="/admin/projects" className="flex-1 inline-flex h-10 items-center justify-center rounded-full border border-input bg-background px-4 py-2 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground">
             {t('actions.cancel')}
           </Link>
           <button
             type="submit"
             disabled={isPending}
-            className="flex-1 inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground ring-offset-background transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+            className="flex-1 inline-flex h-10 items-center justify-center rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground ring-offset-background transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 shadow-lg shadow-primary/20"
           >
+            {isPending ? <Icon icon="ph:spinner" className="animate-spin w-4 h-4 mr-2" /> : <Icon icon="ph:check" className="w-4 h-4 mr-2" />}
             {isPending ? t('actions.saving') : t('actions.save')}
           </button>
         </div>
+
         {state?.message && (
-          <div className="p-4 rounded-md bg-destructive/10 text-destructive text-sm text-center">
+          <div className="p-4 rounded-xl bg-destructive/10 text-destructive text-sm text-center border border-destructive/20 animate-in fade-in slide-in-from-top-2">
             {state.message}
           </div>
         )}

@@ -1,157 +1,202 @@
 'use server'
 
-import { prisma } from "@/lib/prisma"
-import { revalidatePath } from "next/cache"
-import { redirect } from "next/navigation"
-import { z } from "zod"
+import { prisma } from '@/lib/prisma'
+import { revalidatePath } from 'next/cache'
+import { ShareCategory, ShareResource } from '@prisma/client'
 
-const ShareSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  description: z.string().min(1, "Description is required"),
-  link: z.string().url("Must be a valid URL"),
-  categoryKey: z.string().min(1, "Category is required"),
-  iconName: z.string().optional(),
-})
+// --- Categories ---
 
-export async function createShareResource(prevState: any, formData: FormData) {
-  const validatedFields = ShareSchema.safeParse({
-    title: formData.get('title'),
-    description: formData.get('description'),
-    link: formData.get('link'),
-    categoryKey: formData.get('categoryKey'),
-    iconName: formData.get('iconName'),
-  })
-
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to Create Resource.',
-    }
-  }
-
-  const { title, description, link, categoryKey, iconName } = validatedFields.data
-
+export async function getShareCategories() {
   try {
-    await prisma.shareResource.create({
-      data: {
-        title,
-        description,
-        link,
-        categoryKey,
-        iconName,
-        order: 0, // Default order
-      },
+    return await prisma.shareCategory.findMany({
+      orderBy: { sortOrder: 'asc' },
+      include: {
+        _count: {
+          select: { resources: true }
+        }
+      }
     })
   } catch (error) {
-    console.error('Create Share Resource Error:', error);
-    return {
-      message: 'Database Error: Failed to Create Resource.',
-    }
+    console.error('Error fetching categories:', error)
+    return []
   }
+}
 
-  revalidatePath('/admin/share')
-  revalidatePath('/share')
-  redirect('/admin/share')
+export async function createShareCategory(data: Partial<ShareCategory>) {
+  try {
+    if (!data.key || !data.name) return { error: 'Key and Name are required' }
+    
+    await prisma.shareCategory.create({
+      data: {
+        key: data.key,
+        name: data.name,
+        description: data.description,
+        icon: data.icon,
+        color: data.color,
+        sortOrder: data.sortOrder,
+        // @ts-ignore
+        fieldsSchema: data.fieldsSchema as any
+      }
+    })
+    revalidatePath('/admin/share')
+    return { success: true }
+  } catch (error) {
+    console.error('Error creating category:', error)
+    return { error: 'Failed to create category' }
+  }
+}
+
+export async function updateShareCategory(key: string, data: Partial<ShareCategory>) {
+  try {
+    await prisma.shareCategory.update({
+      where: { key },
+      data: {
+        name: data.name,
+        description: data.description,
+        icon: data.icon,
+        color: data.color,
+        sortOrder: data.sortOrder,
+        // @ts-ignore
+        fieldsSchema: data.fieldsSchema as any
+      }
+    })
+    revalidatePath('/admin/share')
+    return { success: true }
+  } catch (error) {
+    console.error('Error updating category:', error)
+    return { error: 'Failed to update category' }
+  }
+}
+
+export async function deleteShareCategory(key: string) {
+  try {
+    // Check for resources
+    const count = await prisma.shareResource.count({
+      where: { categoryKey: key }
+    })
+
+    if (count > 0) {
+      return { error: 'Cannot delete category with existing resources' }
+    }
+
+    await prisma.shareCategory.delete({
+      where: { key }
+    })
+    revalidatePath('/admin/share')
+    return { success: true }
+  } catch (error) {
+    console.error('Error deleting category:', error)
+    return { error: 'Failed to delete category' }
+  }
+}
+
+// --- Resources ---
+
+export async function getShareResources(categoryKey?: string) {
+  try {
+    const where = categoryKey ? { categoryKey } : {}
+    return await prisma.shareResource.findMany({
+      where,
+      orderBy: { order: 'asc' },
+      include: { category: true }
+    })
+  } catch (error) {
+    console.error('Error fetching resources:', error)
+    return []
+  }
+}
+
+export async function createShareResource(data: any) {
+  try {
+    if (!data.categoryKey) {
+      return { error: 'Category is required' }
+    }
+
+    await prisma.shareResource.create({
+      data: {
+        title: data.title,
+        description: data.description,
+        link: data.link,
+        iconName: data.iconName,
+        categoryKey: data.categoryKey,
+        order: data.order,
+        customData: data.customData
+      }
+    })
+    revalidatePath('/admin/share')
+    return { success: true }
+  } catch (error) {
+    console.error('Error creating resource:', error)
+    return { error: 'Failed to create resource' }
+  }
+}
+
+export async function updateShareResource(id: string, data: any) {
+  try {
+    await prisma.shareResource.update({
+      where: { id },
+      data: {
+        title: data.title,
+        description: data.description,
+        link: data.link,
+        iconName: data.iconName,
+        categoryKey: data.categoryKey,
+        order: data.order,
+        customData: data.customData
+      }
+    })
+    revalidatePath('/admin/share')
+    return { success: true }
+  } catch (error) {
+    console.error('Error updating resource:', error)
+    return { error: 'Failed to update resource' }
+  }
 }
 
 export async function deleteShareResource(id: string) {
   try {
     await prisma.shareResource.delete({
-      where: { id },
+      where: { id }
     })
     revalidatePath('/admin/share')
-    revalidatePath('/share')
-    return { message: 'Deleted Resource' }
+    return { success: true }
   } catch (error) {
-    return { message: 'Database Error: Failed to Delete Resource.' }
+    console.error('Error deleting resource:', error)
+    return { error: 'Failed to delete resource' }
   }
-}
-
-export async function updateShareResource(id: string, prevState: any, formData: FormData) {
-    const validatedFields = ShareSchema.safeParse({
-      title: formData.get('title'),
-      description: formData.get('description'),
-      link: formData.get('link'),
-      categoryKey: formData.get('categoryKey'),
-      iconName: formData.get('iconName'),
-    })
-  
-    if (!validatedFields.success) {
-      return {
-        errors: validatedFields.error.flatten().fieldErrors,
-        message: 'Missing Fields. Failed to Update Resource.',
-      }
-    }
-  
-    const { title, description, link, categoryKey, iconName } = validatedFields.data
-  
-    try {
-      await prisma.shareResource.update({
-        where: { id },
-        data: {
-          title,
-          description,
-          link,
-          categoryKey,
-          iconName,
-        },
-      })
-    } catch (error) {
-      return {
-        message: 'Database Error: Failed to Update Resource.',
-      }
-    }
-  
-    revalidatePath('/admin/share')
-    revalidatePath('/share')
-    redirect('/admin/share')
 }
 
 export async function fetchRepoInfo(url: string) {
   try {
-    const cleanUrl = url.endsWith('/') ? url.slice(0, -1) : url;
+    const res = await fetch(url)
+    if (!res.ok) return { success: false, message: 'Failed to fetch URL' }
     
-    // GitHub
-    if (cleanUrl.includes('github.com')) {
-      const match = cleanUrl.match(/github\.com\/([^/]+)\/([^/]+)/);
-      if (match) {
-        const [_, owner, repo] = match;
-        const res = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
-        if (!res.ok) throw new Error('Failed to fetch GitHub repo');
-        const data = await res.json();
-        return {
-           success: true,
-           data: {
-             title: data.name,
-             description: data.description || '',
-             iconName: 'mdi:github',
-           }
-        }
+    const html = await res.text()
+    
+    // Extract title
+    const titleMatch = html.match(/<title>([^<]*)<\/title>/i)
+    const title = titleMatch ? titleMatch[1].trim() : ''
+    
+    // Extract description
+    const descMatch = html.match(/<meta\s+name=["']description["']\s+content=["']([^"']*)["']/i) ||
+                      html.match(/<meta\s+property=["']og:description["']\s+content=["']([^"']*)["']/i)
+    const description = descMatch ? descMatch[1].trim() : ''
+
+    // Guess icon
+    let iconName = ''
+    if (url.includes('github.com')) iconName = 'mdi:github'
+    else if (url.includes('glitch.me')) iconName = 'simple-icons:glitch'
+    else if (url.includes('vercel.app')) iconName = 'simple-icons:vercel'
+
+    return {
+      success: true,
+      data: {
+        title,
+        description,
+        iconName
       }
     }
-
-    // Gitee
-    if (cleanUrl.includes('gitee.com')) {
-      const match = cleanUrl.match(/gitee\.com\/([^/]+)\/([^/]+)/);
-      if (match) {
-        const [_, owner, repo] = match;
-        const res = await fetch(`https://gitee.com/api/v5/repos/${owner}/${repo}`);
-        if (!res.ok) throw new Error('Failed to fetch Gitee repo');
-        const data = await res.json();
-        return {
-           success: true,
-           data: {
-             title: data.name,
-             description: data.description || '',
-             iconName: 'simple-icons:gitee',
-           }
-        }
-      }
-    }
-
-    return { success: false, message: 'Not a supported repository URL (GitHub/Gitee)' };
   } catch (error) {
-    console.error(error);
-    return { success: false, message: 'Failed to fetch repository info' };
+    return { success: false, message: 'Error fetching URL' }
   }
 }
