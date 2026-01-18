@@ -87,7 +87,7 @@ export default function ProjectForm({ project }: { project?: any }) {
                 onChange={handleChange}
                 type="url"
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
-                placeholder="https://github.com/username/repo"
+                placeholder={t('projectForm.githubUrlPlaceholder')}
               />
               <button
                 type="button"
@@ -115,7 +115,7 @@ export default function ProjectForm({ project }: { project?: any }) {
                 value={formData.title}
                 onChange={handleChange}
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
-                placeholder="Project Name"
+                placeholder={t('projectForm.titlePlaceholder')}
                 required
               />
               {state?.errors?.title && <p className="text-sm text-destructive">{state.errors.title}</p>}
@@ -128,7 +128,7 @@ export default function ProjectForm({ project }: { project?: any }) {
                 value={formData.slug}
                 onChange={handleChange}
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
-                placeholder="project-slug"
+                placeholder={t('projectForm.slugPlaceholder')}
                 required
               />
               {state?.errors?.slug && <p className="text-sm text-destructive">{state.errors.slug}</p>}
@@ -144,7 +144,7 @@ export default function ProjectForm({ project }: { project?: any }) {
               value={formData.description}
               onChange={handleChange}
               className="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
-              placeholder="Short description for the card..."
+              placeholder={t('projectForm.descriptionPlaceholder')}
               required
             />
             {state?.errors?.description && <p className="text-sm text-destructive">{state.errors.description}</p>}
@@ -159,7 +159,7 @@ export default function ProjectForm({ project }: { project?: any }) {
               value={formData.content}
               onChange={handleChange}
               className="flex min-h-[300px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-mono ring-offset-background"
-              placeholder="# Detailed case study..."
+              placeholder={t('projectForm.contentPlaceholder')}
             />
           </div>
         </div>
@@ -223,7 +223,7 @@ export default function ProjectForm({ project }: { project?: any }) {
                 onChange={handleChange}
                 type="url"
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                placeholder="https://..."
+                placeholder={t('projectForm.demoUrlPlaceholder')}
               />
               {state?.errors?.demoUrl && <p className="text-sm text-destructive">{state.errors.demoUrl}</p>}
             </div>
@@ -237,7 +237,7 @@ export default function ProjectForm({ project }: { project?: any }) {
               value={formData.thumbnail}
               onChange={handleChange}
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-              placeholder="/images/projects/..."
+              placeholder={t('projectForm.thumbnailPlaceholder')}
             />
           </div>
         </div>

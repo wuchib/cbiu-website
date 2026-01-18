@@ -1,45 +1,84 @@
 import { prisma } from "@/lib/prisma"
-import { Icon } from "@iconify/react"
+import { OverviewStats } from "@/components/admin/dashboard/overview-stats"
+import { QuickActions } from "@/components/admin/dashboard/quick-actions"
+import { WelcomeHeader } from "@/components/admin/dashboard/welcome-header"
+import { RecentActivity, ActivityItem } from "@/components/admin/dashboard/recent-activity"
 
 export const dynamic = 'force-dynamic'
 
 export default async function AdminDashboard() {
-  const [articleCount, projectCount, shareCount] = await Promise.all([
+  const [
+    articleCount,
+    projectCount,
+    shareCount,
+    recentArticles,
+    recentProjects,
+    recentResources
+  ] = await Promise.all([
     prisma.article.count(),
     prisma.project.count(),
     prisma.shareResource.count(),
+    prisma.article.findMany({
+      orderBy: { updatedAt: 'desc' },
+      take: 5,
+      select: { id: true, title: true, published: true, updatedAt: true }
+    }),
+    prisma.project.findMany({
+      orderBy: { updatedAt: 'desc' },
+      take: 5,
+      select: { id: true, title: true, updatedAt: true }
+    }),
+    prisma.shareResource.findMany({
+      orderBy: { createdAt: 'desc' },
+      take: 5,
+      select: { id: true, title: true, createdAt: true }
+    }),
   ])
 
-  return (
-    <div className="space-y-8">
-      <div className="grid gap-4 md:grid-cols-3">
-        <StatCard title="Total Articles" value={articleCount} icon="ph:article-duotone" color="text-blue-500" />
-        <StatCard title="Projects" value={projectCount} icon="ph:projector-screen-duotone" color="text-purple-500" />
-        <StatCard title="Share Resources" value={shareCount} icon="ph:share-network-duotone" color="text-orange-500" />
-      </div>
+  // Combine and format activities
+  const activities: ActivityItem[] = [
+    ...recentArticles.map(a => ({
+      id: a.id,
+      type: 'article' as const,
+      title: a.title,
+      status: a.published ? 'published' : 'draft',
+      date: a.updatedAt,
+      href: `/admin/articles/${a.id}/edit`
+    })),
+    ...recentProjects.map(p => ({
+      id: p.id,
+      type: 'project' as const,
+      title: p.title,
+      date: p.updatedAt,
+      href: `/admin/projects/${p.id}/edit`
+    })),
+    ...recentResources.map(r => ({
+      id: r.id,
+      type: 'resource' as const,
+      title: r.title,
+      date: r.createdAt,
+      href: `/admin/share/${r.id}/edit`
+    }))
+  ].sort((a, b) => b.date.getTime() - a.date.getTime())
+    .slice(0, 10)
 
-      <div className="rounded-xl border bg-card text-card-foreground shadow-sm p-6">
-        <h3 className="font-semibold leading-none tracking-tight mb-4">Quick Actions</h3>
-        <div className="grid gap-4 md:grid-cols-4">
-          {/* Add buttons here later */}
-          <div className="p-4 border rounded-lg bg-muted/20 text-center text-sm text-muted-foreground">
-            Manage Content from Sidebar
-          </div>
+  return (
+    <div className="container mx-auto p-8 max-w-7xl space-y-8">
+      <WelcomeHeader />
+
+      <OverviewStats
+        articleCount={articleCount}
+        projectCount={projectCount}
+        shareCount={shareCount}
+      />
+
+      <div className="grid gap-8 lg:grid-cols-3">
+        <div className="lg:col-span-2">
+          <QuickActions />
         </div>
-      </div>
-    </div>
-  )
-}
-
-function StatCard({ title, value, icon, color }: { title: string, value: number, icon: string, color: string }) {
-  return (
-    <div className="rounded-xl border bg-card text-card-foreground shadow-sm p-6 flex items-center justify-between space-y-0">
-      <div className="space-y-1">
-        <p className="text-sm font-medium text-muted-foreground">{title}</p>
-        <div className="text-2xl font-bold">{value}</div>
-      </div>
-      <div className={`p-3 rounded-full bg-muted/30 ${color}`}>
-        <Icon icon={icon} className="w-6 h-6" />
+        <div className="lg:row-span-2">
+          <RecentActivity activities={activities} />
+        </div>
       </div>
     </div>
   )

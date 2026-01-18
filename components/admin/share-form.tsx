@@ -78,7 +78,7 @@ export default function ShareForm({
               value={formData.link}
               onChange={handleChange}
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              placeholder="https://github.com/owner/repo"
+              placeholder={t('shareForm.urlPlaceholder')}
             />
             <button
               type="button"
@@ -104,7 +104,7 @@ export default function ShareForm({
             value={formData.title}
             onChange={handleChange}
             className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            placeholder="e.g. Tailwind CSS"
+            placeholder={t('shareForm.titlePlaceholder')}
             aria-describedby="title-error"
           />
           {state?.errors?.title && (
@@ -121,7 +121,7 @@ export default function ShareForm({
             value={formData.description}
             onChange={handleChange}
             className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            placeholder="A utility-first CSS framework..."
+            placeholder={t('shareForm.descriptionPlaceholder')}
           />
           {state?.errors?.description && (
             <p className="text-sm text-destructive">{state.errors.description}</p>
@@ -159,7 +159,7 @@ export default function ShareForm({
                 value={formData.iconName}
                 onChange={handleChange}
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                placeholder="ph:wrench-duotone"
+                placeholder={t('shareForm.iconNamePlaceholder')}
               />
               {formData.iconName && (
                 <div className="flex items-center justify-center p-2 rounded-md border bg-muted w-10 shrink-0">

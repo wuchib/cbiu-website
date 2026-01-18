@@ -38,7 +38,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                 </div>
 
                 <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-                  <NavLink href="/admin" icon="ph:gauge" label={t('dashboard')} />
+                  <NavLink href="/admin" icon="ph:gauge" label={t('dashboardNav')} />
                   <div className="pt-4 pb-2 px-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">{t('content')}</div>
                   <NavLink href="/admin/share" icon="ph:share-network" label={t('share')} />
                   <NavLink href="/admin/articles" icon="ph:article" label={t('articles')} />
@@ -61,7 +61,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               <main className="flex-1 overflow-y-auto">
                 <header className="h-16 border-b bg-background flex items-center px-8 sticky top-0 z-10 justify-between">
                   {/* Dynamic Title based on route? For now simple Dashboard or t('dashboard') */}
-                  <h1 className="font-semibold text-lg">{t('dashboard')}</h1>
+                  <h1 className="font-semibold text-lg">{t('dashboardNav')}</h1>
                   <div className="flex items-center gap-4">
                     <AdminLanguageSwitcher />
                     <div className="text-sm text-muted-foreground">{t('welcome')}</div>

@@ -48,7 +48,9 @@
       "published": "Publish",
       "publishedDesc": "Visible to the public.",
       "tags": "Tags",
-      "tagsPlaceholder": "Press Enter to add"
+      "tagsPlaceholder": "Press Enter to add",
+      "coverImage": "Cover Image URL",
+      "previewPlaceholder": "Preview will appear here..."
     },
     "actions": {
       "save": "Save",
@@ -57,7 +59,9 @@
       "close": "Close",
       "new": "New",
       "edit": "Edit",
-      "delete": "Delete"
+      "delete": "Delete",
+      "autoFill": "Auto Fill",
+      "filling": "Filling..."
     },
     "list": {
       "title": "Title",
@@ -72,19 +76,25 @@
     },
     "projectForm": {
       "title": "Project Name",
+      "slug": "Slug",
       "description": "Description",
+      "content": "Content / Details",
       "thumbnail": "Thumbnail URL",
       "links": "Links",
-      "demo": "Demo URL",
-      "github": "Source URL",
-      "featured": "Featured"
+      "demoUrl": "Demo URL",
+      "githubUrl": "Source URL",
+      "githubUrlHint": "Auto-fill likely available",
+      "featured": "Featured",
+      "stars": "Stars",
+      "order": "Sort Order"
     },
     "shareForm": {
       "title": "Resource Title",
-      "link": "Resource Link",
+      "url": "Resource Link",
       "category": "Category",
+      "selectCategory": "Select a category",
       "description": "Description",
-      "icon": "Icon (Iconify)"
+      "iconName": "Icon Name (Iconify)"
     }
   }
 }

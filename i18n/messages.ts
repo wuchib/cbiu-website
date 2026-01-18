@@ -29,7 +29,7 @@ export const messages = {
     },
     "Admin": {
       "title": "Admin Panel",
-      "dashboard": "Dashboard",
+      "dashboardNav": "Dashboard",
       "content": "Content",
       "share": "Share Resources",
       "articles": "Articles",
@@ -39,49 +39,113 @@ export const messages = {
       "logout": "Log Out",
       "welcome": "Welcome, Admin",
       "actions": {
+        "save": "Save",
+        "saving": "Saving...",
+        "cancel": "Cancel",
+        "close": "Close",
+        "new": "New",
+        "edit": "Edit",
+        "delete": "Delete",
+        "autoFill": "Auto Fill",
+        "filling": "Filling..."
+      },
+      "list": {
+        "title": "Title",
+        "status": "Status",
+        "views": "Views",
+        "createdAt": "Created At",
+        "actions": "Actions",
+        "published": "Published",
+        "draft": "Draft",
+        "noData": "No data found",
+        "category": "Category",
+        "featured": "Featured"
+      },
+      "dashboard": {
+        "overview": {
+          "totalArticles": "Total Articles",
+          "projects": "Projects",
+          "shareResources": "Share Resources"
+        },
+        "quickActions": {
+          "title": "Quick Actions",
+          "newArticle": "New Article",
+          "newProject": "New Project",
+          "addResource": "Add Resource",
+          "globalSettings": "Global Settings"
+        },
+        "recentActivity": {
+          "title": "Recent Activity",
+          "viewAll": "View all",
+          "noActivity": "No recent activity",
+          "type": {
+            "article": "Article",
+            "project": "Project",
+            "resource": "Resource"
+          }
+        },
+        "welcome": {
+          "morning": "Good Morning",
+          "afternoon": "Good Afternoon",
+          "evening": "Good Evening",
+          "subtitle": "Here's what's happening with your content today."
+        }
+      },
+      "articleForm": {
         "pageTitle": "New Article",
         "editTitle": "Edit Article",
         "settingsTitle": "Article Settings",
         "title": "Title",
+        "titlePlaceholder": "Article Title",
         "slug": "Slug",
+        "slugPlaceholder": "url-friendly-id",
+        "content": "Content",
+        "contentPlaceholder": "Write your story...",
         "description": "Description",
-        "content": "Content (Markdown)",
-        "coverImage": "Cover Image URL",
-        "published": "Published",
+        "descriptionPlaceholder": "Short description...",
+        "published": "Publish",
         "publishedDesc": "Visible to the public.",
         "tags": "Tags",
-        "tagsPlaceholder": "Type and press Enter to add tag",
-        "slugPlaceholder": "article-slug",
-        "titlePlaceholder": "Article Title",
-        "descriptionPlaceholder": "Brief description...",
-        "contentPlaceholder": "# Your article content...",
+        "tagsPlaceholder": "Press Enter to add",
+        "coverImage": "Cover Image URL",
         "previewPlaceholder": "Preview will appear here..."
       },
       "projectForm": {
         "pageTitle": "New Project",
         "editTitle": "Edit Project",
-        "title": "Title",
+        "title": "Project Name",
+        "titlePlaceholder": "Project Name",
         "slug": "Slug",
+        "slugPlaceholder": "project-slug",
         "description": "Description",
-        "content": "Case Study Content (Markdown, Optional)",
+        "descriptionPlaceholder": "Short description for the card...",
+        "content": "Content / Details",
+        "contentPlaceholder": "# Detailed case study...",
         "thumbnail": "Thumbnail URL",
+        "thumbnailPlaceholder": "/images/projects/...",
+        "links": "Links",
         "demoUrl": "Demo URL",
-        "githubUrl": "GitHub / Gitee URL (Auto Fill Settings)",
-        "githubUrlHint": "Enter a repository URL and click \"Auto Fill\" to automatically populate Title, Description, Demo URL, and Stars.",
-        "featured": "Featured (Show on Home)",
-        "order": "Sort Order",
+        "demoUrlPlaceholder": "https://...",
+        "githubUrl": "Source URL",
+        "githubUrlPlaceholder": "https://github.com/username/repo",
+        "githubUrlHint": "Auto-fill likely available",
+        "featured": "Featured",
         "stars": "Stars",
-        "links": "Links"
+        "order": "Sort Order"
       },
       "shareForm": {
         "pageTitle": "New Resource",
         "editTitle": "Edit Resource",
-        "title": "Title",
-        "description": "Description (Short)",
-        "url": "URL (GitHub / Gitee preferred)",
+        "title": "Resource Title",
+        "titlePlaceholder": "e.g. Tailwind CSS",
+        "url": "Resource Link",
+        "urlPlaceholder": "https://github.com/owner/repo",
         "category": "Category",
-        "iconName": "Iconify Name (Optional)",
-        "selectCategory": "Select a category"
+        "selectCategory": "Select a category",
+        "description": "Description",
+        "descriptionPlaceholder": "A utility-first CSS framework...",
+        "iconName": "Icon Name (Iconify)",
+        "iconNamePlaceholder": "ph:wrench-duotone"
       }
     }
   },
@@ -115,7 +179,7 @@ export const messages = {
     },
     "Admin": {
       "title": "管理面板",
-      "dashboard": "仪表盘",
+      "dashboardNav": "仪表盘",
       "content": "内容管理",
       "share": "分享资源",
       "articles": "文章管理",
@@ -125,17 +189,15 @@ export const messages = {
       "logout": "退出登录",
       "welcome": "欢迎，管理员",
       "actions": {
+        "save": "保存",
+        "saving": "保存中...",
+        "cancel": "取消",
+        "close": "关闭",
         "new": "新建",
         "edit": "编辑",
         "delete": "删除",
-        "save": "保存",
-        "cancel": "取消",
-        "saving": "保存中...",
-        "publish": "发布",
-        "unpublish": "取消发布",
         "autoFill": "自动填充",
-        "filling": "填充中...",
-        "close": "关闭"
+        "filling": "获取中..."
       },
       "list": {
         "title": "标题",
@@ -146,54 +208,95 @@ export const messages = {
         "actions": "操作",
         "published": "已发布",
         "draft": "草稿",
-        "featured": "精选",
+        "noData": "暂无数据",
         "category": "分类",
-        "noData": "暂无数据"
+        "featured": "精选"
+      },
+      "dashboard": {
+        "overview": {
+          "totalArticles": "文章总数",
+          "projects": "项目总数",
+          "shareResources": "分享资源"
+        },
+        "quickActions": {
+          "title": "快捷操作",
+          "newArticle": "新建文章",
+          "newProject": "新建项目",
+          "addResource": "添加资源",
+          "globalSettings": "全局设置"
+        },
+        "recentActivity": {
+          "title": "最近动态",
+          "viewAll": "查看全部",
+          "noActivity": "暂无动态",
+          "type": {
+            "article": "文章",
+            "project": "项目",
+            "resource": "资源"
+          }
+        },
+        "welcome": {
+          "morning": "早上好",
+          "afternoon": "下午好",
+          "evening": "晚上好",
+          "subtitle": "以下是今天的内容概览。"
+        }
       },
       "articleForm": {
         "pageTitle": "新建文章",
         "editTitle": "编辑文章",
         "settingsTitle": "文章设置",
         "title": "标题",
+        "titlePlaceholder": "文章标题",
         "slug": "别名",
+        "slugPlaceholder": "url-friendly-id",
+        "content": "内容",
+        "contentPlaceholder": "在这里撰写文章...",
         "description": "摘要",
-        "content": "内容 (Markdown)",
-        "coverImage": "封面图片 URL",
+        "descriptionPlaceholder": "简短描述文章内容...",
         "published": "发布",
         "publishedDesc": "对公众可见。",
         "tags": "标签",
-        "tagsPlaceholder": "输入后按回车添加标签",
-        "slugPlaceholder": "文章别名",
-        "titlePlaceholder": "文章标题",
-        "descriptionPlaceholder": "简短描述...",
-        "contentPlaceholder": "# 在这里撰写文章...",
+        "tagsPlaceholder": "按回车添加",
+        "coverImage": "封面图片 URL",
         "previewPlaceholder": "预览将显示在这里..."
       },
       "projectForm": {
         "pageTitle": "新建项目",
         "editTitle": "编辑项目",
-        "title": "标题",
+        "title": "项目名称",
+        "titlePlaceholder": "输入项目名称",
         "slug": "别名",
+        "slugPlaceholder": "project-slug",
         "description": "描述",
-        "content": "案例内容 (Markdown, 可选)",
+        "descriptionPlaceholder": "用于卡片展示的简短描述...",
+        "content": "内容 / 详情",
+        "contentPlaceholder": "# 详细的案例研究...",
         "thumbnail": "缩略图 URL",
+        "thumbnailPlaceholder": "/images/projects/...",
+        "links": "链接",
         "demoUrl": "演示链接",
-        "githubUrl": "GitHub / Gitee 链接 (自动填充)",
-        "githubUrlHint": "输入仓库链接后点击\"自动填充\"，将自动填写标题、描述、演示链接和 Star 数。",
-        "featured": "精选 (显示在首页)",
-        "order": "排序",
-        "stars": "Star 数",
-        "links": "链接"
+        "demoUrlPlaceholder": "https://...",
+        "githubUrl": "源码链接",
+        "githubUrlPlaceholder": "https://github.com/username/repo",
+        "githubUrlHint": "支持自动获取信息",
+        "featured": "首页精选",
+        "stars": "Stars",
+        "order": "排序"
       },
       "shareForm": {
         "pageTitle": "新建资源",
         "editTitle": "编辑资源",
-        "title": "标题",
-        "description": "简介",
-        "url": "链接 (推荐 GitHub / Gitee)",
+        "title": "资源标题",
+        "titlePlaceholder": "例如：Tailwind CSS",
+        "url": "资源链接",
+        "urlPlaceholder": "https://github.com/owner/repo",
         "category": "分类",
-        "iconName": "Iconify 图标名 (可选)",
-        "selectCategory": "选择分类"
+        "selectCategory": "选择分类",
+        "description": "描述",
+        "descriptionPlaceholder": "一个实用优先的 CSS 框架...",
+        "iconName": "图标 (Iconify)",
+        "iconNamePlaceholder": "ph:wrench-duotone"
       }
     }
   }

@@ -48,7 +48,9 @@
       "published": "发布",
       "publishedDesc": "对公众可见。",
       "tags": "标签",
-      "tagsPlaceholder": "按回车添加"
+      "tagsPlaceholder": "按回车添加",
+      "coverImage": "封面图片 URL",
+      "previewPlaceholder": "预览将显示在这里..."
     },
     "actions": {
       "save": "保存",
@@ -57,7 +59,9 @@
       "close": "关闭",
       "new": "新建",
       "edit": "编辑",
-      "delete": "删除"
+      "delete": "删除",
+      "autoFill": "自动填充",
+      "filling": "获取中..."
     },
     "list": {
       "title": "标题",
@@ -72,19 +76,25 @@
     },
     "projectForm": {
       "title": "项目名称",
+      "slug": "别名",
       "description": "描述",
+      "content": "内容 / 详情",
       "thumbnail": "缩略图 URL",
       "links": "链接",
-      "demo": "演示链接",
-      "github": "源码链接",
-      "featured": "首页精选"
+      "demoUrl": "演示链接",
+      "githubUrl": "源码链接",
+      "githubUrlHint": "支持自动获取信息",
+      "featured": "首页精选",
+      "stars": "Stars",
+      "order": "排序"
     },
     "shareForm": {
       "title": "资源标题",
-      "link": "资源链接",
+      "url": "资源链接",
       "category": "分类",
+      "selectCategory": "选择分类",
       "description": "描述",
-      "icon": "图标 (Iconify)"
+      "iconName": "图标 (Iconify)"
     }
   }
 }
