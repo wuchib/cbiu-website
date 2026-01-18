@@ -1,11 +1,12 @@
 'use client';
 
 import { useActionState, useState, useEffect } from 'react';
-import { createShareResource, updateShareResource } from '@/actions/share';
+import { createShareResource, updateShareResource, fetchRepoInfo } from '@/actions/share';
 import Link from "next/link"
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { Icon } from '@iconify/react';
 
 // Simplified type for categories passed from server
 type Category = {
@@ -23,6 +24,7 @@ export default function ShareForm({
   const t = useTranslations('Admin');
   const router = useRouter();
   const initialState = { message: null, errors: {} };
+  const [isFetching, setIsFetching] = useState(false);
 
   const handleSubmit = async (prevState: any, formData: FormData) => {
     const plainData = {
@@ -77,6 +79,31 @@ export default function ShareForm({
     }))
   }
 
+  const handleAutoFill = async () => {
+    if (!formData.link) return;
+    setIsFetching(true);
+    try {
+      const res = await fetchRepoInfo(formData.link);
+      if (res.success && res.data) {
+        setFormData(prev => ({
+          ...prev,
+          title: res.data.title || prev.title,
+          description: res.data.description || prev.description,
+          // We decided not to use iconName anymore, but if we wanted to auto-fill it to customData or somewhere else we could.
+          // For now just title and description.
+        }));
+        toast.success(t('actions.autoFillSuccess'));
+      } else {
+        toast.error(t('actions.fetchError'));
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(t('actions.fetchError'));
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
   return (
     <form action={dispatch} className="space-y-6 max-w-2xl">
       <input type="hidden" name="customData" value={JSON.stringify(formData.customData)} />
@@ -104,6 +131,37 @@ export default function ShareForm({
           )}
         </div>
 
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Link */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium" htmlFor="link">{t('shareForm.url')}</label>
+            <div className="flex gap-2">
+              <input
+                id="link"
+                name="link"
+                type="url"
+                value={formData.link}
+                onChange={handleChange}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                placeholder={t('shareForm.urlPlaceholder')}
+              />
+              <button
+                type="button"
+                onClick={handleAutoFill}
+                disabled={isFetching || !formData.link}
+                className="inline-flex shrink-0 items-center justify-center rounded-md border border-input bg-background px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground disabled:opacity-50"
+                title={t('actions.autoFill')}
+              >
+                {isFetching ? <Icon icon="ph:spinner" className="animate-spin w-4 h-4" /> : <Icon icon="ph:magic-wand" className="w-4 h-4" />}
+              </button>
+            </div>
+            {(state as any)?.errors?.link && (
+              <p className="text-sm text-destructive">{(state as any).errors.link}</p>
+            )}
+          </div>
+          {/* Description can share the row or be below, let's keep it structurally simple */}
+        </div>
+
         {/* Title */}
         <div className="space-y-2">
           <label className="text-sm font-medium" htmlFor="title">{t('shareForm.title')}</label>
@@ -118,26 +176,6 @@ export default function ShareForm({
           {(state as any)?.errors?.title && (
             <p className="text-sm text-destructive">{(state as any).errors.title}</p>
           )}
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Link */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium" htmlFor="link">{t('shareForm.url')}</label>
-            <input
-              id="link"
-              name="link"
-              type="url"
-              value={formData.link}
-              onChange={handleChange}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              placeholder={t('shareForm.urlPlaceholder')}
-            />
-            {(state as any)?.errors?.link && (
-              <p className="text-sm text-destructive">{(state as any).errors.link}</p>
-            )}
-          </div>
-          {/* Description can share the row or be below, let's keep it structurally simple */}
         </div>
 
         {/* Description */}

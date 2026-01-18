@@ -5,12 +5,14 @@ import { TableOfContents } from "./table-of-contents"
 import { Article } from "@/lib/articles"
 import { slugify } from "@/lib/slugify"
 import React from "react"
+import { useTranslations } from "next-intl"
 
 interface ArticleDetailProps {
   article: Article
 }
 
 export function ArticleDetail({ article }: ArticleDetailProps) {
+  const t = useTranslations("Articles")
   const components = {
     h1: ({ children, ...props }: any) => {
       const text = React.Children.toArray(children).join("")
@@ -72,7 +74,7 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
         <div className="lg:hidden mb-8 rounded-lg border bg-card text-card-foreground shadow-sm">
           <details className="group">
             <summary className="flex cursor-pointer items-center justify-between p-4 font-medium transition-colors hover:text-primary">
-              <span>Table of Contents</span>
+              <span>{t("tableOfContents")}</span>
               <span className="transition-transform group-open:rotate-180">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

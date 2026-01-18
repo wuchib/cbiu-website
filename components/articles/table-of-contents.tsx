@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { cn } from "@/lib/utils"
+import { useTranslations } from "next-intl"
 
 interface TableOfContentsProps {
   headings: {
@@ -12,6 +13,7 @@ interface TableOfContentsProps {
 }
 
 export function TableOfContents({ headings }: TableOfContentsProps) {
+  const t = useTranslations("Articles")
   const [activeId, setActiveId] = useState<string>("")
 
   useEffect(() => {
@@ -49,7 +51,7 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
 
   return (
     <div className="space-y-2">
-      <p className="font-medium text-muted-foreground mb-4">On this page</p>
+      <p className="font-medium text-muted-foreground mb-4">{t("onThisPage")}</p>
       <ul className="space-y-2 text-sm">
         {headings.map((heading) => (
           <li

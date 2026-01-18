@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Icon } from '@iconify/react';
 import { Link } from '@/i18n/routing';
+import { useTranslations } from 'next-intl';
 import * as Motion from '@/components/motion-client';
 import { cn } from '@/lib/utils';
 import { ShareCategory, ShareResource } from '@prisma/client';
@@ -23,6 +24,7 @@ export default function SharePageClient({ categories, title, description }: Shar
 
   const [activeCategory, setActiveCategory] = useState<string>(visibleCategories[0]?.key || '');
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
+  const t = useTranslations('Share');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -59,7 +61,7 @@ export default function SharePageClient({ categories, title, description }: Shar
   };
 
   return (
-    <div className="container relative mx-auto min-h-screen max-w-7xl px-4 py-24">
+    <div className="container relative mx-auto min-h-screen max-w-5xl px-4 py-24">
       {/* Background Element */}
       <div className="fixed top-0 right-0 -z-10 h-[500px] w-[500px] bg-primary/5 blur-[100px] rounded-full opacity-50 pointer-events-none" />
 
@@ -131,27 +133,19 @@ export default function SharePageClient({ categories, title, description }: Shar
                       <Link
                         href={resource.link}
                         target="_blank"
-                        className="group flex flex-col h-full p-5 rounded-2xl border border-border/40 bg-card/40 hover:bg-card hover:border-border transition-all hover:shadow-md hover:-translate-y-1"
+                        className="group flex flex-col h-full p-4 rounded-xl border border-border/40 bg-card/40 hover:bg-card hover:border-border transition-all hover:shadow-md hover:-translate-y-0.5"
                       >
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="p-2 rounded-lg bg-background border shadow-sm group-hover:scale-105 transition-transform">
-                            {resource.iconName && resource.iconName !== '' ? (
-                              <Icon icon={resource.iconName} className="w-5 h-5 text-primary" />
-                            ) : (
-                              // Fallback to category icon if resource has none
-                              <Icon icon={category.icon || "ph:link"} className="w-5 h-5 text-primary" />
-                            )}
-                          </div>
-                          <Icon icon="ph:arrow-up-right" className="w-4 h-4 text-muted-foreground opacity-30 group-hover:opacity-100 group-hover:text-primary transition-all" />
+                        <div className="flex items-start justify-between gap-2 mb-1.5">
+                          <h3 className="font-medium text-sm text-foreground group-hover:text-primary transition-colors line-clamp-1">{resource.title}</h3>
+                          <Icon icon="ph:arrow-up-right" className="shrink-0 w-3.5 h-3.5 text-muted-foreground opacity-30 group-hover:opacity-100 group-hover:text-primary transition-all" />
                         </div>
 
-                        <h3 className="font-semibold text-base mb-1 group-hover:text-primary transition-colors line-clamp-1">{resource.title}</h3>
-                        <p className="text-sm text-muted-foreground line-clamp-2">{resource.description}</p>
+                        <p className="text-xs text-muted-foreground/80 line-clamp-2 leading-relaxed mb-auto">{resource.description}</p>
 
                         {resource.customData && Object.keys(resource.customData as object).length > 0 && (
-                          <div className="mt-4 pt-3 border-t border-border/50 flex flex-wrap gap-2">
+                          <div className="mt-3 pt-2 border-t border-border/50 flex flex-wrap gap-1.5">
                             {Object.entries(resource.customData as object).slice(0, 2).map(([key, value]) => (
-                              <span key={key} className="text-[10px] px-2 py-1 rounded-full bg-muted text-muted-foreground font-medium uppercase tracking-wide">
+                              <span key={key} className="text-[10px] px-1.5 py-0.5 rounded-md bg-muted/50 text-muted-foreground font-medium uppercase tracking-wider">
                                 {String(value)}
                               </span>
                             ))}

@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button"
 import { Icon } from "@iconify/react"
 import Link from "next/link"
 import { prisma } from "@/lib/prisma"
+import { getTranslations } from "next-intl/server"
 
 export default async function ProjectsPage() {
+  const t = await getTranslations("Projects")
   const projects = await prisma.project.findMany({
     orderBy: [
       { order: 'asc' },
@@ -23,8 +25,8 @@ export default async function ProjectsPage() {
 
       <div className="relative z-10">
         <div className="mb-8 space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight">Open Source Projects</h1>
-          <p className="text-muted-foreground">A collection of my open source contributions and personal projects.</p>
+          <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
+          <p className="text-muted-foreground">{t("description")}</p>
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -66,14 +68,14 @@ export default async function ProjectsPage() {
                   {project.githubUrl && (
                     <Link href={project.githubUrl} target="_blank" className="flex-1">
                       <Button variant="outline" size="sm" className="w-full gap-2 h-8 text-xs">
-                        <Icon icon="mdi:github" /> Source
+                        <Icon icon="mdi:github" /> {t("source")}
                       </Button>
                     </Link>
                   )}
                   {project.demoUrl && (
                     <Link href={project.demoUrl} target="_blank" className="flex-1">
                       <Button variant="default" size="sm" className="w-full gap-2 h-8 text-xs">
-                        <Icon icon="ph:desktop" /> Demo
+                        <Icon icon="ph:desktop" /> {t("demo")}
                       </Button>
                     </Link>
                   )}
@@ -84,7 +86,7 @@ export default async function ProjectsPage() {
 
           {projects.length === 0 && (
             <div className="col-span-full py-20 text-center text-muted-foreground">
-              No projects found. Check back later!
+              {t("noProjects")}
             </div>
           )}
         </div>

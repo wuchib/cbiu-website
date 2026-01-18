@@ -10,7 +10,7 @@ export default async function NewSharePage() {
   const locale = cookieStore.get('NEXT_LOCALE')?.value || 'en';
   const t = await getTranslations({ locale, namespace: 'Admin' });
   const categories = await prisma.shareCategory.findMany({
-    select: { key: true, name: true },
+    select: { key: true, name: true, fieldsSchema: true },
     orderBy: { sortOrder: 'asc' }
   })
 

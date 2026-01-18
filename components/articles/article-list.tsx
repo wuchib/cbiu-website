@@ -14,6 +14,7 @@ interface ArticleListProps {
 
 export function ArticleList({ articles }: ArticleListProps) {
   const t = useTranslations("Navigation")
+  const tArticles = useTranslations("Articles")
 
   return (
     <div className="container relative mx-auto min-h-screen max-w-5xl px-4 py-24">
@@ -32,7 +33,7 @@ export function ArticleList({ articles }: ArticleListProps) {
           {t("articles")}
         </h1>
         <p className="mt-2 text-muted-foreground">
-          Thoughts, tutorials, and insights about development and design.
+          {tArticles("description")}
         </p>
       </motion.div>
 

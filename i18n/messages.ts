@@ -1,12 +1,18 @@
 export const messages = {
   en: {
     "HomePage": {
-      "welcomeBadge": "Welcome",
-      "titlePart1": "Welcome to",
-      "titlePart2": "My Personal Space",
-      "description": "Sharing my thoughts, building open source, and curating the best music. A minimalist digital garden.",
+      "welcomeBadge": "Hello, Friend 👋",
+      "titlePart1": "I build things for the",
+      "titlePart2": "web.",
+      "description": "Just a developer who loves building open source projects, sharing knowledge, and creating useful tools for the community.",
       "readArticles": "Read Articles",
-      "viewProjects": "View Projects"
+      "viewProjects": "View Projects",
+      "latestArticles": "Latest Articles",
+      "viewAll": "View All",
+      "draft": "Draft",
+      "readArticle": "Read Article",
+      "systemStatus": "System Status",
+      "live": "LIVE"
     },
     "Navigation": {
       "home": "Home",
@@ -15,13 +21,39 @@ export const messages = {
       "share": "Share",
       "about": "About"
     },
+    "Projects": {
+      "title": "Open Source Projects",
+      "description": "A collection of my open source contributions and personal projects.",
+      "source": "Source",
+      "demo": "Demo",
+      "noProjects": "No projects found. Check back later!"
+    },
+    "Articles": {
+      "title": "Articles",
+      "description": "Thoughts, tutorials, and insights about development and design.",
+      "tableOfContents": "Table of Contents",
+      "onThisPage": "On this page"
+    },
+    "Footer": {
+      "rights": "All rights reserved."
+    },
     "Share": {
       "title": "Weekly Share",
-      "description": "Curated tools, resources, and inspiration related to design and development."
+      "description": "Curated tools, resources, and inspiration related to design and development.",
+      "categories": "Categories"
     },
     "About": {
       "title": "About Me",
-      "description": "I'm a passionate developer building open source software and sharing my journey."
+      "description": "I'm a passionate developer building open source software and sharing my journey.",
+      "helloIm": "Hello, I'm",
+      "connect": "Connect",
+      "techStack": "Tech Stack",
+      "tags": {
+        "frontendEngineer": "Frontend Engineer",
+        "openSource": "Open Source",
+        "uiUxEnthusiast": "UI/UX Enthusiast",
+        "minimalist": "Minimalist"
+      }
     },
     "Common": {
       "toggleTheme": "Toggle theme",
@@ -48,6 +80,8 @@ export const messages = {
         "edit": "Edit",
         "delete": "Delete",
         "autoFill": "Auto Fill",
+        "autoFillSuccess": "Info auto-filled",
+        "fetchError": "Failed to fetch info",
         "filling": "Filling...",
         "continue": "Continue",
         "back": "Back",
@@ -162,12 +196,18 @@ export const messages = {
   },
   zh: {
     "HomePage": {
-      "welcomeBadge": "欢迎",
-      "titlePart1": "欢迎来到",
-      "titlePart2": "我的个人空间",
-      "description": "分享我的思考，构建开源项目，精选最佳音乐。这是一个极简的数字花园。",
+      "welcomeBadge": "你好，朋友 👋",
+      "titlePart1": "写代码，",
+      "titlePart2": "也热爱生活",
+      "description": "一名喜欢折腾技术的开发者。在这里分享我的开源项目、技术文章，以及一些关于设计的思考。",
       "readArticles": "阅读文章",
-      "viewProjects": "查看项目"
+      "viewProjects": "查看项目",
+      "latestArticles": "最新文章",
+      "viewAll": "查看全部",
+      "draft": "草稿",
+      "readArticle": "阅读全文",
+      "systemStatus": "系统状态",
+      "live": "运行中"
     },
     "Navigation": {
       "home": "首页",
@@ -176,13 +216,39 @@ export const messages = {
       "share": "分享",
       "about": "关于"
     },
+    "Projects": {
+      "title": "开源项目",
+      "description": "我的开源贡献和个人项目合集。",
+      "source": "源码",
+      "demo": "演示",
+      "noProjects": "暂无项目，敬请期待！"
+    },
+    "Articles": {
+      "title": "文章",
+      "description": "关于开发和设计的思考、教程和见解。",
+      "tableOfContents": "目录",
+      "onThisPage": "本页目录"
+    },
+    "Footer": {
+      "rights": "版权所有。"
+    },
     "Share": {
       "title": "每周分享",
-      "description": "精选的设计与开发工具、资源和灵感。"
+      "description": "精选的设计与开发工具、资源和灵感。",
+      "categories": "分类导航"
     },
     "About": {
       "title": "关于我",
-      "description": "我是一名热情的开发者，致力于构建开源软件并分享我的旅程。"
+      "description": "我是一名热情的开发者，致力于构建开源软件并分享我的旅程。",
+      "helloIm": "你好，我是",
+      "connect": "联系方式",
+      "techStack": "技术栈",
+      "tags": {
+        "frontendEngineer": "前端工程师",
+        "openSource": "开源贡献者",
+        "uiUxEnthusiast": "UI/UX 爱好者",
+        "minimalist": "极简主义者"
+      }
     },
     "Common": {
       "toggleTheme": "切换主题",
@@ -208,7 +274,9 @@ export const messages = {
         "new": "新建",
         "edit": "编辑",
         "delete": "删除",
-        "autoFill": "自动填充",
+        "autoFill": "Auto Fill",
+        "autoFillSuccess": "Info auto-filled",
+        "fetchError": "Failed to fetch info",
         "filling": "获取中...",
         "continue": "下一步",
         "back": "返回",
