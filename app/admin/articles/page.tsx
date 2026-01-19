@@ -57,7 +57,10 @@ export default async function ArticlesAdminPage() {
                     <div className="text-xs text-muted-foreground font-mono">/{article.slug}</div>
                   </td>
                   <td className="p-4 align-middle">
-                    <form action={togglePublishArticle.bind(null, article.id, article.published)}>
+                    <form action={async () => {
+                      'use server'
+                      await togglePublishArticle(article.id, article.published)
+                    }}>
                       <button className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors
                             ${article.published ? 'bg-green-100 text-green-800 hover:bg-green-200' : 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'}`}>
                         {article.published ? t('list.published') : t('list.draft')}

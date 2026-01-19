@@ -7,13 +7,20 @@ import { ArticleDetail } from "@/components/articles/article-detail"
 import { prisma } from "@/lib/prisma"
 
 export async function generateStaticParams() {
-  const articles = await prisma.article.findMany({
-    where: { published: true },
-    select: { slug: true }
-  })
-  return articles.map((article) => ({
-    slug: article.slug,
-  }))
+  try {
+    const articles = await prisma.article.findMany({
+      where: { published: true },
+      select: { slug: true }
+    })
+    return articles.map((article) => ({
+      slug: article.slug,
+    }))
+  } catch (error) {
+    // If DB is seemingly unavailable (e.g. during build), return empty
+    // to skip static generation for now.
+    console.log('Skipping static params generation due to DB unavailable')
+    return []
+  }
 }
 
 export default async function ArticlePage(props: { params: Promise<{ slug: string }> }) {
