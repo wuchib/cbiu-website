@@ -1,5 +1,6 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { ImageWithSkeleton } from "@/components/ui/image-with-skeleton"
 import { Button } from "@/components/ui/button"
 import { Icon } from "@iconify/react"
 import Link from "next/link"
@@ -33,10 +34,11 @@ export default async function ProjectsPage() {
           {projects.map((project, i) => (
             <Card key={project.id} className="flex flex-col overflow-hidden group transition-all duration-300 border-border/60 hover:border-primary/30 hover:shadow-xl hover:bg-accent/5">
               {project.thumbnail && (
-                <div className="h-32 w-full overflow-hidden border-b bg-muted relative">
-                  <img
+                <div className="h-32 w-full overflow-hidden border-b relative">
+                  <ImageWithSkeleton
                     src={project.thumbnail}
                     alt={project.title}
+                    wrapperClassName="h-full w-full"
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   {/* @ts-ignore */}

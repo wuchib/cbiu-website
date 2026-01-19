@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import { Icon } from "@iconify/react"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { ImageWithSkeleton } from "@/components/ui/image-with-skeleton"
 import { Article } from "@/lib/articles"
 import { useTranslations } from "next-intl"
 
@@ -60,11 +61,12 @@ export function ArticleList({ articles }: ArticleListProps) {
                 <Card className="overflow-hidden border-border/40 bg-background/50 backdrop-blur-sm transition-all duration-300 hover:border-primary/50 hover:bg-muted/30 hover:shadow-lg hover:shadow-primary/5">
                   <div className="flex flex-col sm:flex-row h-full">
                     {/* Cover Image (Compact) */}
-                    <div className="relative h-32 w-full shrink-0 overflow-hidden bg-muted sm:h-32 sm:w-48">
+                    <div className="relative h-32 w-full shrink-0 overflow-hidden sm:h-32 sm:w-48">
                       {article.cover ? (
-                        <img
+                        <ImageWithSkeleton
                           src={article.cover}
                           alt={article.title}
+                          wrapperClassName="h-full w-full"
                           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       ) : (

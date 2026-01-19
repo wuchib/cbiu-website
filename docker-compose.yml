@@ -1,0 +1,57 @@
+version: '3' # Docker Compose 文件版本
+
+services:
+  # 定义我们要启动的服务（容器）
+  app:
+    # 服务名称：应用本身
+    container_name: cbiu-website # 容器名称，方便查看日志和管理
+    build:
+      # 构建配置
+      context: . #构建上下文，'.' 表示当前目录
+      dockerfile: Dockerfile # 指定使用哪个文件作为 Dockerfile
+    restart: always # 重启策略：无论什么原因退出，都自动重启
+    ports:
+      - "3000:3000" # 端口映射：将宿主机的 3000 端口映射到容器的 3000 端口
+    environment:
+      # 环境变量配置
+      # 数据库连接地址，格式：mysql://用户名:密码@服务名:端口/数据库名
+      # 注意：这里的 host 是 'db'，对应下面定义的数据库服务名
+      - DATABASE_URL=${DATABASE_URL:-mysql://root:123456@db:3306/cbiu_webside}
+      # NextAuth 的密钥和 URL
+      - AUTH_SECRET=${AUTH_SECRET}
+      - AUTH_URL=${AUTH_URL}
+    depends_on:
+      # 依赖配置
+      - db # 告诉 Docker，app 服务需要等待 db 服务启动后再启动
+    networks:
+      #加入的网络
+      - cbiu-network
+
+  db:
+    # 服务名称：数据库
+    container_name: cbiu-db
+    image: mysql:8.0 # 使用官方的 MySQL 8.0 镜像
+    restart: always
+    # 使用原生密码认证插件，防止部分客户端连接报错
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      # MySQL root 用户密码
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-123456}
+      # 容器启动时默认创建的数据库名
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-cbiu_webside}
+    volumes:
+      # 数据卷配置（非常重要！）
+      # 将容器内的 /var/lib/mysql 映射到宿主机的 db-data 卷
+      # 这样即使删除了容器，数据也不会丢失
+      - db-data:/var/lib/mysql
+    networks:
+      - cbiu-network
+
+networks:
+  # 定义网络
+  cbiu-network:
+    driver: bridge # 使用桥接网络，容器之间可以通过服务名互相访问
+
+volumes:
+  # 定义数据卷
+  db-data: # 声明一个具名数据卷，用于持久化数据库数据

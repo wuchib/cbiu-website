@@ -8,8 +8,8 @@ export default function AboutPage() {
   const t = useTranslations("About")
 
   return (
-    <div className="container relative mx-auto min-h-screen max-w-5xl px-4 py-24">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:grid-rows-2 h-full">
+    <div className="container relative mx-auto flex min-h-screen max-w-5xl flex-col justify-center px-4 py-12 md:py-24">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:grid-rows-2">
 
         {/* Profile Card - Large Left */}
         <div className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-border/50 bg-card/50 p-8 md:col-span-2 md:row-span-2 backdrop-blur-sm transition-all hover:bg-card/80">
