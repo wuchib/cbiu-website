@@ -1,31 +1,47 @@
 import ArticleForm from "@/components/admin/article-form"
-import Link from "next/link"
-import { Icon } from "@iconify/react"
 import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
 
-export default async function EditArticlePage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params
-  const articleData = await prisma.article.findUnique({
-    where: { id },
-    include: {
-      tags: {
-        include: {
-          tag: true
+export const dynamic = 'force-dynamic'
+
+export default async function EditArticlePage({ params }: { params: { id: string } }) {
+  const { id } = params
+
+  const [article, categories] = await Promise.all([
+    prisma.article.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        content: true,
+        description: true,
+        coverImage: true,
+        published: true,
+        categoryId: true,
+        tags: {
+          select: {
+            tag: {
+              select: {
+                name: true
+              }
+            }
+          }
         }
       }
-    }
-  })
+    }),
+    prisma.articleCategory.findMany({
+      orderBy: { sortOrder: 'asc' }
+    })
+  ])
 
-  // Flatten tags for the form
-  const article = articleData ? {
-    ...articleData,
-    tags: articleData.tags.map(t => t.tag.name)
-  } : null
+  if (!article) notFound()
 
-  if (!article) {
-    notFound()
+  // Transform tags to simple string array
+  const articleWithTags = {
+    ...article,
+    tags: article.tags.map(t => t.tag.name)
   }
 
-  return <ArticleForm article={article} />
+  return <ArticleForm article={articleWithTags} categories={categories} />
 }

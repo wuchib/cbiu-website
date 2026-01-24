@@ -29,6 +29,11 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
       const id = slugify(text)
       return <h3 id={id} {...props}>{children}</h3>
     },
+    img: ({ node, src, alt, ...props }: any) => {
+      // Don't render img if src is empty to prevent console warnings
+      if (!src) return null;
+      return <img src={src} alt={alt || ''} {...props} />;
+    }
   }
 
   const headings = React.useMemo(() => {

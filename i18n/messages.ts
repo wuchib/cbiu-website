@@ -65,6 +65,7 @@ export const messages = {
       "content": "Content",
       "share": "Share Resources",
       "articles": "Articles",
+      "articleCategories": "Article Categories",
       "projects": "Projects",
       "settings": "Settings",
       "globalSettings": "Global Settings",
@@ -191,6 +192,25 @@ export const messages = {
         "descriptionPlaceholder": "A utility-first CSS framework...",
         "iconName": "Icon Name (Iconify)",
         "iconNamePlaceholder": "ph:wrench-duotone"
+      },
+      "categoryForm": {
+        "name": "Category Name",
+        "slug": "Slug",
+        "description": "Description",
+        "color": "Color Class",
+        "sortOrder": "Sort Order"
+      },
+      "tabs": {
+        "articles": "Articles",
+        "categories": "Categories"
+      },
+      "confirmDelete": {
+        "article": "Are you sure you want to delete this article?",
+        "category": "Are you sure you want to delete this category?"
+      },
+      "messages": {
+        "articlesCount": "articles",
+        "noCategory": "No category"
       }
     }
   },
@@ -260,6 +280,7 @@ export const messages = {
       "content": "内容管理",
       "share": "分享资源",
       "articles": "文章管理",
+      "articleCategories": "文章分类",
       "projects": "项目管理",
       "settings": "系统设置",
       "globalSettings": "全局设置",
@@ -387,6 +408,25 @@ export const messages = {
         "descriptionPlaceholder": "一个实用优先的 CSS 框架...",
         "iconName": "图标 (Iconify)",
         "iconNamePlaceholder": "ph:wrench-duotone"
+      },
+      "categoryForm": {
+        "name": "分类名称",
+        "slug": "别名",
+        "description": "描述",
+        "color": "颜色类名",
+        "sortOrder": "排序"
+      },
+      "tabs": {
+        "articles": "文章列表",
+        "categories": "分类管理"
+      },
+      "confirmDelete": {
+        "article": "确定要删除这篇文章吗？",
+        "category": "确定要删除此分类吗？"
+      },
+      "messages": {
+        "articlesCount": "篇文章",
+        "noCategory": "未分类"
       }
     }
   }

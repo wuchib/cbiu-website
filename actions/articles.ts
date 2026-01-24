@@ -20,6 +20,7 @@ const ArticleSchema = z.object({
   coverImage: z.string().optional(),
   published: z.coerce.boolean(),
   tags: z.string().optional(), // Received as JSON string
+  categoryId: z.string().optional(),
 })
 
 export async function createArticle(prevState: any, formData: FormData) {
@@ -31,6 +32,7 @@ export async function createArticle(prevState: any, formData: FormData) {
     coverImage: formData.get('coverImage') || undefined,
     published: formData.get('published') === 'on',
     tags: formData.get('tags') || undefined,
+    categoryId: formData.get('categoryId') || undefined,
   })
 
   if (!validatedFields.success) {
@@ -40,7 +42,7 @@ export async function createArticle(prevState: any, formData: FormData) {
     }
   }
 
-  const { title, slug, description, content, coverImage, published, tags } = validatedFields.data
+  const { title, slug, description, content, coverImage, published, tags, categoryId } = validatedFields.data
   
   const tagsList: string[] = tags ? JSON.parse(tags) : [];
 
@@ -63,6 +65,7 @@ export async function createArticle(prevState: any, formData: FormData) {
         coverImage,
         published,
         publishedAt: published ? new Date() : null,
+        categoryId: categoryId || null,
         tags: {
             create: tagsList.map(tag => ({
                 tag: {
@@ -96,6 +99,7 @@ export async function updateArticle(id: string, prevState: any, formData: FormDa
     coverImage: formData.get('coverImage') || undefined,
     published: formData.get('published') === 'on',
     tags: formData.get('tags') || undefined,
+    categoryId: formData.get('categoryId') || undefined,
   })
 
   if (!validatedFields.success) {
@@ -105,7 +109,7 @@ export async function updateArticle(id: string, prevState: any, formData: FormDa
     }
   }
 
-  const { title, slug, description, content, coverImage, published, tags } = validatedFields.data
+  const { title, slug, description, content, coverImage, published, tags, categoryId } = validatedFields.data
   const tagsList: string[] = tags ? JSON.parse(tags) : [];
 
   try {
@@ -127,6 +131,7 @@ export async function updateArticle(id: string, prevState: any, formData: FormDa
         coverImage,
         published,
         publishedAt: published ? (existing?.published ? existing.publishedAt : new Date()) : null,
+        categoryId: categoryId || null,
         tags: {
             deleteMany: {}, // Remove existing relations
             create: tagsList.map(tag => ({

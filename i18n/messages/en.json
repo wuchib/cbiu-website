@@ -28,6 +28,7 @@
     "content": "Content",
     "share": "Share Resources",
     "articles": "Articles",
+    "articleCategories": "Article Categories",
     "projects": "Projects",
     "settings": "Settings",
     "globalSettings": "Global Settings",
@@ -61,7 +62,8 @@
       "edit": "Edit",
       "delete": "Delete",
       "autoFill": "Auto Fill",
-      "filling": "Filling..."
+      "filling": "Filling...",
+      "continue": "Continue"
     },
     "list": {
       "title": "Title",
@@ -95,6 +97,25 @@
       "selectCategory": "Select a category",
       "description": "Description",
       "iconName": "Icon Name (Iconify)"
+    },
+    "categoryForm": {
+      "name": "Category Name",
+      "slug": "Slug",
+      "description": "Description",
+      "color": "Color Class",
+      "sortOrder": "Sort Order"
+    },
+    "tabs": {
+      "articles": "Articles",
+      "categories": "Categories"
+    },
+    "confirmDelete": {
+      "article": "Are you sure you want to delete this article?",
+      "category": "Are you sure you want to delete this category?"
+    },
+    "messages": {
+      "articlesCount": "articles",
+      "noCategory": "No category"
     }
   }
 }

@@ -28,6 +28,7 @@
     "content": "内容管理",
     "share": "分享资源",
     "articles": "文章管理",
+    "articleCategories": "文章分类",
     "projects": "项目管理",
     "settings": "系统设置",
     "globalSettings": "全局设置",
@@ -61,7 +62,8 @@
       "edit": "编辑",
       "delete": "删除",
       "autoFill": "自动填充",
-      "filling": "获取中..."
+      "filling": "获取中...",
+      "continue": "继续"
     },
     "list": {
       "title": "标题",
@@ -95,6 +97,25 @@
       "selectCategory": "选择分类",
       "description": "描述",
       "iconName": "图标 (Iconify)"
+    },
+    "categoryForm": {
+      "name": "分类名称",
+      "slug": "别名",
+      "description": "描述",
+      "color": "颜色类名",
+      "sortOrder": "排序"
+    },
+    "tabs": {
+      "articles": "文章列表",
+      "categories": "分类管理"
+    },
+    "confirmDelete": {
+      "article": "确定要删除这篇文章吗？",
+      "category": "确定要删除此分类吗？"
+    },
+    "messages": {
+      "articlesCount": "篇文章",
+      "noCategory": "未分类"
     }
   }
 }

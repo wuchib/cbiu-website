@@ -9,7 +9,7 @@ import { useTranslations } from 'next-intl';
 import ReactMarkdown from 'react-markdown';
 import { cn } from '@/lib/utils';
 
-export default function ArticleForm({ article }: { article?: any }) {
+export default function ArticleForm({ article, categories = [] }: { article?: any, categories?: any[] }) {
   const t = useTranslations('Admin');
 
   // Step 1: Content (Title + Markdown)
@@ -369,7 +369,12 @@ export default function ArticleForm({ article }: { article?: any }) {
                   components={{
                     a: ({ node, ...props }) => (
                       <a {...props} target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-4 hover:opacity-80 transition-opacity" />
-                    )
+                    ),
+                    img: ({ node, src, alt, ...props }) => {
+                      // Don't render img if src is empty to prevent console warnings
+                      if (!src) return null;
+                      return <img src={src} alt={alt || ''} {...props} />;
+                    }
                   }}
                 >
                   {content || `*${t('articleForm.previewPlaceholder')}*`}
@@ -430,6 +435,27 @@ export default function ArticleForm({ article }: { article?: any }) {
                           placeholder={t('articleForm.descriptionPlaceholder')}
                         />
                       </div>
+                    </div>
+
+                    {/* Category Selection */}
+                    <div className="space-y-3">
+                      <label className="text-sm font-medium text-muted-foreground" htmlFor="categoryId">{t('list.category')}</label>
+                      <div className="rounded-xl border border-input/50 bg-background/50 transition-all focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary focus-within:bg-background">
+                        <select
+                          id="categoryId"
+                          name="categoryId"
+                          defaultValue={article?.categoryId || ''}
+                          className="flex h-11 w-full bg-transparent px-4 py-2 text-sm shadow-none focus-visible:outline-none cursor-pointer"
+                        >
+                          <option value="">{t('shareForm.selectCategory')}</option>
+                          {categories.map((category: any) => (
+                            <option key={category.id} value={category.id}>
+                              {category.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <p className="text-xs text-muted-foreground/60">Group article into a category for better organization.</p>
                     </div>
                   </div>
                 </div>
