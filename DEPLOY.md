@@ -42,23 +42,21 @@ nano .env
 # 1. 这里的 host 必须填 'db'，因为这是我们在 docker-compose.yml 中给数据库服务起的名字
 # 2. 这里的密码 (123456) 必须与下面 MYSQL_ROOT_PASSWORD 保持一致
 DATABASE_URL="mysql://root:123456@db:3306/cbiu_webside"
-
 # --- MySQL 容器初始化配置 ---
 # 这些变量仅用于首次创建数据库容器时设置密码和库名。
 # 必须与上面的 DATABASE_URL 中的信息保持一致。
 MYSQL_ROOT_PASSWORD="123456"      # 数据库 root 密码
 MYSQL_DATABASE="cbiu_webside"     # 默认创建的数据库名
-
 # --- NextAuth 认证配置 ---
-
 # 1. 生成一个随机密钥。在终端运行: openssl rand -base64 32
 # 将输出的结果填在下面:
-AUTH_SECRET="这里填你生成的随机字符串"
-
-# 2. 你的网站完整访问地址 (包含协议 http:// 或 https://)
-# 如果你有域名，填域名：https://www.your-domain.com
-# 如果没有域名，填 IP+端口：http://你的公网IP:3000
+AUTH_SECRET="lHZ93apCxxHrjKfvxGTVOUCquHA0qF9gq30PSg07e8M="
+# 2. 你的网站完整访问地址 (包含协议 https://)
+# 如果你还在本地测试，可以用 http://localhost:3000
+# 上线时务必改成你的域名，例如:
+# AUTH_URL="https://www.your-domain.com"
 AUTH_URL="http://你的公网IP:3000" 
+
 ```
 
 **3. 保存并退出**
@@ -118,7 +116,7 @@ docker-compose exec app npx prisma db seed
 ```nginx
 server {
     listen 80;
-    server_name your-domain.com www.your-domain.com; # 替换你的域名
+    server_name cbiu.fun www.cbiu.fun; # 替换你的域名
 
     location / {
         proxy_pass http://localhost:3000; # 转发到 Docker 容器映射的端口
