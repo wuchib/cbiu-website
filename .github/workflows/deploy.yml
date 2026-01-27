@@ -16,20 +16,26 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       
-      - name: Build Docker image
+      - name: Build Docker images
         run: |
+          # Build application image
           docker build -t cbiu-website:latest .
           docker save cbiu-website:latest -o cbiu-website.tar
           chmod 644 cbiu-website.tar
+          
+          # Pull and save MySQL image (to avoid network issues on server)
+          docker pull mysql:8.0
+          docker save mysql:8.0 -o mysql.tar
+          chmod 644 mysql.tar
       
-      - name: Upload image to server
+      - name: Upload images to server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_PORT || 22 }}
-          source: "cbiu-website.tar"
+          source: "cbiu-website.tar,mysql.tar"
           target: "/root/projects/cbiu-website/"
       
       - name: Deploy on server
@@ -41,8 +47,16 @@ jobs:
           port: ${{ secrets.SERVER_PORT || 22 }}
           script: |
             cd /root/projects/cbiu-website
+            
+            # Load both images
+            docker load -i mysql.tar
             docker load -i cbiu-website.tar
-            docker-compose up -d --force-recreate app
+            
+            # Start all services
+            docker-compose up -d
+            
+            # Cleanup
             docker image prune -f
-            rm cbiu-website.tar
+            rm cbiu-website.tar mysql.tar
+            
             echo "✅ Deployment completed successfully!"
