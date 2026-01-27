@@ -20,6 +20,7 @@ jobs:
         run: |
           docker build -t cbiu-website:latest .
           docker save cbiu-website:latest -o cbiu-website.tar
+          chmod 644 cbiu-website.tar
       
       - name: Upload image to server
         uses: appleboy/scp-action@v0.1.7
