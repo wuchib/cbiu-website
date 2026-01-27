@@ -5,10 +5,7 @@ services:
   app:
     # 服务名称：应用本身
     container_name: cbiu-website # 容器名称，方便查看日志和管理
-    build:
-      # 构建配置
-      context: . #构建上下文，'.' 表示当前目录
-      dockerfile: Dockerfile # 指定使用哪个文件作为 Dockerfile
+    image: cbiu-website:latest # 使用已构建的镜像（由 GitHub Actions 构建并上传）
     restart: always # 重启策略：无论什么原因退出，都自动重启
     ports:
       - "3000:3000" # 端口映射：将宿主机的 3000 端口映射到容器的 3000 端口
