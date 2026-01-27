@@ -46,26 +46,55 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_PORT || 22 }}
           script: |
+            set -e  # Exit on error
             cd /root/projects/cbiu-website
             
-            # Load both images
+            echo "📦 Step 1: Checking tar files..."
+            ls -lh cbiu-website.tar mysql.tar
+            
+            echo ""
+            echo "🛑 Step 2: Stopping containers..."
+            docker-compose down || true
+            
+            echo ""
+            echo "🗑️  Step 3: Removing old cbiu-website image..."
+            docker rmi -f cbiu-website:latest || echo "No old image to remove"
+            
+            echo ""
+            echo "📥 Step 4: Loading new images..."
             docker load -i mysql.tar
             docker load -i cbiu-website.tar
             
-            # Update docker-compose.yml to use pre-built image
-            # Replace build section with image directive
+            echo ""
+            echo "🔍 Step 5: Verifying loaded images..."
+            docker images | grep -E "cbiu-website|mysql"
+            
+            echo ""
+            echo "📝 Step 6: Updating docker-compose.yml..."
             if grep -q "build:" docker-compose.yml; then
               sed -i '/app:/,/restart:/ {
                 /build:/,/dockerfile:/d
                 /container_name:/a\    image: cbiu-website:latest
               }' docker-compose.yml
+              echo "✅ docker-compose.yml updated"
+            else
+              echo "✅ docker-compose.yml already uses image"
             fi
             
-            # Start all services
+            echo ""
+            echo "🚀 Step 7: Starting services..."
             docker-compose up -d
             
-            # Cleanup
+            echo ""
+            echo "🔍 Step 8: Checking container status..."
+            docker ps
+            
+            echo ""
+            echo "🧹 Step 9: Cleanup..."
             docker image prune -f
             rm cbiu-website.tar mysql.tar
             
+            echo ""
             echo "✅ Deployment completed successfully!"
+            echo "📊 Final status:"
+            docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
