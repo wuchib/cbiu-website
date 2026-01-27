@@ -61,12 +61,12 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
             <a
               href={`#${heading.id}`}
               className={cn(
-                "block border-l-2 pl-3 py-1 transition-all hover:text-primary hover:border-border line-clamp-2 text-xs",
+                "block border-l-2 pl-3 py-1 transition-all line-clamp-2 text-xs",
                 activeId === heading.id
                   ? "border-primary text-primary font-bold scale-105 origin-left"
                   : headings.findIndex(h => h.id === activeId) > headings.findIndex(h => h.id === heading.id)
-                    ? "border-primary/40 text-primary/80"
-                    : "border-transparent text-muted-foreground/70"
+                    ? "border-primary/40 text-primary/80 hover:text-primary hover:border-primary/60"
+                    : "border-transparent text-muted-foreground/70 hover:text-primary hover:border-border"
               )}
               onClick={(e) => {
                 e.preventDefault()

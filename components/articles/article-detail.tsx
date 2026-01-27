@@ -13,20 +13,31 @@ interface ArticleDetailProps {
 
 export function ArticleDetail({ article }: ArticleDetailProps) {
   const t = useTranslations("Articles")
+
+  // Track heading occurrences for unique ID generation
+  const headingCounters = React.useRef(new Map<string, number>())
+
+  const getUniqueHeadingId = (text: string) => {
+    const count = headingCounters.current.get(text) || 0
+    headingCounters.current.set(text, count + 1)
+    const baseId = slugify(text)
+    return count > 0 ? `${baseId}-${count}` : baseId
+  }
+
   const components = {
     h1: ({ children, ...props }: any) => {
       const text = React.Children.toArray(children).join("")
-      const id = slugify(text)
+      const id = getUniqueHeadingId(text)
       return <h1 id={id} {...props}>{children}</h1>
     },
     h2: ({ children, ...props }: any) => {
       const text = React.Children.toArray(children).join("")
-      const id = slugify(text)
+      const id = getUniqueHeadingId(text)
       return <h2 id={id} {...props}>{children}</h2>
     },
     h3: ({ children, ...props }: any) => {
       const text = React.Children.toArray(children).join("")
-      const id = slugify(text)
+      const id = getUniqueHeadingId(text)
       return <h3 id={id} {...props}>{children}</h3>
     },
     img: ({ node, src, alt, ...props }: any) => {
@@ -39,6 +50,7 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
   const headings = React.useMemo(() => {
     const lines = article.content.split("\n")
     const extracted = []
+    const textOccurrences = new Map<string, number>()
     let inCodeBlock = false
 
     for (const line of lines) {
@@ -52,7 +64,15 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
       if (match) {
         const level = match[1].length
         const text = match[2].trim()
-        const id = slugify(text)
+        const baseId = slugify(text)
+
+        // Track occurrences of this text
+        const count = textOccurrences.get(text) || 0
+        textOccurrences.set(text, count + 1)
+
+        // Generate unique ID by appending counter if duplicate
+        const id = count > 0 ? `${baseId}-${count}` : baseId
+
         extracted.push({ id, text, level })
       }
     }
