@@ -6,6 +6,9 @@ import { ArrowLeft } from "lucide-react"
 import { ArticleDetail } from "@/components/articles/article-detail"
 import { prisma } from "@/lib/prisma"
 
+// Force dynamic rendering to avoid static generation issues
+export const dynamic = 'force-dynamic'
+
 export async function generateStaticParams() {
   try {
     const articles = await prisma.article.findMany({
