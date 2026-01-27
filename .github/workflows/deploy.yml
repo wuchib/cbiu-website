@@ -52,6 +52,15 @@ jobs:
             docker load -i mysql.tar
             docker load -i cbiu-website.tar
             
+            # Update docker-compose.yml to use pre-built image
+            # Replace build section with image directive
+            if grep -q "build:" docker-compose.yml; then
+              sed -i '/app:/,/restart:/ {
+                /build:/,/dockerfile:/d
+                /container_name:/a\    image: cbiu-website:latest
+              }' docker-compose.yml
+            fi
+            
             # Start all services
             docker-compose up -d
             
