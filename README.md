@@ -1,103 +1,221 @@
-# 🌿 Personal Digital Garden
+# 🌿 Cbiu 个人网站
 
-A premium, full-stack personal portfolio and digital garden built with the latest **Next.js 15** ecosystem. Designed with "Advanced Minimalism" logic, featuring smooth animations, robust internationalization, and a powerful admin content management system.
+基于 **Next.js 15** 打造的现代化全栈个人网站，采用「高级极简主义」设计理念，具备流畅动画、国际化支持和强大的后台管理系统。
 
-## ✨ Features
+[![部署状态](https://img.shields.io/badge/部署-在线-success)](https://www.cbiu.fun)
+[![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-### 🎨 Frontend Experiences
-- **Premium Design**: "Advanced Minimalism" aesthetic with glassmorphism, dynamic grids, and noise textures.
-- **Micro-Interactions**: Smooth page transitions and element animations powered by **Framer Motion**.
-- **Responsive Layout**: Mobile-first design that looks stunning on all devices.
-- **Internationalization (i18n)**: Seamless English/Chinese switching support via **next-intl**.
+🌐 **在线访问**：[www.cbiu.fun](https://www.cbiu.fun)
 
-### 🛠️ Core Modules
-- **Home**: Dynamic hero section with "System Status" visualization and staggered entry animations.
-- **About**: Modern "Bento Grid" layout showcasing personal info, tech stack, and social connections.
-- **Articles**: Full-featured blog system with Markdown rendering, TOC (Table of Contents), and metadata support.
-- **Projects**: Portfolio showcase with links to demos and source code.
-- **Share**: A collection of curated resources (Software, Tools) with category filtering and dynamic search.
+## ✨ 核心特性
 
-### ⚡ Admin Dashboard
-- **Secure Authentication**: Protected routes powered by **NextAuth.js v5**.
-- **Content Management**:
-  - **Article Editor**: Markdown editor with metadata management.
-  - **Project Manager**: Add/Edit/Delete portfolio projects.
-  - **Share Manager**: Advanced resource management with dynamic category schemas and auto-fetching metadata.
-  - **Analytics**: Dashboard overview of content statistics.
+### 🎨 前端体验
+- **精致设计**：高级极简主义美学，融合玻璃态、动态网格和噪点纹理
+- **流畅动画**：基于 **Framer Motion** 的页面过渡和元素动画
+- **响应式布局**：移动优先设计，适配所有设备
+- **国际化**：通过 **next-intl** 实现中英文无缝切换
 
-## 🚀 Tech Stack
+### 🛠️ 功能模块
+- **首页**：动态 Hero 区域，系统状态可视化，交错入场动画
+- **关于**：现代化 Bento Grid 布局，展示个人信息、技术栈和社交链接
+- **文章**：完整的博客系统，Markdown 渲染、目录导航、文章分类
+- **项目**：作品集展示，包含演示链接和源码链接
+- **分享**：精选资源合集（软件、工具），支持分类筛选和动态搜索
 
-- **Framework**: [Next.js 15](https://nextjs.org/) (App Router, Turbopack)
-- **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
-- **UI System**: [Radix UI](https://www.radix-ui.com/) Primitives, Lucide Icons
-- **Animations**: [Framer Motion](https://www.framer.com/motion/)
-- **Database**: [Prisma](https://www.prisma.io/) (ORM)
-- **Internationalization**: [next-intl](https://next-intl-docs.vercel.app/)
-- **Authentication**: [NextAuth.js v5](https://authjs.dev/)
+### 🔐 管理后台
+- **安全认证**：基于 **NextAuth.js v5** 的身份验证系统
+- **内容管理**：
+  - **文章编辑器**：Markdown 编辑器 + 元数据管理
+  - **项目管理**：添加/编辑/删除作品集项目
+  - **资源管理**：高级资源管理，支持动态分类和自动获取元数据
+  - **数据统计**：内容统计仪表盘
+- **私密账户**：交互式账户创建，密码 bcrypt 加密，凭证不存在代码中
 
-## 📦 Getting Started
+## 🚀 技术栈
 
-### Prerequisites
+| 技术 | 说明 |
+|------|------|
+| **框架** | [Next.js 15](https://nextjs.org/) (App Router, Turbopack) |
+| **语言** | [TypeScript 5](https://www.typescriptlang.org/) |
+| **样式** | [Tailwind CSS v4](https://tailwindcss.com/) |
+| **UI 组件** | [Radix UI](https://www.radix-ui.com/) + [Iconify](https://iconify.design/) |
+| **动画** | [Framer Motion](https://www.framer.com/motion/) |
+| **数据库** | [Prisma ORM](https://www.prisma.io/) + MySQL |
+| **国际化** | [next-intl](https://next-intl-docs.vercel.app/) |
+| **认证** | [NextAuth.js v5](https://authjs.dev/) |
+| **部署** | Docker + GitHub Actions |
+
+## 📦 快速开始
+
+### 环境要求
 - Node.js 18+
-- pnpm (recommended)
+- pnpm（推荐）或 npm
+- MySQL 8.0+（生产环境）
 
-### Installation
+### 本地开发
 
-1. **Clone the repository**
+1. **克隆仓库**
    ```bash
-   git clone https://github.com/your-username/digital-garden.git
-   cd digital-garden
+   git clone https://github.com/wuchib/cbiu-website.git
+   cd cbiu-website
    ```
 
-2. **Install dependencies**
+2. **安装依赖**
    ```bash
    pnpm install
    ```
 
-3. **Environment Setup**
-    Create a `.env` file in the root directory:
+3. **环境配置**
+   
+   创建 `.env` 文件：
    ```env
-   # Database (SQLite for dev, Postgres for prod)
-   DATABASE_URL="file:./dev.db"
-
-   # NextAuth
+   # 数据库连接
+   DATABASE_URL="mysql://root:password@localhost:3306/cbiu_webside"
+   
+   # NextAuth 认证
+   # 生成密钥：openssl rand -base64 32
    AUTH_SECRET="your-secret-key-at-least-32-chars"
    AUTH_URL="http://localhost:3000"
    ```
 
-4. **Initialize Database**
+4. **初始化数据库**
    ```bash
+   # 生成 Prisma Client
    npx prisma generate
+   
+   # 同步数据库结构
    npx prisma db push
-   # Optional: Seed initial data
-   # npx prisma db seed
+   
+   # 填充初始数据（分类等）
+   npx prisma db seed
    ```
 
-5. **Run Development Server**
+5. **创建管理员账户**
+   ```bash
+   pnpm run setup-admin
+   ```
+   
+   按提示输入邮箱、用户名和密码（密码会加密保存）
+
+6. **启动开发服务器**
    ```bash
    pnpm dev
    ```
+   
+   访问 [http://localhost:3000](http://localhost:3000)
 
-   Open [http://localhost:3000](http://localhost:3000) to view the application.
-
-## 📂 Project Structure
+## 🏗️ 项目结构
 
 ```
-├── app/                  # Next.js App Router Pages
-│   ├── [locale]/         # Public pages (Home, About, etc.)
-│   ├── admin/            # Protected Admin Dashboard
-│   └── api/              # API Route Handlers
-├── components/           # Reusable UI Components
-│   ├── layout/           # Header, Footer, Nav
-│   ├── ui/               # Design System Primitives
-│   └── ...
-├── i18n/                 # Internationalization Config
-├── lib/                  # Utilities & Helpers
-├── prisma/               # Database Schema & Migrations
-└── public/               # Static Assets
+cbiu-website/
+├── app/                      # Next.js App Router
+│   ├── [locale]/             # 公开页面（首页、关于等）
+│   │   ├── page.tsx          # 首页
+│   │   ├── about/            # 关于页面
+│   │   ├── articles/         # 文章列表和详情
+│   │   ├── projects/         # 项目展示
+│   │   └── share/            # 资源分享
+│   ├── admin/                # 后台管理（需登录）
+│   │   ├── articles/         # 文章管理
+│   │   ├── projects/         # 项目管理
+│   │   └── share/            # 资源管理
+│   ├── login/                # 登录页面
+│   └── api/                  # API 路由
+├── components/               # React 组件
+│   ├── layout/               # 布局组件（Header, Footer, Nav）
+│   ├── ui/                   # UI 基础组件
+│   ├── admin/                # 后台专用组件
+│   └── articles/             # 文章相关组件
+├── actions/                  # Server Actions
+├── lib/                      # 工具函数
+├── i18n/                     # 国际化配置
+├── prisma/                   # 数据库 Schema
+│   ├── schema.prisma         # 数据模型
+│   └── seed.ts               # 初始数据
+├── scripts/                  # 实用脚本
+│   └── setup-admin.ts        # 管理员账户创建
+├── public/                   # 静态资源
+└── middleware.ts             # 路由中间件（认证 + i18n）
 ```
 
-## 📄 License
+## 🚢 生产部署
 
-This project is open source and available under the [MIT License](LICENSE).
+详细部署文档请参考：[DEPLOY.md](./DEPLOY.md)
+
+**使用 Docker Compose 快速部署**：
+
+1. **配置 `.env` 文件**（参考 DEPLOY.md）
+2. **启动服务**
+   ```bash
+   docker-compose up -d --build
+   ```
+3. **初始化数据库**
+   ```bash
+   docker-compose exec app npx prisma db push
+   docker-compose exec app npx prisma db seed
+   ```
+4. **创建管理员账户**
+   ```bash
+   docker-compose exec app npm run setup-admin
+   ```
+
+**使用 GitHub Actions 自动化部署**：
+- 每次推送到 `master` 分支会自动触发构建和部署
+- 查看 `.github/workflows/deploy.yml` 了解详情
+
+## 📝 使用说明
+
+### 访问后台管理
+
+1. 访问 `https://www.cbiu.fun/admin`
+2. 未登录会自动跳转到登录页面
+3. 使用创建的管理员账户登录
+4. 登录成功后自动进入管理后台
+
+### 编写文章
+
+1. 进入后台 → 文章管理 → 新建文章
+2. 填写标题、描述、分类、标签
+3. 使用 Markdown 编辑器编写内容
+4. 可选上传封面图
+5. 选择是否发布
+6. 保存即可
+
+### 添加项目
+
+1. 进入后台 → 项目管理 → 新建项目
+2. 填写项目信息（标题、描述、链接等）
+3. 上传缩略图
+4. 设置排序和特色标记
+5. 保存发布
+
+## 🔒 安全特性
+
+- ✅ **密码加密**：使用 bcrypt 哈希算法
+- ✅ **凭证私密**：管理员账号密码不存在代码中
+- ✅ **会话管理**：NextAuth 自动处理 session 和 token
+- ✅ **路由保护**：中间件自动拦截未授权访问
+- ✅ **环境变量**：敏感信息通过环境变量管理
+
+## 📄 开源协议
+
+本项目采用 [MIT License](LICENSE) 开源协议。
+
+## 🙏 致谢
+
+感谢以下开源项目：
+
+- [Next.js](https://nextjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Prisma](https://www.prisma.io/)
+- [NextAuth.js](https://authjs.dev/)
+- [Radix UI](https://www.radix-ui.com/)
+- [Framer Motion](https://www.framer.com/motion/)
+
+---
+
+**如有问题或建议，欢迎 [提交 Issue](https://github.com/wuchib/cbiu-website/issues)**
+
+**喜欢这个项目？给个 ⭐️ Star 吧！**
