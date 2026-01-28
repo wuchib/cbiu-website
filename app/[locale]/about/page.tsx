@@ -1,86 +1,94 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
 import { Icon } from "@iconify/react"
-import { useTranslations } from "next-intl"
+import Link from "next/link"
 
 export default function AboutPage() {
-  const t = useTranslations("About")
+  const techStack = [
+    { name: "Vue", icon: "simple-icons:vuedotjs", color: "text-green-500" },
+    { name: "React", icon: "simple-icons:react", color: "text-blue-500" },
+    { name: "TypeScript", icon: "simple-icons:typescript", color: "text-blue-600" },
+    { name: "Tailwind CSS", icon: "simple-icons:tailwindcss", color: "text-cyan-500" },
+  ]
 
   return (
-    <div className="container relative mx-auto flex min-h-screen max-w-5xl flex-col justify-center px-4 py-12 md:py-24">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:grid-rows-2">
+    <div className="container relative mx-auto flex min-h-screen max-w-4xl flex-col items-center justify-center px-4 py-12">
+      {/* Main Card */}
+      <div className="w-full overflow-hidden rounded-3xl border border-border/50 bg-card/30 backdrop-blur-md">
 
-        {/* Profile Card - Large Left */}
-        <div className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-border/50 bg-card/50 p-8 md:col-span-2 md:row-span-2 backdrop-blur-sm transition-all hover:bg-card/80">
-          <div className="absolute right-0 top-0 -z-10 opacity-10">
-            <Icon icon="ph:sketch-logo-duotone" width={300} height={300} className="translate-x-1/3 -translate-y-1/3 rotate-12 text-primary" />
+        {/* Avatar Section - Prominent */}
+        <div className="flex flex-col items-center justify-center pt-16 pb-8">
+          <div className="group relative">
+            {/* Decorative Ring */}
+            <div className="absolute inset-0 -m-2 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 blur-xl transition-all group-hover:scale-110" />
+
+            {/* Avatar */}
+            <Avatar className="relative h-32 w-32 border-4 border-background shadow-2xl transition-transform group-hover:scale-105 md:h-40 md:w-40">
+              <AvatarImage src="/avatar.jpg" alt="Cbiu" className="object-cover" />
+              <AvatarFallback className="text-4xl">CB</AvatarFallback>
+            </Avatar>
           </div>
 
-          <div>
-            <div className="mb-6 inline-block rounded-full border border-primary/20 bg-primary/10 p-1">
-              <Avatar className="h-20 w-20 border-2 border-background">
-                <AvatarImage src="https://github.com/shadcn.png" alt="@cbiu" />
-                <AvatarFallback>CB</AvatarFallback>
-              </Avatar>
-            </div>
+          {/* Name */}
+          <h1 className="mt-8 text-4xl font-bold tracking-tight md:text-5xl">
+            Cbiu
+          </h1>
 
-            <h1 className="mb-2 text-4xl font-extrabold tracking-tight md:text-5xl lg:text-6xl">
-              {t("helloIm")} <span className="text-primary">CBIU</span>
-            </h1>
-            <p className="text-lg text-muted-foreground md:text-xl">
-              {t("description")}
-            </p>
-          </div>
+          {/* Bio */}
+          <p className="mt-4 text-center text-lg text-muted-foreground max-w-md px-6 md:text-xl">
+            💻 啥都想学，希望成为优秀的开发者、产品工程师。
+          </p>
 
-          <div className="mt-12 space-y-4">
-            <div className="flex flex-wrap gap-2">
-              {[
-                t("tags.frontendEngineer"),
-                t("tags.openSource"),
-                t("tags.uiUxEnthusiast"),
-                t("tags.minimalist")
-              ].map((tag) => (
-                <span key={tag} className="inline-flex items-center rounded-full border border-border bg-background/50 px-3 py-1 text-sm text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary">
-                  {tag}
+          {/* GitHub Link */}
+          <Link
+            href="https://github.com/wuchib"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-8"
+          >
+            <Button
+              variant="outline"
+              size="lg"
+              className="group h-12 rounded-full border-2 px-8 transition-all hover:border-primary hover:bg-primary/5"
+            >
+              <Icon icon="mdi:github" className="mr-2 h-5 w-5 transition-transform group-hover:scale-110" />
+              <span className="font-medium">GitHub</span>
+              <Icon icon="ph:arrow-up-right-bold" className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </Button>
+          </Link>
+        </div>
+
+        {/* Tech Stack Section */}
+        <div className="border-t border-border/50 bg-muted/20 px-8 py-10 md:px-12">
+          <h2 className="mb-6 text-center text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+            技术栈
+          </h2>
+
+          <div className="flex flex-wrap items-center justify-center gap-6">
+            {techStack.map((tech) => (
+              <div
+                key={tech.name}
+                className="group flex flex-col items-center gap-2 transition-transform hover:scale-110"
+              >
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-background shadow-sm transition-all group-hover:shadow-md">
+                  <Icon
+                    icon={tech.icon}
+                    className={`h-7 w-7 transition-colors ${tech.color} group-hover:opacity-100 opacity-80`}
+                  />
+                </div>
+                <span className="text-xs font-medium text-muted-foreground transition-colors group-hover:text-foreground">
+                  {tech.name}
                 </span>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Social Card - Top Right */}
-        <div className="group relative flex flex-col justify-center overflow-hidden rounded-3xl border border-border/50 bg-card/50 p-6 backdrop-blur-sm transition-all hover:bg-card/80">
-          <div className="absolute right-4 top-4 opacity-20 transition-opacity group-hover:opacity-40">
-            <Icon icon="ph:arrow-up-right-bold" className="h-6 w-6" />
-          </div>
-          <h3 className="mb-4 text-lg font-semibold text-muted-foreground">{t("connect")}</h3>
-          <div className="flex gap-4">
-            <Button variant="outline" size="icon" className="h-12 w-12 rounded-full border-2 hover:border-primary hover:text-primary">
-              <Icon icon="mdi:github" className="h-6 w-6" />
-            </Button>
-            <Button variant="outline" size="icon" className="h-12 w-12 rounded-full border-2 hover:border-primary hover:text-primary">
-              <Icon icon="mdi:twitter" className="h-6 w-6" />
-            </Button>
-            <Button variant="outline" size="icon" className="h-12 w-12 rounded-full border-2 hover:border-primary hover:text-primary">
-              <Icon icon="mdi:email" className="h-6 w-6" />
-            </Button>
-          </div>
-        </div>
-
-        {/* Stack Card - Bottom Right */}
-        <div className="group relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-primary/5 to-transparent p-6 backdrop-blur-sm transition-all hover:from-primary/10">
-          <h3 className="mb-4 text-lg font-semibold text-muted-foreground">{t("techStack")}</h3>
-          <div className="grid grid-cols-4 gap-4">
-            {["react", "nextjs", "typescript", "tailwindcss", "nodedotjs", "postgresql", "figma", "git"].map((tech) => (
-              <div key={tech} className="flex h-10 w-10 items-center justify-center rounded-lg bg-background shadow-sm transition-transform group-hover:scale-110">
-                <Icon icon={`simple-icons:${tech.replace("nextjs", "nextdotjs")}`} className="h-5 w-5 text-foreground/80" />
               </div>
             ))}
           </div>
         </div>
-
       </div>
+
+      {/* Footer Note */}
+      <p className="mt-8 text-center text-sm text-muted-foreground/60">
+        持续学习，不断进步
+      </p>
     </div>
   )
 }
