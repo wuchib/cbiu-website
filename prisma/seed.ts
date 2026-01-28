@@ -1,12 +1,11 @@
 import { PrismaClient } from '@prisma/client'
-import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
 async function main() {
   console.log('Seeding database...')
 
-  // 1. Share Categories
+  // Share Categories
   const categories = [
     {
       key: 'design',
@@ -50,24 +49,10 @@ async function main() {
     })
   }
   
-  // 2. Admin User
-  const email = 'admin@example.com'
-  const password = 'adminpassword' // Change this in production
-  const hashedPassword = await bcrypt.hash(password, 10)
-
-  const admin = await prisma.user.upsert({
-    where: { email },
-    update: {},
-    create: {
-      email,
-      username: 'Admin',
-      passwordHash: hashedPassword,
-      role: 'admin'
-    }
-  })
-
-  console.log(`Admin user ensured: ${email} / ${password}`)
-  console.log('Seeding finished.')
+  console.log('✓ Share categories seeded')
+  console.log('\n📌 提示: 请运行以下命令创建管理员账户:')
+  console.log('   npx ts-node scripts/setup-admin.ts')
+  console.log('\nSeeding finished.')
 }
 
 main()

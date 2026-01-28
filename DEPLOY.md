@@ -93,9 +93,50 @@ docker-compose logs -f app
 # 进入应用容器执行迁移命令
 docker-compose exec app npx prisma db push
 
-# (可选) 填充初始数据
+# 填充初始数据（Share Categories 等）
 docker-compose exec app npx prisma db seed
 ```
+
+### 3.2 创建管理员账户（重要！）
+
+**⚠️ 首次部署必须执行此步骤，否则无法登录管理后台！**
+
+运行以下命令，按提示输入您的管理员账号和密码：
+
+```bash
+docker-compose exec app npm run setup-admin
+```
+
+脚本会交互式地询问您：
+- 管理员邮箱（用于登录）
+- 管理员用户名
+- 密码（至少6位）
+- 确认密码
+
+**示例输出**：
+```
+=== 管理员账户设置 ===
+
+请输入管理员邮箱: your-email@example.com
+请输入管理员用户名: Admin
+请输入管理员密码（至少6位）: ******
+请再次输入密码确认: ******
+
+正在创建管理员账户...
+
+✅ 管理员账户创建成功！
+   邮箱: your-email@example.com
+   用户名: Admin
+
+请妥善保管您的登录凭证，密码已加密存储。
+您可以访问 https://www.cbiu.fun/login 进行登录。
+```
+
+> **安全提示**：
+> - 密码保存在数据库中并经过 bcrypt 加密
+> - 请务必使用强密码
+> - 登录凭证只有您自己知道，代码中不会包含任何明文密码
+
 
 ## 4. 访问网站
 
