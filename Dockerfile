@@ -70,7 +70,6 @@ COPY --from=builder /app/prisma ./prisma
 # Standalone doesn't include these since the script is not part of the Next.js app
 COPY --from=builder /app/node_modules/bcryptjs ./node_modules/bcryptjs
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
 USER nextjs
 
