@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "setup-admin": "ts-node scripts/setup-admin.ts"
+    "setup-admin": "node scripts/setup-admin.js"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
