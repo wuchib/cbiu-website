@@ -52,22 +52,19 @@ RUN adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/public ./public
 
-# Copy scripts for admin setup
-COPY --from=builder /app/scripts ./scripts
-
-# Copy Prisma schema and client for admin setup
-COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
-
 # Set the correct permission for prerender cache
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
+# This includes optimized node_modules with Prisma client
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+# Copy scripts and Prisma schema for admin setup (after standalone to add additional files)
+COPY --from=builder /app/scripts ./scripts
+COPY --from=builder /app/prisma ./prisma
 
 USER nextjs
 
