@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils"
 import { ThemeToggle } from "@/components/layout/theme-toggle"
 import { ThemeCustomizer } from "@/components/theme-customizer"
 import { LanguageToggle } from "@/components/language-toggle"
+
 import { Icon } from "@iconify/react"
 import { useTranslations } from "next-intl"
 import { motion } from "framer-motion"
