@@ -75,8 +75,10 @@ COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/bcryptjs ./node_modules/bcryptjs
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
-# Copy proxychains configuration (must be done before switching to nextjs user)
-COPY proxychains.conf /etc/proxychains.conf
+# Copy proxychains configuration to the correct path
+# IMPORTANT: proxychains4 looks for /etc/proxychains/proxychains.conf by default, not /etc/proxychains.conf
+RUN mkdir -p /etc/proxychains
+COPY proxychains.conf /etc/proxychains/proxychains.conf
 
 USER nextjs
 
