@@ -46,6 +46,10 @@ ENV NODE_ENV=production
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED=1
 
+# Install proxychains-ng for proxy support (to bypass GFW)
+# Note: Alpine uses apk package manager
+RUN apk add --no-cache proxychains-ng
+
 # Don't run as root
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
@@ -71,6 +75,9 @@ COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/bcryptjs ./node_modules/bcryptjs
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
+# Copy proxychains configuration (must be done before switching to nextjs user)
+COPY proxychains.conf /etc/proxychains.conf
+
 USER nextjs
 
 EXPOSE 3000
@@ -79,4 +86,5 @@ ENV PORT=3000
 # set hostname to localhost
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["node", "server.js"]
+# Use proxychains to route all traffic through V2Ray proxy
+CMD ["proxychains4", "-q", "node", "server.js"]
