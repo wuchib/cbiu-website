@@ -20,6 +20,10 @@ services:
       # Google OAuth 配置
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      # 代理配置 - 通过本地 V2Ray 代理访问 Google (绕过 GFW)
+      - HTTP_PROXY=http://127.0.0.1:10808
+      - HTTPS_PROXY=http://127.0.0.1:10808
+      - NO_PROXY=localhost,127.0.0.1,db
 
   db:
     # 服务名称：数据库
