@@ -22,6 +22,7 @@ model User {
 
   accounts      Account[]
   sessions      Session[]
+  comments      Comment[]
 
   @@map("users")
 }
@@ -41,6 +42,7 @@ model Article {
   categoryId  String?   @map("category_id")
 
   tags        ArticleTag[]
+  comments    Comment[]
   category    ArticleCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
   @@map("articles")
@@ -140,6 +142,23 @@ model ProjectTag {
 
   @@id([projectId, tagId])
   @@map("project_tags")
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String   @db.Text
+  articleId String   @map("article_id")
+  userId    String   @map("user_id")
+  parentId  String?  @map("parent_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent    Comment? @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   Comment[] @relation("CommentReplies")
+
+  @@map("comments")
 }
 
 model GlobalSetting {

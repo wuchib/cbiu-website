@@ -34,6 +34,23 @@ export const messages = {
       "tableOfContents": "Table of Contents",
       "onThisPage": "On this page"
     },
+    "Comments": {
+      "title": "Comments",
+      "placeholder": "Write a comment...",
+      "replyPlaceholder": "Write a reply...",
+      "submit": "Submit",
+      "submitting": "Submitting...",
+      "reply": "Reply",
+      "cancelReply": "Cancel",
+      "loginRequired": "Please login to comment",
+      "loginButton": "Login with Google",
+      "noComments": "No comments yet. Be the first to comment!",
+      "deleteConfirm": "Are you sure you want to delete this comment?",
+      "repliesCount": "{count} replies",
+      "showReplies": "Show {count} replies",
+      "hideReplies": "Hide replies",
+      "loadMore": "Load {count} more comments"
+    },
     "Footer": {
       "rights": "All rights reserved."
     },
@@ -154,6 +171,7 @@ export const messages = {
         "tags": "Tags",
         "tagsPlaceholder": "Press Enter to add",
         "coverImage": "Cover Image URL",
+        "coverImageHint": "Maximum file size: 5MB",
         "previewPlaceholder": "Preview will appear here..."
       },
       "projectForm": {
@@ -248,6 +266,23 @@ export const messages = {
       "description": "关于开发和设计的思考、教程和见解。",
       "tableOfContents": "目录",
       "onThisPage": "本页目录"
+    },
+    "Comments": {
+      "title": "评论",
+      "placeholder": "写下你的评论...",
+      "replyPlaceholder": "写下你的回复...",
+      "submit": "发表",
+      "submitting": "发表中...",
+      "reply": "回复",
+      "cancelReply": "取消",
+      "loginRequired": "请登录后发表评论",
+      "loginButton": "使用 Google 登录",
+      "noComments": "暂无评论，来发表第一条吧！",
+      "deleteConfirm": "确定要删除这条评论吗？",
+      "repliesCount": "{count} 条回复",
+      "showReplies": "展开 {count} 条回复",
+      "hideReplies": "收起回复",
+      "loadMore": "加载更多 ({count} 条)"
     },
     "Footer": {
       "rights": "版权所有。"
@@ -370,6 +405,7 @@ export const messages = {
         "tags": "标签",
         "tagsPlaceholder": "按回车添加",
         "coverImage": "封面图片 URL",
+        "coverImageHint": "文件大小限制：5MB",
         "previewPlaceholder": "预览将显示在这里..."
       },
       "projectForm": {

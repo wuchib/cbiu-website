@@ -2,6 +2,7 @@
 
 import ReactMarkdown from "react-markdown"
 import { TableOfContents } from "./table-of-contents"
+import { CommentSection } from "./comment-section"
 import { Article } from "@/lib/articles"
 import { slugify } from "@/lib/slugify"
 import React from "react"
@@ -9,48 +10,19 @@ import { useTranslations } from "next-intl"
 
 interface ArticleDetailProps {
   article: Article
+  articleId: string
 }
 
-export function ArticleDetail({ article }: ArticleDetailProps) {
+export function ArticleDetail({ article, articleId }: ArticleDetailProps) {
   const t = useTranslations("Articles")
 
-  // Track heading occurrences for unique ID generation
-  const headingCounters = React.useRef(new Map<string, number>())
-
-  const getUniqueHeadingId = (text: string) => {
-    const count = headingCounters.current.get(text) || 0
-    headingCounters.current.set(text, count + 1)
-    const baseId = slugify(text)
-    return count > 0 ? `${baseId}-${count}` : baseId
-  }
-
-  const components = {
-    h1: ({ children, ...props }: any) => {
-      const text = React.Children.toArray(children).join("")
-      const id = getUniqueHeadingId(text)
-      return <h1 id={id} {...props}>{children}</h1>
-    },
-    h2: ({ children, ...props }: any) => {
-      const text = React.Children.toArray(children).join("")
-      const id = getUniqueHeadingId(text)
-      return <h2 id={id} {...props}>{children}</h2>
-    },
-    h3: ({ children, ...props }: any) => {
-      const text = React.Children.toArray(children).join("")
-      const id = getUniqueHeadingId(text)
-      return <h3 id={id} {...props}>{children}</h3>
-    },
-    img: ({ node, src, alt, ...props }: any) => {
-      // Don't render img if src is empty to prevent console warnings
-      if (!src) return null;
-      return <img src={src} alt={alt || ''} {...props} />;
-    }
-  }
-
-  const headings = React.useMemo(() => {
+  // Pre-compute all heading IDs and their mappings in a stable way
+  const { headings, headingIdMap } = React.useMemo(() => {
     const lines = article.content.split("\n")
-    const extracted = []
+    const extracted: { id: string; text: string; level: number }[] = []
     const textOccurrences = new Map<string, number>()
+    // Map from "level:text:occurrence" to the computed ID
+    const idMap = new Map<string, string>()
     let inCodeBlock = false
 
     for (const line of lines) {
@@ -73,12 +45,60 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
         // Generate unique ID by appending counter if duplicate
         const id = count > 0 ? `${baseId}-${count}` : baseId
 
+        // Store mapping for lookup during render
+        const key = `${level}:${text}:${count}`
+        idMap.set(key, id)
+
         extracted.push({ id, text, level })
       }
     }
-    return extracted
+    return { headings: extracted, headingIdMap: idMap }
   }, [article.content])
 
+  // Create a stable counter for each heading level/text combination
+  const renderCounters = React.useRef(new Map<string, number>())
+
+  // Reset counters when content changes
+  React.useEffect(() => {
+    renderCounters.current.clear()
+  }, [article.content])
+
+  // Get heading ID from pre-computed map
+  const getHeadingId = (level: number, text: string) => {
+    const counterKey = `${level}:${text}`
+    const count = renderCounters.current.get(counterKey) || 0
+    renderCounters.current.set(counterKey, count + 1)
+
+    const mapKey = `${level}:${text}:${count}`
+    return headingIdMap.get(mapKey) || slugify(text)
+  }
+
+  const components = React.useMemo(() => ({
+    h1: ({ children, ...props }: any) => {
+      const text = React.Children.toArray(children).join("")
+      const id = getHeadingId(1, text)
+      return <h1 id={id} {...props}>{children}</h1>
+    },
+    h2: ({ children, ...props }: any) => {
+      const text = React.Children.toArray(children).join("")
+      const id = getHeadingId(2, text)
+      return <h2 id={id} {...props}>{children}</h2>
+    },
+    h3: ({ children, ...props }: any) => {
+      const text = React.Children.toArray(children).join("")
+      const id = getHeadingId(3, text)
+      return <h3 id={id} {...props}>{children}</h3>
+    },
+    img: ({ node, src, alt, ...props }: any) => {
+      // Don't render img if src is empty to prevent console warnings
+      if (!src) return null;
+      return <img src={src} alt={alt || ''} {...props} />;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }), [headingIdMap])
+
+  // Reset render counters before each render
+  renderCounters.current.clear()
 
   return (
     <div className="relative lg:flex lg:gap-10 xl:gap-20 items-start">
@@ -126,6 +146,11 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
         <ReactMarkdown components={components}>
           {article.content}
         </ReactMarkdown>
+
+        {/* Comment Section - wrapped in not-prose to prevent typography styles from affecting avatars */}
+        <div className="not-prose">
+          <CommentSection articleId={articleId} />
+        </div>
       </article>
 
       <aside className="hidden lg:block w-64 shrink-0 sticky top-24">
@@ -134,3 +159,4 @@ export function ArticleDetail({ article }: ArticleDetailProps) {
     </div>
   )
 }
+

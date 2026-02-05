@@ -18,8 +18,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     ...authConfig.callbacks,
     async session({ session, token }) {
-      if (token.sub && session.user) {
-        session.user.id = token.sub
+      if (token.userId && session.user) {
+        session.user.id = token.userId as string
       }
       if (token.role && session.user) {
         session.user.role = token.role as string
@@ -28,6 +28,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
     async jwt({ token, user }) {
       if (user) {
+        token.userId = user.id
         token.role = user.role
       }
       return token

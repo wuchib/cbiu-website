@@ -48,7 +48,7 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
     tags: [], // TODO: Fetch tags
     content: article.content || '',
     description: article.description || '',
-    cover: article.coverImage
+    cover: article.coverImage || undefined
   }
 
   return (
@@ -67,8 +67,7 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
           </Button>
         </Link>
 
-        {/* @ts-ignore */}
-        <ArticleDetail article={formattedArticle} />
+        <ArticleDetail article={formattedArticle} articleId={article.id} />
       </div>
     </div>
   )

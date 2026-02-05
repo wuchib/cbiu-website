@@ -8,6 +8,7 @@ import { Icon } from "@iconify/react"
 import { useTranslations } from 'next-intl';
 import ReactMarkdown from 'react-markdown';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 export default function ArticleForm({ article, categories = [] }: { article?: any, categories?: any[] }) {
   const t = useTranslations('Admin');
@@ -100,10 +101,8 @@ export default function ArticleForm({ article, categories = [] }: { article?: an
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Reset error (if we had a global one, but for editor we might just use alert or toast)
-    // For consistency with requested simplicity, let's use valid check
     if (file.size > 5 * 1024 * 1024) {
-      alert(t('actions.upload.errorSize'));
+      toast.error(t('actions.upload.errorSize'));
       if (fileInputRef.current) fileInputRef.current.value = '';
       return;
     }
@@ -120,7 +119,7 @@ export default function ArticleForm({ article, categories = [] }: { article?: an
       console.error(result.error);
       // @ts-ignore
       const errorMessage = result.error ? t(`actions.upload.${result.error}`) : t('actions.upload.errorGeneric');
-      alert(errorMessage);
+      toast.error(errorMessage);
     }
 
 
@@ -133,7 +132,7 @@ export default function ArticleForm({ article, categories = [] }: { article?: an
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
-      alert(t('actions.upload.errorSize'));
+      toast.error(t('actions.upload.errorSize'));
       if (coverInputRef.current) coverInputRef.current.value = '';
       return;
     }
@@ -150,7 +149,7 @@ export default function ArticleForm({ article, categories = [] }: { article?: an
       console.error(result.error);
       // @ts-ignore
       const errorMessage = result.error ? t(`actions.upload.${result.error}`) : t('actions.upload.errorGeneric');
-      alert(errorMessage);
+      toast.error(errorMessage);
     }
 
     setIsUploading(false);
@@ -527,27 +526,30 @@ export default function ArticleForm({ article, categories = [] }: { article?: an
 
                 {/* Cover Image Card */}
                 <div className="rounded-2xl border bg-card/50 backdrop-blur-sm shadow-sm overflow-hidden">
-                  <div className="px-6 py-4 border-b bg-muted/20 flex items-center justify-between">
-                    <h3 className="font-semibold flex items-center gap-2">
-                      <Icon icon="ph:image-duotone" className="w-5 h-5 text-pink-500" />
-                      {t('articleForm.coverImage')}
-                    </h3>
-                    <button
-                      type="button"
-                      onClick={() => coverInputRef.current?.click()}
-                      disabled={isUploading}
-                      className="text-xs bg-muted hover:bg-muted/80 px-2 py-1 rounded transition-colors flex items-center gap-1"
-                    >
-                      {isUploading ? <Icon icon="ph:spinner" className="animate-spin" /> : <Icon icon="ph:upload-simple" />}
-                      Upload
-                    </button>
-                    <input
-                      type="file"
-                      ref={coverInputRef}
-                      className="hidden"
-                      accept="image/*"
-                      onChange={handleCoverUpload}
-                    />
+                  <div className="px-6 py-4 border-b bg-muted/20">
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="font-semibold flex items-center gap-2">
+                        <Icon icon="ph:image-duotone" className="w-5 h-5 text-pink-500" />
+                        {t('articleForm.coverImage')}
+                      </h3>
+                      <button
+                        type="button"
+                        onClick={() => coverInputRef.current?.click()}
+                        disabled={isUploading}
+                        className="text-xs bg-muted hover:bg-muted/80 px-2 py-1 rounded transition-colors flex items-center gap-1"
+                      >
+                        {isUploading ? <Icon icon="ph:spinner" className="animate-spin" /> : <Icon icon="ph:upload-simple" />}
+                        Upload
+                      </button>
+                      <input
+                        type="file"
+                        ref={coverInputRef}
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handleCoverUpload}
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground/60">{t('articleForm.coverImageHint')}</p>
                   </div>
                   <div className="p-6 pt-6">
                     <div className="space-y-4">

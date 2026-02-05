@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import "../globals.css"
 import { NextIntlClientProvider } from "next-intl"
 import { getMessages, getTranslations } from "next-intl/server"
+import { Toaster } from "@/components/ui/sonner"
 
 import { cookies } from 'next/headers'
 import { AdminLanguageSwitcher } from "@/components/admin/language-switcher"
@@ -70,6 +71,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                 {children}
               </main>
             </div>
+            <Toaster position="top-center" />
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>
