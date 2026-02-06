@@ -229,6 +229,24 @@ export const messages = {
       "messages": {
         "articlesCount": "articles",
         "noCategory": "No category"
+      },
+      "analytics": "Analytics",
+      "visitors": "Visitors",
+      "visitorStats": {
+        "subtitle": "View website traffic and visitor information",
+        "today": "Today",
+        "total": "Total Visits",
+        "path": "Path",
+        "ip": "IP Address",
+        "userAgent": "Device",
+        "referer": "Referer",
+        "time": "Time",
+        "noData": "No visitor records yet",
+        "recentVisits": "Recent Visits",
+        "totalRecords": "{count} total records",
+        "page": "Page",
+        "prev": "Previous",
+        "next": "Next"
       }
     }
   },
@@ -463,6 +481,24 @@ export const messages = {
       "messages": {
         "articlesCount": "篇文章",
         "noCategory": "未分类"
+      },
+      "analytics": "数据分析",
+      "visitors": "访客记录",
+      "visitorStats": {
+        "subtitle": "查看网站流量和访客信息",
+        "today": "今日访问",
+        "total": "总访问量",
+        "path": "访问页面",
+        "ip": "IP 地址",
+        "userAgent": "设备信息",
+        "referer": "来源页面",
+        "time": "访问时间",
+        "noData": "暂无访客记录",
+        "recentVisits": "最近访问",
+        "totalRecords": "共 {count} 条记录",
+        "page": "第",
+        "prev": "上一页",
+        "next": "下一页"
       }
     }
   }

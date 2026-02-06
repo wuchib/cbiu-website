@@ -207,3 +207,17 @@ model VerificationToken {
   @@unique([identifier, token])
   @@map("verification_tokens")
 }
+
+model Visitor {
+  id        String   @id @default(uuid())
+  path      String                        // 访问路径
+  ip        String?                       // IP 地址
+  userAgent String?  @map("user_agent") @db.Text  // 浏览器信息
+  referer   String?  @db.Text             // 来源页面
+  country   String?                       // 国家/地区
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([createdAt])
+  @@index([path])
+  @@map("visitors")
+}

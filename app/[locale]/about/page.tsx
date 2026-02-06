@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Icon } from "@iconify/react"
 import Link from "next/link"
+import { GitHubContributions } from "@/components/about/github-contributions"
 
 export default function AboutPage() {
   const techStack = [
@@ -56,6 +57,14 @@ export default function AboutPage() {
               <Icon icon="ph:arrow-up-right-bold" className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </Button>
           </Link>
+        </div>
+
+        {/* GitHub Contributions Section */}
+        <div className="border-t border-border/50 bg-muted/10 px-8 py-10 md:px-12">
+          <h2 className="mb-6 text-center text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+            GitHub Contributions
+          </h2>
+          <GitHubContributions username="wuchib" />
         </div>
 
         {/* Tech Stack Section */}

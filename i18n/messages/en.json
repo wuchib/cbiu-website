@@ -116,6 +116,25 @@
     "messages": {
       "articlesCount": "articles",
       "noCategory": "No category"
+    },
+    "dashboardNav": "Dashboard",
+    "analytics": "Analytics",
+    "visitors": "Visitors",
+    "visitorStats": {
+      "subtitle": "View website traffic and visitor information",
+      "today": "Today",
+      "total": "Total Visits",
+      "path": "Path",
+      "ip": "IP Address",
+      "userAgent": "Device",
+      "referer": "Referer",
+      "time": "Time",
+      "noData": "No visitor records yet",
+      "recentVisits": "Recent Visits",
+      "totalRecords": "{count} total records",
+      "page": "Page",
+      "prev": "Previous",
+      "next": "Next"
     }
   }
 }

@@ -8,6 +8,7 @@ import { MainNav } from "@/components/layout/main-nav";
 import { AuthWidget } from "@/components/auth/auth-widget";
 import { Footer } from "@/components/layout/footer";
 import { Toaster } from "@/components/ui/sonner";
+import { VisitorTracker } from "@/components/visitor-tracker";
 import "../globals.css";
 
 // Generate static params for static export if needed, 
@@ -45,6 +46,7 @@ export default async function LocaleLayout({
               enableSystem
               disableTransitionOnChange
             >
+              <VisitorTracker />
               <div className="relative flex min-h-screen flex-col">
                 <MainNav />
                 <AuthWidget />
