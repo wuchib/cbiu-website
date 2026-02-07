@@ -78,6 +78,14 @@ jobs:
             docker-compose up -d
             
             echo ""
+            echo "⏳ Step 7.1: Waiting for database to be ready..."
+            sleep 10
+            
+            echo ""
+            echo "🔄 Step 7.2: Running database migrations..."
+            docker exec cbiu-website npx prisma migrate deploy
+            
+            echo ""
             echo "🔍 Step 8: Checking container status..."
             docker ps
             
