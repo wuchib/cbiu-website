@@ -34,6 +34,7 @@ const formSchema = z.object({
 })
 
 type FormValues = z.infer<typeof formSchema>
+type FormInput = z.input<typeof formSchema>
 
 interface FriendLinkFormProps {
   initialData?: FriendLink | null
@@ -43,8 +44,8 @@ export function FriendLinkForm({ initialData }: FriendLinkFormProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<FormInput>({
+    resolver: zodResolver(formSchema) as any,
     defaultValues: {
       name: initialData?.name || "",
       link: initialData?.link || "",
@@ -54,11 +55,18 @@ export function FriendLinkForm({ initialData }: FriendLinkFormProps) {
     },
   })
 
-  async function onSubmit(data: FormValues) {
+  async function onSubmit(data: FormInput) {
     try {
       setLoading(true)
+      const payload = {
+        name: data.name,
+        link: data.link,
+        avatar: data.avatar,
+        description: data.description ?? null,
+        sortOrder: Number(data.sortOrder) || 0,
+      }
       if (initialData) {
-        const res = await updateFriendLink(initialData.id, data)
+        const res = await updateFriendLink(initialData.id, payload)
         if (res.success) {
           toast.success("Friend link updated")
           router.push("/admin/friends")
@@ -67,7 +75,7 @@ export function FriendLinkForm({ initialData }: FriendLinkFormProps) {
           toast.error(res.error)
         }
       } else {
-        const res = await createFriendLink(data)
+        const res = await createFriendLink(payload)
         if (res.success) {
           toast.success("Friend link created")
           router.push("/admin/friends")
@@ -133,7 +141,7 @@ export function FriendLinkForm({ initialData }: FriendLinkFormProps) {
               <FormItem>
                 <FormLabel>Sort Order</FormLabel>
                 <FormControl>
-                  <Input type="number" {...field} />
+                  <Input type="number" {...field} value={field.value as number ?? 0} />
                 </FormControl>
                 <FormDescription>
                   Higher numbers appear last (or first, depending on sorting logic).
