@@ -1,6 +1,4 @@
 #!/bin/sh
-# Auto-sync database schema before starting the app
-echo "Running prisma db push to sync database schema..."
-./node_modules/.bin/prisma db push --skip-generate 2>&1 || echo "Warning: prisma db push failed, continuing anyway..."
+# Start the Next.js server with proxychains for proxy support
 echo "Starting Next.js server..."
 exec proxychains4 -q node server.js
