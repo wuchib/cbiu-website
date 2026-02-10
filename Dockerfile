@@ -31,12 +31,6 @@ COPY . .
 # Run prisma generate to create the client
 RUN npx prisma generate
 
-# Resolve pnpm symlinks for prisma CLI deps (needed for prisma db push at runtime)
-# Only copy prisma CLI + @prisma/engines. @prisma/client is already in standalone output.
-RUN mkdir -p /prisma-deps && \
-  cp -rL node_modules/prisma /prisma-deps/prisma && \
-  (cp -rL node_modules/.pnpm/node_modules/@prisma/engines /prisma-deps/engines 2>/dev/null || \
-  cp -rL node_modules/.pnpm/@prisma+engines@*/node_modules/@prisma/engines /prisma-deps/engines 2>/dev/null || true)
 
 RUN \
   if [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
@@ -77,11 +71,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder /app/scripts ./scripts
 COPY --from=builder /app/prisma ./prisma
 
-# Copy dependencies needed by setup-admin script and prisma db push
-# Note: @prisma/client is already included via standalone output, only add engines + CLI
+# Copy dependencies needed by setup-admin script
 COPY --from=builder /app/node_modules/bcryptjs ./node_modules/bcryptjs
-COPY --from=builder /prisma-deps/prisma ./node_modules/prisma
-COPY --from=builder /prisma-deps/engines ./node_modules/@prisma/engines
 
 # Copy proxychains configuration to the correct path
 # IMPORTANT: proxychains4 looks for /etc/proxychains/proxychains.conf by default, not /etc/proxychains.conf
@@ -99,5 +90,5 @@ ENV PORT=3000
 # set hostname to localhost
 ENV HOSTNAME="0.0.0.0"
 
-# Use startup script to run prisma db push before starting the server
+# Start the server
 CMD ["sh", "./scripts/start.sh"]
