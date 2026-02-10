@@ -32,11 +32,11 @@ COPY . .
 RUN npx prisma generate
 
 # Resolve pnpm symlinks for prisma CLI deps (needed for prisma db push at runtime)
-RUN mkdir -p /prisma-deps/@prisma && \
+# Only copy prisma CLI + @prisma/engines. @prisma/client is already in standalone output.
+RUN mkdir -p /prisma-deps && \
   cp -rL node_modules/prisma /prisma-deps/prisma && \
-  cp -rL node_modules/@prisma/client /prisma-deps/@prisma/client && \
-  cp -rL node_modules/.pnpm/node_modules/@prisma/engines /prisma-deps/@prisma/engines 2>/dev/null || \
-  cp -rL node_modules/.pnpm/@prisma+engines@*/node_modules/@prisma/engines /prisma-deps/@prisma/engines 2>/dev/null || true
+  (cp -rL node_modules/.pnpm/node_modules/@prisma/engines /prisma-deps/engines 2>/dev/null || \
+  cp -rL node_modules/.pnpm/@prisma+engines@*/node_modules/@prisma/engines /prisma-deps/engines 2>/dev/null || true)
 
 RUN \
   if [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
@@ -78,10 +78,10 @@ COPY --from=builder /app/scripts ./scripts
 COPY --from=builder /app/prisma ./prisma
 
 # Copy dependencies needed by setup-admin script and prisma db push
-# Use resolved symlinks from the builder stage to handle pnpm layout
+# Note: @prisma/client is already included via standalone output, only add engines + CLI
 COPY --from=builder /app/node_modules/bcryptjs ./node_modules/bcryptjs
 COPY --from=builder /prisma-deps/prisma ./node_modules/prisma
-COPY --from=builder /prisma-deps/@prisma ./node_modules/@prisma
+COPY --from=builder /prisma-deps/engines ./node_modules/@prisma/engines
 
 # Copy proxychains configuration to the correct path
 # IMPORTANT: proxychains4 looks for /etc/proxychains/proxychains.conf by default, not /etc/proxychains.conf
