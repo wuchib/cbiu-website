@@ -61,14 +61,11 @@ export default function SharePageClient({ categories, title, description }: Shar
   };
 
   return (
-    <div className="container relative mx-auto min-h-screen max-w-5xl px-4 py-24">
+    <div className="container relative mx-auto min-h-screen max-w-5xl px-4 py-32">
       {/* Background Element */}
       <div className="fixed top-0 right-0 -z-10 h-[500px] w-[500px] bg-primary/5 blur-[100px] rounded-full opacity-50 pointer-events-none" />
 
-      <div className="mb-16 space-y-4 text-center md:text-left">
-        <h1 className="text-4xl font-bold tracking-tight">{title}</h1>
-        <p className="max-w-2xl text-lg text-muted-foreground mx-auto md:mx-0">{description}</p>
-      </div>
+
 
       <div className="lg:grid lg:grid-cols-12 lg:gap-12">
         {/* Sidebar - Desktop */}

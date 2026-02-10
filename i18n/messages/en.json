@@ -20,7 +20,11 @@
   },
   "Common": {
     "toggleTheme": "Toggle theme",
-    "language": "Language"
+    "language": "Language",
+    "friendLinks": {
+      "title": "Friend Links",
+      "subtitle": "Check out these awesome websites from my friends."
+    }
   },
   "Admin": {
     "title": "Admin Panel",

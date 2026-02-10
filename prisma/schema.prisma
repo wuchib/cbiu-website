@@ -219,5 +219,19 @@ model Visitor {
 
   @@index([createdAt])
   @@index([path])
+
   @@map("visitors")
+}
+
+model FriendLink {
+  id          String   @id @default(uuid())
+  name        String
+  link        String
+  avatar      String
+  description String?
+  sortOrder   Int      @default(0) @map("sort_order")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("friend_links")
 }

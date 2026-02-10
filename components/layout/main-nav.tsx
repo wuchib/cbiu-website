@@ -11,18 +11,22 @@ import { Icon } from "@iconify/react"
 import { useTranslations } from "next-intl"
 import { motion } from "framer-motion"
 
+import { SearchCommand } from "@/components/search-command"
+
 export function MainNav() {
   const pathname = usePathname()
   const t = useTranslations("Navigation")
   const [activeRect, setActiveRect] = React.useState({ left: 0, width: 0, opacity: 0 })
   const itemsRef = React.useRef<(HTMLAnchorElement | null)[]>([])
   const [hovered, setHovered] = React.useState<string | null>(null)
+  const [searchOpen, setSearchOpen] = React.useState(false)
 
   const items = React.useMemo(() => [
     { title: t("home"), href: "/", icon: "ph:house-bold" },
     { title: t("articles"), href: "/articles", icon: "ph:read-cv-logo-bold" },
     { title: t("projects"), href: "/projects", icon: "ph:code-bold" },
     { title: t("share"), href: "/share", icon: "ph:share-network-bold" },
+    { title: t("friends"), href: "/friends", icon: "ph:users-bold" },
     { title: t("about"), href: "/about", icon: "ph:user-bold" },
   ], [t])
 
@@ -117,6 +121,20 @@ export function MainNav() {
           </Link>
         ))}
 
+        {/* Search Trigger */}
+        <button
+          onClick={() => setSearchOpen(true)}
+          className="group relative flex items-center justify-center rounded-full px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+          aria-label="Search"
+        >
+          <motion.div
+            whileHover={{ scale: 1.2, rotate: 10 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+          >
+            <Icon icon="ph:magnifying-glass-bold" className="h-4 w-4" />
+          </motion.div>
+        </button>
+
         <div className="mx-2 h-6 w-px bg-white/10" />
 
         <div className="flex items-center gap-1 pr-2">
@@ -125,6 +143,8 @@ export function MainNav() {
           <ThemeToggle />
         </div>
       </nav>
+
+      <SearchCommand open={searchOpen} onOpenChange={setSearchOpen} />
     </div>
   )
 }

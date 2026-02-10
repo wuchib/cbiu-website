@@ -19,7 +19,12 @@ export const messages = {
       "articles": "Articles",
       "projects": "Projects",
       "share": "Share",
+      "friends": "Friends",
       "about": "About"
+    },
+    "Friends": {
+      "title": "Friend Links",
+      "description": "A collection of awesome websites from my friends and people I admire."
     },
     "Projects": {
       "title": "Open Source Projects",
@@ -74,7 +79,11 @@ export const messages = {
     },
     "Common": {
       "toggleTheme": "Toggle theme",
-      "language": "Language"
+      "language": "Language",
+      "friendLinks": {
+        "title": "Friend Links",
+        "subtitle": "Check out these awesome websites from my friends."
+      }
     },
     "Admin": {
       "title": "Admin Panel",
@@ -270,7 +279,12 @@ export const messages = {
       "articles": "文章",
       "projects": "项目",
       "share": "分享",
+      "friends": "友链",
       "about": "关于"
+    },
+    "Friends": {
+      "title": "友情链接",
+      "description": "收集了一些朋友和值得关注的博主的网站。"
     },
     "Projects": {
       "title": "开源项目",
@@ -325,7 +339,11 @@ export const messages = {
     },
     "Common": {
       "toggleTheme": "切换主题",
-      "language": "语言"
+      "language": "语言",
+      "friendLinks": {
+        "title": "友情链接",
+        "subtitle": "看看我朋友们的精彩网站"
+      }
     },
     "Admin": {
       "title": "管理面板",

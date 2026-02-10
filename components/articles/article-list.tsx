@@ -18,25 +18,13 @@ export function ArticleList({ articles }: ArticleListProps) {
   const tArticles = useTranslations("Articles")
 
   return (
-    <div className="container relative mx-auto min-h-screen max-w-5xl px-4 py-24">
+    <div className="container relative mx-auto min-h-screen max-w-5xl px-4 py-32">
       {/* Background decoration */}
       <div className="absolute top-20 right-0 -z-10 opacity-5">
         <Icon icon="ph:read-cv-logo-bold" className="h-96 w-96" />
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="mb-12"
-      >
-        <h1 className="bg-gradient-to-r from-primary to-primary/50 bg-clip-text text-4xl font-bold tracking-tight text-transparent">
-          {t("articles")}
-        </h1>
-        <p className="mt-2 text-muted-foreground">
-          {tArticles("description")}
-        </p>
-      </motion.div>
+
 
       <div className="relative">
         {/* Timeline Line (Right Side) */}
