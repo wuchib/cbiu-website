@@ -74,11 +74,16 @@ COPY --from=builder /app/prisma ./prisma
 # Standalone doesn't include these since the script is not part of the Next.js app
 COPY --from=builder /app/node_modules/bcryptjs ./node_modules/bcryptjs
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
+COPY --from=builder /app/node_modules/.bin/prisma ./node_modules/.bin/prisma
 
 # Copy proxychains configuration to the correct path
 # IMPORTANT: proxychains4 looks for /etc/proxychains/proxychains.conf by default, not /etc/proxychains.conf
 RUN mkdir -p /etc/proxychains
 COPY proxychains.conf /etc/proxychains/proxychains.conf
+
+# Make startup script executable
+RUN chmod +x ./scripts/start.sh
 
 USER nextjs
 
@@ -88,5 +93,5 @@ ENV PORT=3000
 # set hostname to localhost
 ENV HOSTNAME="0.0.0.0"
 
-# Use proxychains to route all traffic through V2Ray proxy
-CMD ["proxychains4", "-q", "node", "server.js"]
+# Use startup script to run prisma db push before starting the server
+CMD ["sh", "./scripts/start.sh"]
