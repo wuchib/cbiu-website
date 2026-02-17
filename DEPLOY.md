@@ -172,6 +172,13 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
     }
+
+    # 处理上传文件的访问 (直接由 Nginx 提供，无需经过 Next.js)
+    location /uploads/ {
+        alias /home/你的用户名/projects/cbiu-webside/uploads/; # 注意：这里要填你在宿主机上的实际路径
+        expires 30d;
+        add_header Cache-Control "public, no-transform";
+    }
 }
 ```
 

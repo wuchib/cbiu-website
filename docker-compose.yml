@@ -24,6 +24,8 @@ services:
       - HTTP_PROXY=http://127.0.0.1:10808
       - HTTPS_PROXY=http://127.0.0.1:10808
       - NO_PROXY=localhost,127.0.0.1,db,172.17.0.1,172.18.0.1,172.17.0.0/16,172.18.0.0/16
+    volumes:
+      - ./uploads:/app/public/uploads
 
   db:
     # 服务名称：数据库
