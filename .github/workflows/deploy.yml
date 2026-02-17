@@ -47,6 +47,7 @@ jobs:
           port: ${{ secrets.SERVER_PORT || 22 }}
           script: |
             set -e  # Exit on error
+            cd /var/www/cbiu-website/
             # 尝试更改所有权为当前用户（便于管理）
             chown -R $USER:$USER /var/www/cbiu-website || true
             chmod -R 755 /var/www/cbiu-website
