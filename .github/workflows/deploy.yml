@@ -47,11 +47,23 @@ jobs:
           port: ${{ secrets.SERVER_PORT || 22 }}
           script: |
             set -e  # Exit on error
-            # 确保目标目录存在
-            mkdir -p /var/www/cbiu-website
-            cd /var/www/cbiu-website
+            # 尝试更改所有权为当前用户（便于管理）
+            chown -R $USER:$USER /var/www/cbiu-website || true
+            chmod -R 755 /var/www/cbiu-website
+
+            # ----------------------------------------------------
+            #  关键修复: 处理 uploads 目录权限 (解决 EACCES 错误)
+            # ----------------------------------------------------
+            # 1. 确保 uploads 目录存在 (宿主机)
+            mkdir -p /var/www/cbiu-website/uploads
             
-            # (可选) 确保 www-data 可以访问
+            # 2. 将 uploads 设为 UID 1001 (容器内的 nextjs 用户)
+            # 只有 root (或 sudo) 才能执行 chown 为其他 UID
+            # 如果您当前是普通用户，可能需要 sudo
+            echo "🔧 Fixing uploads directory permissions..."
+            chown -R 1001:1001 /var/www/cbiu-website/uploads || echo "⚠️ Warning: Failed to chown uploads to 1001 (Non-root user?)"
+            
+            # 3. 检查 .env 文件是否存在         # (可选) 确保 www-data 可以访问
             # chown -R www-data:www-data /var/www/cbiu-website
             
             echo "📦 Step 1: Checking tar files..."
