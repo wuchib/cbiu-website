@@ -36,7 +36,7 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_PORT || 22 }}
           source: "cbiu-website.tar,mysql.tar,docker-compose.yml"
-          target: "/root/projects/cbiu-website/"
+          target: "projects/cbiu-website/"
       
       - name: Deploy on server
         uses: appleboy/ssh-action@v1.0.3
@@ -47,7 +47,9 @@ jobs:
           port: ${{ secrets.SERVER_PORT || 22 }}
           script: |
             set -e  # Exit on error
-            cd /root/projects/cbiu-website
+            # 确保目标目录存在
+            mkdir -p ~/projects/cbiu-website
+            cd ~/projects/cbiu-website
             
             echo "📦 Step 1: Checking tar files..."
             ls -lh cbiu-website.tar mysql.tar

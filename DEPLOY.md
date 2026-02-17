@@ -14,6 +14,11 @@
 ### 2.1 获取代码
 建议在服务器上创建一个专门存放项目的目录，例如 `~/projects` 或 `/opt/cbiu`。
 
+> **⚠️ 重要安全警告**：
+> 这里的路径**不要**选在 `/root` 目录下！
+> Nginx 默认运行用户（通常是 `www-data`）没有权限访问 `/root` 目录，会导致上传的文件无法访问（403 Forbidden）。
+> 推荐使用普通用户目录（如 `/home/ubuntu/projects`）或 `/var/www/`。
+
 ```bash
 mkdir -p ~/projects
 cd ~/projects
@@ -175,7 +180,13 @@ server {
 
     # 处理上传文件的访问 (直接由 Nginx 提供，无需经过 Next.js)
     location /uploads/ {
-        alias /home/你的用户名/projects/cbiu-webside/uploads/; # 注意：这里要填你在宿主机上的实际路径
+        # ⚠️ 注意 1: 路径末尾的斜杠 / 不能少
+        # ⚠️ 注意 2: 这里的路径必须是宿主机上的【绝对路径】
+        # ⚠️ 注意 3: Docker 卷挂载的是 ./uploads，所以宿主机路径不包含 public
+        # 错误示例: alias /root/projects/cbiu-webside/public/uploads/; (原因: /root 没权限, public 多余)
+        # 正确示例: 
+        alias /home/你的用户名/projects/cbiu-webside/uploads/; 
+        
         expires 30d;
         add_header Cache-Control "public, no-transform";
     }
