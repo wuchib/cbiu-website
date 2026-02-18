@@ -24,6 +24,12 @@ services:
       - HTTP_PROXY=http://127.0.0.1:10808
       - HTTPS_PROXY=http://127.0.0.1:10808
       - NO_PROXY=localhost,127.0.0.1,db,172.17.0.1,172.18.0.1,172.17.0.0/16,172.18.0.0/16
+      # MinIO (S3) 配置
+      - S3_ENDPOINT=${S3_ENDPOINT:-http://cbiu-minio:9000}
+      - S3_ACCESS_KEY=${MINIO_ROOT_USER:-admin}
+      - S3_SECRET_KEY=${MINIO_ROOT_PASSWORD:-password123}
+      - S3_BUCKET_NAME=${S3_BUCKET_NAME:-cbiu-uploads}
+      - S3_REGION=us-east-1
     volumes:
       - ./uploads:/app/public/uploads
 
@@ -49,6 +55,22 @@ services:
     networks:
       - cbiu-network
 
+  minio:
+    image: minio/minio:RELEASE.2025-04-22T22-12-26Z
+    container_name: cbiu-minio
+    restart: always
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000" # API 端口
+      - "9001:9001" # 控制台端口
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-admin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-password123}
+    volumes:
+      - minio-data:/data
+    networks:
+      - cbiu-network
+
 networks:
   # 定义网络
   cbiu-network:
@@ -58,3 +80,4 @@ networks:
 volumes:
   # 定义数据卷
   db-data: # 声明一个具名数据卷，用于持久化数据库数据
+  minio-data: # 声明一个具名数据卷，用于持久化 MinIO 数据

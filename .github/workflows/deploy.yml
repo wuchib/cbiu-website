@@ -27,6 +27,11 @@ jobs:
           docker pull mysql:8.0
           docker save mysql:8.0 -o mysql.tar
           chmod 644 mysql.tar
+          
+          # 拉取并保存 MinIO 镜像（使用旧版本，包含完整控制台功能）
+          docker pull minio/minio:RELEASE.2025-04-22T22-12-26Z
+          docker save minio/minio:RELEASE.2025-04-22T22-12-26Z -o minio.tar
+          chmod 644 minio.tar
       
       - name: Upload files to server
         uses: appleboy/scp-action@v0.1.7
@@ -35,7 +40,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_PORT || 22 }}
-          source: "cbiu-website.tar,mysql.tar,docker-compose.yml"
+          source: "cbiu-website.tar,mysql.tar,minio.tar,docker-compose.yml"
           target: "/var/www/cbiu-website/"
       
       - name: Deploy on server
@@ -68,7 +73,7 @@ jobs:
             # chown -R www-data:www-data /var/www/cbiu-website
             
             echo "📦 Step 1: Checking tar files..."
-            ls -lh cbiu-website.tar mysql.tar
+            ls -lh cbiu-website.tar mysql.tar minio.tar
             
             echo ""
             echo "🛑 Step 2: Stopping containers..."
@@ -82,10 +87,11 @@ jobs:
             echo "📥 Step 4: Loading new images..."
             docker load -i mysql.tar
             docker load -i cbiu-website.tar
+            docker load -i minio.tar
             
             echo ""
             echo "🔍 Step 5: Verifying loaded images..."
-            docker images | grep -E "cbiu-website|mysql"
+            docker images | grep -E "cbiu-website|mysql|minio"
             
             echo ""
             echo "📝 Step 6: docker-compose.yml synced from repository"
@@ -102,7 +108,7 @@ jobs:
             echo ""
             echo "🧹 Step 9: Cleanup..."
             docker image prune -f
-            rm cbiu-website.tar mysql.tar
+            rm cbiu-website.tar mysql.tar minio.tar
             
             echo ""
             echo "✅ Deployment completed successfully!"
