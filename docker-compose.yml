@@ -30,6 +30,7 @@ services:
       - S3_SECRET_KEY=${MINIO_ROOT_PASSWORD:-password123}
       - S3_BUCKET_NAME=${S3_BUCKET_NAME:-cbiu-uploads}
       - S3_REGION=us-east-1
+      - S3_PUBLIC_DOMAIN=${S3_PUBLIC_DOMAIN:-http://localhost:9000}
     volumes:
       - ./uploads:/app/public/uploads
 
