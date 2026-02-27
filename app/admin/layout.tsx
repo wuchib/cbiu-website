@@ -45,6 +45,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                   <NavLink href="/admin/share" icon="ph:share-network" label={t('share')} />
                   <NavLink href="/admin/articles" icon="ph:article" label={t('articles')} />
                   <NavLink href="/admin/projects" icon="ph:projector-screen" label={t('projects')} />
+                  <NavLink href="/admin/todo" icon="ph:check-square-offset" label="Todo" />
                   <NavLink href="/admin/friends" icon="ph:users-three" label="Friend Links" />
                   <div className="pt-4 pb-2 px-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">{t('analytics')}</div>
                   <NavLink href="/admin/visitors" icon="ph:users" label={t('visitors')} />

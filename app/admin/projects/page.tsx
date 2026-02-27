@@ -5,14 +5,25 @@ import { deleteProject } from "@/actions/projects"
 import { getTranslations } from "next-intl/server"
 import { cookies } from "next/headers"
 
+import { Pagination } from "@/components/ui/pagination"
+
 export const dynamic = 'force-dynamic'
 
-export default async function ProjectsAdminPage() {
+export default async function ProjectsAdminPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
   const cookieStore = await cookies();
   const locale = cookieStore.get('NEXT_LOCALE')?.value || 'en';
   const t = await getTranslations({ locale, namespace: 'Admin' });
+  const resolvedParams = await searchParams;
+  const page = parseInt(resolvedParams.page || '1');
+  const pageSize = 10;
+
+  const totalProjects = await prisma.project.count();
+  const totalPages = Math.ceil(totalProjects / pageSize);
+
   const projects = await prisma.project.findMany({
     orderBy: { order: 'asc' }, // Order by manual order first
+    skip: (page - 1) * pageSize,
+    take: pageSize,
   })
 
   return (
@@ -92,6 +103,10 @@ export default async function ProjectsAdminPage() {
             </tbody>
           </table>
         </div>
+      </div>
+
+      <div className="mt-4">
+        <Pagination totalPages={totalPages} currentPage={page} />
       </div>
     </div>
   )

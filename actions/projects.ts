@@ -207,3 +207,31 @@ export async function fetchRepoInfo(url: string) {
     return { success: false, message: 'Failed to fetch repository info' };
   }
 }
+
+export async function getPublicProjects(page = 1, limit = 12) {
+  try {
+    const skip = (page - 1) * limit
+
+    const [total, projects] = await Promise.all([
+      prisma.project.count(),
+      prisma.project.findMany({
+        orderBy: [
+          { order: 'asc' },
+          { createdAt: 'desc' }
+        ],
+        skip,
+        take: limit,
+      })
+    ])
+
+    return {
+      success: true,
+      data: projects,
+      total,
+      hasMore: skip + limit < total
+    }
+  } catch (error) {
+    console.error('Fetch Public Projects Error:', error)
+    return { success: false, data: [], total: 0, hasMore: false }
+  }
+}

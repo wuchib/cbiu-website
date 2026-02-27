@@ -8,12 +8,16 @@ import Link from 'next/link'
 import CategoryManager from './category-manager'
 import { deleteShareResource } from '@/actions/share'
 
+import { Pagination } from '@/components/ui/pagination'
+
 interface ShareDashboardProps {
   resources: (ShareResource & { category: ShareCategory })[]
   categories: (ShareCategory & { _count: { resources: number } })[]
+  totalPages: number
+  currentPage: number
 }
 
-export default function ShareDashboard({ resources: initialResources, categories }: ShareDashboardProps) {
+export default function ShareDashboard({ resources: initialResources, categories, totalPages, currentPage }: ShareDashboardProps) {
   const t = useTranslations('Admin')
   const [activeTab, setActiveTab] = useState<'resources' | 'categories'>('resources')
   const [resources, setResources] = useState(initialResources)
@@ -111,6 +115,9 @@ export default function ShareDashboard({ resources: initialResources, categories
                 </tbody>
               </table>
             </div>
+          </div>
+          <div className="mt-4">
+            <Pagination totalPages={totalPages} currentPage={currentPage} />
           </div>
         </div>
       ) : (

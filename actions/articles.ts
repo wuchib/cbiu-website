@@ -185,3 +185,50 @@ export async function togglePublishArticle(id: string, currentState: boolean) {
         return { message: 'Failed to update status' }
     }
 }
+
+export async function getPublicArticles(page = 1, limit = 12) {
+  try {
+    const skip = (page - 1) * limit
+    
+    // We only want published articles
+    const where = { published: true }
+
+    const [total, articles] = await Promise.all([
+      prisma.article.count({ where }),
+      prisma.article.findMany({
+        where,
+        orderBy: { publishedAt: 'desc' },
+        skip,
+        take: limit,
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          description: true,
+          publishedAt: true,
+          coverImage: true,
+        }
+      })
+    ])
+
+    const formattedArticles = articles.map(article => ({
+      id: article.id,
+      title: article.title,
+      slug: article.slug,
+      description: article.description,
+      date: article.publishedAt ? article.publishedAt.toISOString() : new Date().toISOString(),
+      cover: article.coverImage,
+      tags: [], // Could join tags if needed
+    }))
+
+    return {
+      success: true,
+      data: formattedArticles,
+      total,
+      hasMore: skip + limit < total
+    }
+  } catch (error) {
+    console.error('Fetch Public Articles Error:', error)
+    return { success: false, data: [], total: 0, hasMore: false }
+  }
+}

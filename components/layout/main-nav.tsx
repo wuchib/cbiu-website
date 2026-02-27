@@ -26,6 +26,7 @@ export function MainNav() {
     { title: t("articles"), href: "/articles", icon: "ph:read-cv-logo-bold" },
     { title: t("projects"), href: "/projects", icon: "ph:code-bold" },
     { title: t("share"), href: "/share", icon: "ph:share-network-bold" },
+    { title: t("todo"), href: "/todo", icon: "ph:check-square-offset-bold" },
     { title: t("friends"), href: "/friends", icon: "ph:users-bold" },
     { title: t("about"), href: "/about", icon: "ph:user-bold" },
   ], [t])

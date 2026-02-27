@@ -9,13 +9,37 @@ import { ImageWithSkeleton } from "@/components/ui/image-with-skeleton"
 import { Article } from "@/lib/articles"
 import { useTranslations } from "next-intl"
 
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { getPublicArticles } from "@/actions/articles"
+
 interface ArticleListProps {
-  articles: Article[]
+  initialArticles: Article[]
+  initialHasMore: boolean
 }
 
-export function ArticleList({ articles }: ArticleListProps) {
+export function ArticleList({ initialArticles, initialHasMore }: ArticleListProps) {
   const t = useTranslations("Navigation")
   const tArticles = useTranslations("Articles")
+
+  const [articles, setArticles] = useState(initialArticles)
+  const [page, setPage] = useState(1)
+  const [hasMore, setHasMore] = useState(initialHasMore)
+  const [loading, setLoading] = useState(false)
+
+  const loadMore = async () => {
+    if (loading || !hasMore) return
+    setLoading(true)
+    const nextPage = page + 1
+    const res = await getPublicArticles(nextPage, 12)
+    if (res.success) {
+      // @ts-ignore
+      setArticles(prev => [...prev, ...res.data])
+      setPage(nextPage)
+      setHasMore(res.hasMore)
+    }
+    setLoading(false)
+  }
 
   return (
     <div className="container relative mx-auto min-h-screen max-w-5xl px-4 py-32">
@@ -98,6 +122,20 @@ export function ArticleList({ articles }: ArticleListProps) {
             </motion.div>
           ))}
         </div>
+
+        {hasMore && (
+          <div className="mt-12 flex justify-center pb-8">
+            <Button
+              variant="outline"
+              onClick={loadMore}
+              disabled={loading}
+              className="gap-2 min-w-[140px]"
+            >
+              {loading && <Icon icon="ph:spinner-gap" className="animate-spin w-4 h-4" />}
+              {loading ? "Loading..." : "Load More"}
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   )

@@ -19,6 +19,7 @@ export const messages = {
       "articles": "Articles",
       "projects": "Projects",
       "share": "Share",
+      "todo": "Todo",
       "friends": "Friends",
       "about": "About"
     },
@@ -279,6 +280,7 @@ export const messages = {
       "articles": "文章",
       "projects": "项目",
       "share": "分享",
+      "todo": "待办",
       "friends": "友链",
       "about": "关于"
     },

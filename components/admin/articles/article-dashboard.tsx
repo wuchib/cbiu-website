@@ -8,12 +8,16 @@ import Link from 'next/link'
 import CategoryManager from './category-manager'
 import { deleteArticle, togglePublishArticle } from '@/actions/articles'
 
+import { Pagination } from '@/components/ui/pagination'
+
 interface ArticleDashboardProps {
   articles: (Article & { category?: ArticleCategory | null })[]
   categories: (ArticleCategory & { _count: { articles: number } })[]
+  totalPages: number
+  currentPage: number
 }
 
-export default function ArticleDashboard({ articles: initialArticles, categories }: ArticleDashboardProps) {
+export default function ArticleDashboard({ articles: initialArticles, categories, totalPages, currentPage }: ArticleDashboardProps) {
   const t = useTranslations('Admin')
   const [activeTab, setActiveTab] = useState<'articles' | 'categories'>('articles')
   const [articles, setArticles] = useState(initialArticles)
@@ -123,6 +127,9 @@ export default function ArticleDashboard({ articles: initialArticles, categories
                 </tbody>
               </table>
             </div>
+          </div>
+          <div className="mt-4">
+            <Pagination totalPages={totalPages} currentPage={currentPage} />
           </div>
         </div>
       ) : (

@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { getFriendLinks, deleteFriendLink } from "@/actions/friend-link"
 import { Button } from "@/components/ui/button"
+import { Pagination } from "@/components/ui/pagination"
 import {
   Table,
   TableBody,
@@ -9,11 +10,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Pencil, Trash2, Plus } from "lucide-react"
+import { Pencil, Plus } from "lucide-react"
 import { DeleteButton } from "@/components/admin/delete-button"
 
-export default async function AdminFriendsPage() {
-  const { data: links } = await getFriendLinks()
+export default async function AdminFriendsPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
+  const resolvedParams = await searchParams;
+  const page = parseInt(resolvedParams.page || '1');
+  const limit = 10;
+
+  const { data: links, totalPages = 1 } = await getFriendLinks(page, limit)
 
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
@@ -83,6 +88,10 @@ export default async function AdminFriendsPage() {
             )}
           </TableBody>
         </Table>
+      </div>
+
+      <div className="mt-4">
+        <Pagination totalPages={totalPages} currentPage={page} />
       </div>
     </div>
   )

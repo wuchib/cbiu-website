@@ -4,14 +4,17 @@ import { prisma } from "@/lib/prisma"
 import { FriendLink } from "@prisma/client"
 import { revalidatePath } from "next/cache"
 
-export async function getFriendLinks() {
+export async function getFriendLinks(page = 1, limit = 10) {
   try {
+    const total = await prisma.friendLink.count()
     const links = await prisma.friendLink.findMany({
       orderBy: {
         sortOrder: "asc",
       },
+      skip: (page - 1) * limit,
+      take: limit,
     })
-    return { success: true, data: links }
+    return { success: true, data: links, total, totalPages: Math.ceil(total / limit) }
   } catch (error) {
     return { success: false, error: "Failed to fetch friend links" }
   }
