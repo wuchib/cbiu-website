@@ -101,22 +101,22 @@ export function ArticleDetail({ article, articleId }: ArticleDetailProps) {
   renderCounters.current.clear()
 
   return (
-    <div className="relative lg:flex lg:gap-10 xl:gap-20 items-start">
-      <article className="prose prose-stone dark:prose-invert max-w-none flex-1 min-w-0 lg:prose-lg">
-        <div className="mb-8 border-b pb-8">
-          <h1 className="mb-2 text-4xl font-extrabold tracking-tight lg:text-5xl">{article.title}</h1>
-          <p className="text-xl text-muted-foreground">{article.description}</p>
+    <div>
+      <article className="prose max-w-none flex-1 min-w-0 lg:prose-lg prose-headings:text-[#2C2520] prose-p:text-[#5C5147] prose-a:text-[#C4956A] prose-strong:text-[#2C2520] prose-ul:text-[#5C5147] prose-li:text-[#5C5147] prose-code:text-[#C4956A]">
+        <div className="mb-8 border-b border-[#D4C8BC] pb-8">
+          <h1 className="mb-2 text-4xl font-bold tracking-tight lg:text-5xl text-[#2C2520]">{article.title}</h1>
+          <p className="text-xl text-[#5C5147] mt-4">{article.description}</p>
 
-          <div className="mt-4 flex items-center gap-4">
-            <time className="block text-sm text-muted-foreground">{article.date}</time>
+          <div className="mt-6 flex items-center gap-4 text-[#8B7E74]">
+            <time className="block text-[13px] font-medium">{article.date}</time>
             {article.tags?.map(tag => (
-              <span key={tag} className="text-sm px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">{tag}</span>
+              <span key={tag} className="text-[13px] font-medium text-[#C4956A]">#{tag}</span>
             ))}
           </div>
         </div>
 
         {/* Mobile TOC */}
-        <div className="lg:hidden mb-8 rounded-lg border bg-card text-card-foreground shadow-sm">
+        <div className="mb-8 rounded-lg border bg-card text-card-foreground shadow-sm">
           <details className="group">
             <summary className="flex cursor-pointer items-center justify-between p-4 font-medium transition-colors hover:text-primary">
               <span>{t("tableOfContents")}</span>
@@ -152,10 +152,6 @@ export function ArticleDetail({ article, articleId }: ArticleDetailProps) {
           <CommentSection articleId={articleId} />
         </div>
       </article>
-
-      <aside className="hidden lg:block w-64 shrink-0 sticky top-24">
-        <TableOfContents headings={headings} />
-      </aside>
     </div>
   )
 }

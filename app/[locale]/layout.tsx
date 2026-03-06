@@ -4,12 +4,15 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SessionProvider } from "@/components/providers/session-provider";
-import { MainNav } from "@/components/layout/main-nav";
+import { LeftSidebar } from "@/components/layout/left-sidebar";
+import { RightSidebar } from "@/components/layout/right-sidebar";
 import { AuthWidget } from "@/components/auth/auth-widget";
 import { Footer } from "@/components/layout/footer";
 import { Toaster } from "@/components/ui/sonner";
 import { VisitorTracker } from "@/components/visitor-tracker";
 import "../globals.css";
+
+import { getGlobalSettings } from "@/actions/settings";
 
 // Generate static params for static export if needed, 
 // though we usually rely on middleware for matching.
@@ -27,7 +30,7 @@ export default async function LocaleLayout({
   const { locale } = await params;
 
   // Ensure that the incoming `locale` is valid
-  if (!routing.locales.includes(locale as any)) {
+  if (!routing.locales.includes(locale as (typeof routing.locales)[number])) {
     notFound();
   }
 
@@ -35,9 +38,13 @@ export default async function LocaleLayout({
   // side is the easiest way to get started
   const messages = await getMessages();
 
+  // Fetch global settings
+  const settings = await getGlobalSettings();
+  const pageWidth = settings?.pageWidth || "1200";
+
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className="min-h-screen bg-background font-sans antialiased">
+      <body className="min-h-screen bg-[#F3EBE1] font-sans antialiased text-[#2C2520]">
         <SessionProvider>
           <NextIntlClientProvider messages={messages}>
             <ThemeProvider
@@ -47,13 +54,21 @@ export default async function LocaleLayout({
               disableTransitionOnChange
             >
               <VisitorTracker />
-              <div className="relative flex min-h-screen flex-col">
-                <MainNav />
-                <AuthWidget />
-                <main className="flex-1">{children}</main>
-                <Footer />
-                <Toaster />
+              <div
+                className="relative mx-auto flex min-h-screen w-full"
+                style={{ maxWidth: `${pageWidth}px` }}
+              >
+                <LeftSidebar />
+                <main className="flex-1 flex flex-col min-h-screen w-full">
+                  <div className="flex-1 w-full px-4 md:px-8">
+                    {children}
+                  </div>
+                  <Footer />
+                </main>
+                <RightSidebar />
               </div>
+              <AuthWidget />
+              <Toaster />
             </ThemeProvider>
           </NextIntlClientProvider>
         </SessionProvider>

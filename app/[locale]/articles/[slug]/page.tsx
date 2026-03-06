@@ -1,8 +1,6 @@
 import { notFound } from "next/navigation"
-import { Icon } from "@iconify/react"
-import { Button } from "@/components/ui/button"
 import { Link } from "@/i18n/routing"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, ArrowRight } from "lucide-react"
 import { ArticleDetail } from "@/components/articles/article-detail"
 import { prisma } from "@/lib/prisma"
 
@@ -39,6 +37,26 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
     notFound()
   }
 
+  // 查询上一篇（比当前更新的文章）
+  const prevArticle = await prisma.article.findFirst({
+    where: {
+      published: true,
+      publishedAt: { gt: article.publishedAt ?? undefined }
+    },
+    orderBy: { publishedAt: 'asc' },
+    select: { slug: true, title: true }
+  })
+
+  // 查询下一篇（比当前更旧的文章）
+  const nextArticle = await prisma.article.findFirst({
+    where: {
+      published: true,
+      publishedAt: { lt: article.publishedAt ?? undefined }
+    },
+    orderBy: { publishedAt: 'desc' },
+    select: { slug: true, title: true }
+  })
+
   // Map to the shape expected by ArticleDetail (compatible with Article interface)
   const formattedArticle = {
     ...article,
@@ -52,23 +70,60 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
   }
 
   return (
-    <div className="relative min-h-[calc(100vh-3.5rem)]">
-      {/* Background Element - wrapped to prevent scrollbar */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute right-0 top-0 z-0 opacity-5 dark:opacity-[0.02]">
-          <Icon icon="ph:article-medium-thin" width={600} height={600} />
-        </div>
+    <div className="relative min-h-[calc(100vh-3.5rem)] w-full max-w-none">
+      {/* 粘性返回按钮 */}
+      <div className="sticky top-0 z-30 bg-[#F3EBE1]/80 backdrop-blur-sm py-3 -mx-4 px-4 md:-mx-8 md:px-8">
+        <Link href="/articles" className="inline-flex items-center gap-2 text-[13px] text-[#8B7E74] hover:text-[#C4956A] transition-colors">
+          <ArrowLeft className="h-4 w-4" />
+          返回文章列表
+        </Link>
       </div>
 
-      <div className="container relative mx-auto max-w-5xl px-4 py-24 z-10">
-        <Link href="/articles" className="inline-block mb-8">
-          <Button variant="ghost" className="pl-0 hover:bg-transparent hover:text-primary transition-colors">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Articles
-          </Button>
-        </Link>
-
+      {/* 文章内容 */}
+      <div className="py-8">
         <ArticleDetail article={formattedArticle} articleId={article.id} />
       </div>
+
+      {/* 上一篇 / 下一篇导航 */}
+      <nav className="border-t border-[#D4C8BC] py-8 mt-4">
+        <div className="flex items-stretch justify-between gap-4">
+          {/* 上一篇 */}
+          {prevArticle ? (
+            <Link
+              href={`/articles/${prevArticle.slug}`}
+              className="group flex flex-col gap-1.5 max-w-[45%] text-left"
+            >
+              <span className="text-[12px] text-[#8B7E74] flex items-center gap-1">
+                <ArrowLeft className="h-3 w-3" />
+                上一篇
+              </span>
+              <span className="text-[14px] font-medium text-[#2C2520] group-hover:text-[#C4956A] transition-colors line-clamp-2">
+                {prevArticle.title}
+              </span>
+            </Link>
+          ) : (
+            <div />
+          )}
+
+          {/* 下一篇 */}
+          {nextArticle ? (
+            <Link
+              href={`/articles/${nextArticle.slug}`}
+              className="group flex flex-col items-end gap-1.5 max-w-[45%] text-right"
+            >
+              <span className="text-[12px] text-[#8B7E74] flex items-center gap-1">
+                下一篇
+                <ArrowRight className="h-3 w-3" />
+              </span>
+              <span className="text-[14px] font-medium text-[#2C2520] group-hover:text-[#C4956A] transition-colors line-clamp-2">
+                {nextArticle.title}
+              </span>
+            </Link>
+          ) : (
+            <div />
+          )}
+        </div>
+      </nav>
     </div>
   )
 }

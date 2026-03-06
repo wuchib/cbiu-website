@@ -38,7 +38,7 @@ export function ProjectList({ initialProjects, initialHasMore }: ProjectListProp
   }
 
   return (
-    <div className="container relative mx-auto min-h-screen max-w-5xl px-4 py-32">
+    <div className="container relative mx-auto min-h-screen max-w-5xl px-4">
       {/* Background Element */}
       <div className="absolute -right-20 bottom-20 z-0 opacity-5 dark:opacity-[0.02]">
         <Icon icon="ph:code-block-thin" width={600} height={600} />
