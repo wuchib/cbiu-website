@@ -7,9 +7,9 @@ export function SignInButton() {
   return (
     <button
       onClick={() => signIn('google', { callbackUrl: '/' })}
-      className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2.5 text-sm font-medium text-foreground shadow-sm backdrop-blur-md transition-all hover:bg-white/20 hover:scale-105 supports-[backdrop-filter]:bg-white/5 dark:border-white/10 dark:bg-black/10 dark:hover:bg-black/20"
+      className="flex w-full items-center gap-2 rounded-md text-[12px] text-[#5C5147] hover:bg-[#E8DDD0] hover:text-[#2C2520] transition-colors"
     >
-      <Icon icon="mdi:google" className="h-5 w-5" />
+      <Icon icon="mdi:google" className="h-4 w-4 text-[#8B7E74]" />
       <span>使用 Google 登录</span>
     </button>
   )

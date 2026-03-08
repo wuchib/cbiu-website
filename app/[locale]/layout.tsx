@@ -6,13 +6,25 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SessionProvider } from "@/components/providers/session-provider";
 import { LeftSidebar } from "@/components/layout/left-sidebar";
 import { RightSidebar } from "@/components/layout/right-sidebar";
-import { AuthWidget } from "@/components/auth/auth-widget";
-import { Footer } from "@/components/layout/footer";
 import { Toaster } from "@/components/ui/sonner";
 import { VisitorTracker } from "@/components/visitor-tracker";
 import "../globals.css";
 
 import { getGlobalSettings } from "@/actions/settings";
+import localFont from "next/font/local";
+
+// 引入全局定制字体
+const cangErJinKai = localFont({
+  src: "../../public/fonts/CangErJinKai.ttf",
+  variable: "--font-article-canger",
+  display: "swap",
+});
+
+const jetBrainsMono = localFont({
+  src: "../../public/fonts/JetBrainsMono-Regular.ttf",
+  variable: "--font-article-jetbrains",
+  display: "swap",
+});
 
 // Generate static params for static export if needed, 
 // though we usually rely on middleware for matching.
@@ -44,7 +56,7 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className="min-h-screen bg-[#F3EBE1] font-sans antialiased text-[#2C2520]">
+      <body className={`${cangErJinKai.variable} ${jetBrainsMono.variable} min-h-screen bg-[#F3EBE1] font-sans antialiased text-[#2C2520]`}>
         <SessionProvider>
           <NextIntlClientProvider messages={messages}>
             <ThemeProvider
@@ -63,11 +75,9 @@ export default async function LocaleLayout({
                   <div className="flex-1 w-full px-4 md:px-8">
                     {children}
                   </div>
-                  <Footer />
                 </main>
                 <RightSidebar />
               </div>
-              <AuthWidget />
               <Toaster />
             </ThemeProvider>
           </NextIntlClientProvider>

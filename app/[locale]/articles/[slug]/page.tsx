@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation"
 import { Link } from "@/i18n/routing"
-import { ArrowLeft, ArrowRight } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
 import { ArticleDetail } from "@/components/articles/article-detail"
+import { ReadingProgress } from "@/components/articles/reading-progress"
 import { prisma } from "@/lib/prisma"
 
 // Force dynamic rendering to avoid static generation issues
@@ -71,59 +72,27 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
 
   return (
     <div className="relative min-h-[calc(100vh-3.5rem)] w-full max-w-none">
-      {/* 粘性返回按钮 */}
+      {/* 粘性返回按钮 + 阅读进度 */}
       <div className="sticky top-0 z-30 bg-[#F3EBE1]/80 backdrop-blur-sm py-3 -mx-4 px-4 md:-mx-8 md:px-8">
-        <Link href="/articles" className="inline-flex items-center gap-2 text-[13px] text-[#8B7E74] hover:text-[#C4956A] transition-colors">
-          <ArrowLeft className="h-4 w-4" />
-          返回文章列表
-        </Link>
+        <div className="flex items-center justify-between">
+          <Link href="/articles" className="inline-flex items-center gap-2 text-[13px] text-[#8B7E74] hover:text-[#C4956A] transition-colors">
+            <ArrowLeft className="h-4 w-4" />
+            返回文章列表
+          </Link>
+          <ReadingProgress content={article.content || ''} />
+        </div>
       </div>
 
       {/* 文章内容 */}
       <div className="py-8">
-        <ArticleDetail article={formattedArticle} articleId={article.id} />
+        <ArticleDetail
+          article={formattedArticle}
+          articleId={article.id}
+          prevArticle={prevArticle}
+          nextArticle={nextArticle}
+        />
       </div>
 
-      {/* 上一篇 / 下一篇导航 */}
-      <nav className="border-t border-[#D4C8BC] py-8 mt-4">
-        <div className="flex items-stretch justify-between gap-4">
-          {/* 上一篇 */}
-          {prevArticle ? (
-            <Link
-              href={`/articles/${prevArticle.slug}`}
-              className="group flex flex-col gap-1.5 max-w-[45%] text-left"
-            >
-              <span className="text-[12px] text-[#8B7E74] flex items-center gap-1">
-                <ArrowLeft className="h-3 w-3" />
-                上一篇
-              </span>
-              <span className="text-[14px] font-medium text-[#2C2520] group-hover:text-[#C4956A] transition-colors line-clamp-2">
-                {prevArticle.title}
-              </span>
-            </Link>
-          ) : (
-            <div />
-          )}
-
-          {/* 下一篇 */}
-          {nextArticle ? (
-            <Link
-              href={`/articles/${nextArticle.slug}`}
-              className="group flex flex-col items-end gap-1.5 max-w-[45%] text-right"
-            >
-              <span className="text-[12px] text-[#8B7E74] flex items-center gap-1">
-                下一篇
-                <ArrowRight className="h-3 w-3" />
-              </span>
-              <span className="text-[14px] font-medium text-[#2C2520] group-hover:text-[#C4956A] transition-colors line-clamp-2">
-                {nextArticle.title}
-              </span>
-            </Link>
-          ) : (
-            <div />
-          )}
-        </div>
-      </nav>
     </div>
   )
 }

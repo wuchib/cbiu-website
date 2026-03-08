@@ -9,6 +9,7 @@ import { useTranslations } from "next-intl"
 import { SearchCommand } from "@/components/search-command"
 import { LanguageToggle } from "@/components/language-toggle"
 import { ThemeToggle } from "@/components/layout/theme-toggle"
+import { AuthWidget } from "@/components/auth/auth-widget"
 
 export function LeftSidebar() {
   const pathname = usePathname()
@@ -32,8 +33,8 @@ export function LeftSidebar() {
           <Icon icon="lucide:sparkles" className="h-5 w-5" />
         </div>
         <div className="flex flex-col">
-          <span className="font-bold text-[#2C2520] text-sm">Cbiu的小站 ✨</span>
-          <span className="text-[10px] text-[#8B7E74]">记录生活与技术的点滴</span>
+          <span className="font-bold text-[#2C2520] text-[16px]">Cbiu的小站 ✨</span>
+          <span className="text-[12px] text-[#8B7E74]">记录生活与技术的点滴</span>
         </div>
       </div>
 
@@ -43,12 +44,11 @@ export function LeftSidebar() {
         className="flex h-9 w-full items-center gap-2 rounded-lg bg-[#EDE5DB] px-3 text-[#A89888] hover:bg-[#E8DDD0] transition-colors"
       >
         <Icon icon="lucide:search" className="h-3.5 w-3.5" />
-        <span className="text-[13px]">Search</span>
+        <span className="text-[15px]">Search</span>
       </button>
 
       {/* Main Navigation */}
       <div className="flex flex-col gap-1">
-        <span className="mb-2 text-[11px] font-semibold text-[#8B7E74]">路线牌</span>
         {items.map((item) => {
           const isActive = pathname === item.href || (pathname !== "/" && pathname?.startsWith(item.href) && item.href !== "/")
           return (
@@ -56,7 +56,7 @@ export function LeftSidebar() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex h-8 items-center gap-3 rounded-md px-2 text-[13px] transition-colors",
+                "flex h-8 items-center gap-3 rounded-md px-2 text-[15px] transition-colors",
                 isActive
                   ? "bg-[#E8DDD0] text-[#2C2520] font-semibold"
                   : "text-[#5C5147] hover:bg-[#E8DDD0] hover:text-[#2C2520]"
@@ -72,12 +72,10 @@ export function LeftSidebar() {
         })}
       </div>
 
-      <div className="mt-auto flex flex-col gap-1 text-[11px] text-[#A89888]">
-        <span className="mb-1 font-semibold text-[#8B7E74]">其他</span>
-        <a href="#" className="flex gap-2 text-[#5C5147] hover:text-[#C4956A]">Github / Rss</a>
-        <span className="text-[#8B7E74]">Power by Next.js</span>
-        <span className="text-[#8B7E74]">CC BY-NC-ND 4.0</span>
-        <span>本站由Vercel提供服务</span>
+      <div className="mt-auto flex flex-col items-center gap-1 text-[13px] text-[#A89888]">
+        <AuthWidget />
+        <span className="text-[#8B7E74] mt-1">© 2026 Cbiu. 版权所有</span>
+        <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" className="text-[#8B7E74] hover:text-[#C4956A] transition-colors">粤ICP备2026011005号-1</a>
       </div>
 
       <SearchCommand open={searchOpen} onOpenChange={setSearchOpen} />

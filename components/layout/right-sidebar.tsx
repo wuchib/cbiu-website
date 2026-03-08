@@ -51,8 +51,8 @@ export function RightSidebar() {
     <aside className="sticky top-0 z-40 hidden h-screen w-[240px] shrink-0 flex-col gap-8 bg-[#F3EBE1] p-6 lg:flex overflow-y-auto">
       {/* Heatmap Section */}
       <div className="flex flex-col gap-3">
-        <span className="font-bold text-[13px] text-[#2C2520]">热力图</span>
-        <div className="flex items-center gap-1 text-[10px] text-[#8B7E74]">
+        <span className="font-bold text-[15px] text-[#2C2520]">热力图</span>
+        <div className="flex items-center gap-1 text-[12px] text-[#8B7E74]">
           <Icon icon="lucide:pen-line" className="h-3 w-3" />
           <span>写作伙伴，博主已记录 836 篇文章!</span>
         </div>
@@ -63,16 +63,16 @@ export function RightSidebar() {
 
       {/* Tags Cloud Section */}
       <div className="flex flex-col gap-3">
-        <span className="font-bold text-[13px] text-[#2C2520]">Tags</span>
+        <span className="font-bold text-[15px] text-[#2C2520]">Tags</span>
         <div className="flex flex-col gap-1.5">
           {tags.map((tag) => (
             <div key={tag.name} className="flex items-center justify-between group cursor-pointer hover:bg-[#E8DDD0] -mx-2 px-2 py-1 rounded-md transition-colors">
-              <span className="text-[12px] text-[#C4956A]">#{tag.name}</span>
-              <span className="text-[12px] text-[#8B7E74]">{tag.count}</span>
+              <span className="text-[14px] text-[#C4956A]">#{tag.name}</span>
+              <span className="text-[14px] text-[#8B7E74]">{tag.count}</span>
             </div>
           ))}
           <div className="flex items-center justify-between cursor-pointer group mt-2 -mx-2 px-2 py-1 rounded-md hover:bg-[#E8DDD0] transition-colors">
-            <span className="text-[12px] text-[#C4956A]">#More..</span>
+            <span className="text-[14px] text-[#C4956A]">#More..</span>
             <Icon icon="lucide:arrow-right" className="h-3 w-3 text-[#C4956A]" />
           </div>
         </div>
@@ -83,7 +83,7 @@ export function RightSidebar() {
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         className="mt-auto py-2 flex justify-center hover:bg-[#E8DDD0] rounded-md transition-colors"
       >
-        <span className="font-bold text-[11px] text-[#C4956A]">TOP</span>
+        <span className="font-bold text-[13px] text-[#C4956A]">TOP</span>
       </button>
     </aside>
   )
