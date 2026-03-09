@@ -143,5 +143,12 @@
       "prev": "Previous",
       "next": "Next"
     }
+  },
+  "Projects": {
+    "source": "Source",
+    "demo": "Demo",
+    "noProjects": "No projects yet",
+    "loading": "Loading...",
+    "loadMore": "Load More"
   }
 }

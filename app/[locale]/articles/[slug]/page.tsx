@@ -1,8 +1,6 @@
 import { notFound } from "next/navigation"
-import { Link } from "@/i18n/routing"
-import { ArrowLeft } from "lucide-react"
 import { ArticleDetail } from "@/components/articles/article-detail"
-import { ReadingProgress } from "@/components/articles/reading-progress"
+import { ArticleStoreUpdater } from "@/components/articles/article-store-updater"
 import { prisma } from "@/lib/prisma"
 
 // Force dynamic rendering to avoid static generation issues
@@ -72,16 +70,8 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
 
   return (
     <div className="relative min-h-[calc(100vh-3.5rem)] w-full max-w-none">
-      {/* 粘性返回按钮 + 阅读进度 */}
-      <div className="sticky top-0 z-30 bg-[#F3EBE1]/80 backdrop-blur-sm py-3 -mx-4 px-4 md:-mx-8 md:px-8">
-        <div className="flex items-center justify-between">
-          <Link href="/articles" className="inline-flex items-center gap-2 text-[13px] text-[#8B7E74] hover:text-[#C4956A] transition-colors">
-            <ArrowLeft className="h-4 w-4" />
-            返回文章列表
-          </Link>
-          <ReadingProgress content={article.content || ''} />
-        </div>
-      </div>
+      {/* 实时同步文章内容给全局 DynamicIsland 中的阅读进度组件 */}
+      <ArticleStoreUpdater content={article.content || ''} />
 
       {/* 文章内容 */}
       <div className="py-8">

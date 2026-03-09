@@ -61,7 +61,7 @@ export default function SharePageClient({ categories, title, description }: Shar
   };
 
   return (
-    <div className="container relative mx-auto min-h-screen max-w-5xl px-4">
+    <div className="container relative mx-auto min-h-screen max-w-5xl px-4 pt-10">
       {/* Background Element */}
       <div className="fixed top-0 right-0 -z-10 h-[500px] w-[500px] bg-primary/5 blur-[100px] rounded-full opacity-50 pointer-events-none" />
 

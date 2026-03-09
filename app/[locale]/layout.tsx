@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SessionProvider } from "@/components/providers/session-provider";
 import { LeftSidebar } from "@/components/layout/left-sidebar";
 import { RightSidebar } from "@/components/layout/right-sidebar";
+import { DynamicIsland } from "@/components/layout/dynamic-island";
 import { Toaster } from "@/components/ui/sonner";
 import { VisitorTracker } from "@/components/visitor-tracker";
 import "../globals.css";
@@ -72,6 +73,7 @@ export default async function LocaleLayout({
               >
                 <LeftSidebar />
                 <main className="flex-1 flex flex-col min-h-screen w-full">
+                  <DynamicIsland />
                   <div className="flex-1 w-full px-4 md:px-8">
                     {children}
                   </div>

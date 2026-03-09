@@ -45,7 +45,7 @@ export function ArticleList({ initialArticles, initialHasMore }: ArticleListProp
   }
 
   return (
-    <div className="container relative mx-auto min-h-screen max-w-5xl px-4">
+    <div className="container relative mx-auto min-h-screen max-w-5xl px-4 pt-10">
       <div>
         {articles.map((article, index) => (
           <motion.div

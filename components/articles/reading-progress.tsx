@@ -95,12 +95,12 @@ export function ReadingProgress({ content }: ReadingProgressProps) {
   return (
     <div className="flex items-center gap-3">
       {/* 预估阅读时间 */}
-      <span className="text-[12px] text-[#8B7E74] whitespace-nowrap">
+      <span className="text-[12px] text-[#8B7E74] whitespace-nowrap leading-none">
         阅读时间：约 {estimatedMinutes} 分钟
       </span>
 
       {/* 环状进度 */}
-      <div className="flex items-center gap-1.5">
+      <div className="flex items-center justify-center">
         <svg
           width={size}
           height={size}
@@ -132,14 +132,14 @@ export function ReadingProgress({ content }: ReadingProgressProps) {
 
       {/* 目录按钮 + Popover */}
       {headings.length > 0 && (
-        <div className="relative" ref={tocRef}>
+        <div className="relative flex items-center" ref={tocRef}>
           <button
             onClick={() => setTocOpen(!tocOpen)}
-            className="flex items-center justify-center w-7 h-7 rounded-md hover:bg-[#E8DDD0] transition-colors text-[#8B7E74] hover:text-[#5C5147]"
+            className="flex items-center justify-center w-6 h-6 rounded-md hover:bg-[#E8DDD0] transition-colors text-[#8B7E74] hover:text-[#5C5147]"
             aria-label="目录"
             title="目录"
           >
-            <List className="h-4 w-4" />
+            <List className="h-3.5 w-3.5" />
           </button>
 
           {/* Popover */}
