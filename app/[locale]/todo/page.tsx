@@ -22,7 +22,7 @@ export default async function TodoPage() {
 
   return (
     <main className="min-h-screen pb-20 bg-[#F3EBE1]">
-      <div className="container max-w-5xl mx-auto px-6 pt-10">
+      <div className="container max-w-5xl mx-auto px-6">
         {/* Table Content */}
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-both overflow-x-auto">
           {todos.length > 0 ? (

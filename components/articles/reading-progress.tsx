@@ -1,8 +1,13 @@
 "use client"
 
-import { useEffect, useRef, useState, useMemo } from "react"
+import { useEffect, useState, useMemo } from "react"
 import { List } from "lucide-react"
 import { slugify } from "@/lib/slugify"
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+} from "@/components/ui/dropdown-menu"
 
 interface ReadingProgressProps {
   /** 文章内容，用于计算字数和预估阅读时间 */
@@ -15,7 +20,6 @@ interface ReadingProgressProps {
 export function ReadingProgress({ content }: ReadingProgressProps) {
   const [progress, setProgress] = useState(0)
   const [tocOpen, setTocOpen] = useState(false)
-  const tocRef = useRef<HTMLDivElement>(null)
 
   // 从 content 提取标题
   const headings = useMemo(() => {
@@ -73,17 +77,7 @@ export function ReadingProgress({ content }: ReadingProgressProps) {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  // 点击外部关闭 Popover
-  useEffect(() => {
-    if (!tocOpen) return
-    const handleClickOutside = (e: MouseEvent) => {
-      if (tocRef.current && !tocRef.current.contains(e.target as Node)) {
-        setTocOpen(false)
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [tocOpen])
+
 
   // 环形进度 SVG 参数
   const size = 16
@@ -132,43 +126,45 @@ export function ReadingProgress({ content }: ReadingProgressProps) {
 
       {/* 目录按钮 + Popover */}
       {headings.length > 0 && (
-        <div className="relative flex items-center" ref={tocRef}>
-          <button
-            onClick={() => setTocOpen(!tocOpen)}
-            className="flex items-center justify-center w-6 h-6 rounded-md hover:bg-[#E8DDD0] transition-colors text-[#8B7E74] hover:text-[#5C5147]"
-            aria-label="目录"
-            title="目录"
-          >
-            <List className="h-3.5 w-3.5" />
-          </button>
+        <DropdownMenu open={tocOpen} onOpenChange={setTocOpen}>
+          <DropdownMenuTrigger asChild>
+            <button
+              className="flex items-center justify-center w-6 h-6 rounded-md hover:bg-[#E8DDD0] transition-colors text-[#8B7E74] hover:text-[#5C5147]"
+              aria-label="目录"
+              title="目录"
+            >
+              <List className="h-3.5 w-3.5" />
+            </button>
+          </DropdownMenuTrigger>
 
-          {/* Popover */}
-          {tocOpen && (
-            <div className="absolute right-0 top-full mt-2 w-64 max-h-80 overflow-y-auto rounded-lg border border-[#E8DDD0] bg-[#FAF5EF] shadow-lg p-3 z-50">
-              <p className="text-[12px] font-semibold text-[#5C5147] mb-2">目录</p>
-              <ul className="space-y-0.5">
-                {headings.map((heading) => (
-                  <li key={heading.id}>
-                    <a
-                      href={`#${heading.id}`}
-                      style={{ paddingLeft: `${(heading.level - 1) * 12}px` }}
-                      className="block text-[12px] py-1.5 px-2 rounded-md text-[#5C5147] hover:bg-[#E8DDD0] hover:text-[#2C2520] transition-colors line-clamp-1"
-                      onClick={(e) => {
-                        e.preventDefault()
-                        document.getElementById(heading.id)?.scrollIntoView({
-                          behavior: "smooth",
-                        })
-                        setTocOpen(false)
-                      }}
-                    >
-                      {heading.text}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
+          <DropdownMenuContent
+            align="end"
+            sideOffset={14}
+            className="w-64 max-h-80 overflow-y-auto rounded-lg border border-[#E8DDD0] bg-[#FAF5EF] shadow-lg p-3 z-50"
+          >
+            <p className="text-[12px] font-semibold text-[#5C5147] mb-2 px-2">目录</p>
+            <ul className="space-y-0.5">
+              {headings.map((heading) => (
+                <li key={heading.id}>
+                  <a
+                    href={`#${heading.id}`}
+                    style={{ paddingLeft: `${(heading.level - 1) * 12 + 8}px` }}
+                    className="block text-[12px] py-1.5 pr-2 rounded-md text-[#5C5147] hover:bg-[#E8DDD0] hover:text-[#2C2520] transition-colors line-clamp-1"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      document.getElementById(heading.id)?.scrollIntoView({
+                        behavior: "smooth",
+                      })
+                      setTocOpen(false)
+                    }}
+                  >
+                    {heading.text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </DropdownMenuContent>
+        </DropdownMenu>
       )}
     </div>
   )

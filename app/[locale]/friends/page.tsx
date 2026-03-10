@@ -4,7 +4,8 @@ import { getTranslations } from "next-intl/server"
 import { GridPattern } from "@/components/ui/grid-pattern"
 import { cn } from "@/lib/utils"
 
-export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'Friends' })
 
   return {
@@ -14,7 +15,6 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 }
 
 export default async function FriendsPage() {
-  const t = await getTranslations('Friends')
 
   return (
     <div className="relative min-h-[calc(100vh-4rem)]">
@@ -29,9 +29,7 @@ export default async function FriendsPage() {
         )}
       />
 
-      <div className="container max-w-5xl mx-auto py-32 relative z-10">
-
-
+      <div className="container max-w-5xl mx-auto relative z-10">
         <FriendLinksGrid />
       </div>
     </div>

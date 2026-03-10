@@ -39,27 +39,22 @@ export function ProjectList({ initialProjects, initialHasMore }: ProjectListProp
   return (
     <div className="container relative mx-auto min-h-screen max-w-5xl px-4 pb-8 pt-10">
       {projects.length > 0 ? (
-        <div className="overflow-hidden border border-border/40 bg-border/40">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px]">
+        <div className="overflow-hidden">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-[4px]">
             {projects.map((project) => (
               <div key={project.id} className="relative flex flex-col bg-card">
 
                 <div className="relative z-10 flex flex-col h-full">
                   {/* 项目缩略图 */}
                   {project.thumbnail && (
-                    <div className="relative h-28 w-full overflow-hidden border-b border-border/40">
+                    <div className="relative h-28 w-full rounded-md overflow-hidden">
                       <ImageWithSkeleton
                         src={project.thumbnail}
                         alt={project.title}
                         wrapperClassName="h-full w-full bg-muted/20"
                         className="h-full w-full object-cover"
                       />
-                      {project.stars > 0 && (
-                        <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-black/60 px-2 py-1 text-xs font-medium text-white/95 backdrop-blur-md rounded-xl">
-                          <Icon icon="ph:star-fill" className="text-yellow-400 w-3 h-3" />
-                          {project.stars >= 1000 ? (project.stars / 1000).toFixed(1).replace(/\.0$/, '') + 'k' : project.stars}
-                        </div>
-                      )}
+
                     </div>
                   )}
 
@@ -100,6 +95,13 @@ export function ProjectList({ initialProjects, initialHasMore }: ProjectListProp
                           {tag}
                         </Badge>
                       ))}
+
+                      {project.stars > 0 && (
+                        <Badge variant="secondary" className="text-[10px] px-1.5 py-0 rounded-none font-normal bg-secondary/40 hover:bg-secondary/60 transition-colors text-muted-foreground/80 flex items-center gap-1">
+                          <Icon icon="ph:star-fill" className="text-yellow-400 w-2.5 h-2.5" />
+                          {project.stars >= 1000 ? (project.stars / 1000).toFixed(1).replace(/\.0$/, '') + 'k' : project.stars}
+                        </Badge>
+                      )}
                     </div>
                   </div>
                 </div>

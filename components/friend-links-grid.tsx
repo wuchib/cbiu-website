@@ -10,14 +10,14 @@ export async function FriendLinksGrid() {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
       {links.map((link: any) => (
         <a
           key={link.id}
           href={link.link}
           target="_blank"
           rel="noopener noreferrer"
-          className="group relative flex flex-col items-center p-6 space-y-4 rounded-xl border bg-card text-card-foreground shadow transition-all hover:shadow-lg hover:-translate-y-1 block"
+          className="group relative flex flex-col items-center p-4 space-y-4 rounded-md border bg-card text-card-foreground transition-all hover:-translate-y-1 block"
         >
           <div className="relative h-20 w-20 overflow-hidden rounded-full border-2 border-border group-hover:border-primary transition-colors">
             {link.avatar ? (

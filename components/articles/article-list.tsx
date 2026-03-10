@@ -45,7 +45,7 @@ export function ArticleList({ initialArticles, initialHasMore }: ArticleListProp
   }
 
   return (
-    <div className="container relative mx-auto min-h-screen max-w-5xl px-4 pt-10">
+    <div className="container relative mx-auto min-h-screen max-w-5xl px-4">
       <div>
         {articles.map((article, index) => (
           <motion.div
@@ -56,14 +56,7 @@ export function ArticleList({ initialArticles, initialHasMore }: ArticleListProp
           >
             {/* 装饰性分隔符（非首项显示） */}
             {index > 0 && (
-              <div className="flex items-center justify-start gap-1 py-2">
-                {Array.from({ length: 12 }).map((_, i) => (
-                  <span
-                    key={i}
-                    className="h-[3px] w-[3px] rounded-full bg-muted-foreground/30"
-                  />
-                ))}
-              </div>
+              <div className="h-[3px] w-[60px] rounded-sm bg-[#D4C8BC] my-6" />
             )}
 
             <Link
