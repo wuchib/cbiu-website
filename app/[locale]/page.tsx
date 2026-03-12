@@ -1,6 +1,7 @@
 import { Link } from "@/i18n/routing"
 import { Icon } from "@iconify/react"
 import { prisma } from "@/lib/prisma"
+import { MobileRightSidebarContent } from "@/components/layout/right-sidebar"
 
 export default async function Home() {
   const recentArticles = await prisma.article.findMany({
@@ -83,6 +84,9 @@ export default async function Home() {
         {recentArticles.length === 0 && (
           <div className="text-[#8B7E74] text-[14px]">目前还没有文章哦~</div>
         )}
+      </section>
+      <section className="lg:hidden">
+        <MobileRightSidebarContent />
       </section>
     </div>
   )
