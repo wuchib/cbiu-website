@@ -72,11 +72,11 @@ export default async function LocaleLayout({
                 style={{ maxWidth: `${pageWidth}px` }}
               >
                 <LeftSidebar />
-                <main className="flex-1 flex flex-col min-h-screen w-full">
+                <main className="flex-1 flex flex-col min-h-screen min-w-0">
                   <header className="sticky top-0 z-40 w-full bg-[#F3EBE1]/60 backdrop-blur-md">
                     <DynamicIsland />
                   </header>
-                  <div className="flex-1 w-full px-4 md:px-8">
+                  <div className="flex-1 min-w-0 px-4 md:px-8">
                     {children}
                   </div>
                 </main>

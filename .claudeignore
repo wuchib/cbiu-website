@@ -1,0 +1,26 @@
+# dependencies
+node_modules/
+
+# build
+dist/
+build/
+out/
+.next/
+
+# environment
+.env
+.env.*
+
+# logs
+*.log
+
+# cache
+.cache/
+.tmp/
+
+# data
+*.csv
+*.parquet
+
+# git
+.git/

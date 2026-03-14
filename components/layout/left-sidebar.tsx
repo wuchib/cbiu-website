@@ -7,11 +7,17 @@ import { Icon } from "@iconify/react"
 import { useTranslations } from "next-intl"
 
 import { SearchCommand } from "@/components/search-command"
-import { LanguageToggle } from "@/components/language-toggle"
-import { ThemeToggle } from "@/components/layout/theme-toggle"
 import { AuthWidget } from "@/components/auth/auth-widget"
 
-export function LeftSidebar() {
+type LeftSidebarContentProps = {
+  mobile?: boolean
+  onNavigate?: () => void
+}
+
+export function LeftSidebarContent({
+  mobile = false,
+  onNavigate,
+}: LeftSidebarContentProps) {
   const pathname = usePathname()
   const t = useTranslations("Navigation")
   const [searchOpen, setSearchOpen] = React.useState(false)
@@ -26,7 +32,12 @@ export function LeftSidebar() {
   ], [t])
 
   return (
-    <aside className="sticky top-0 z-40 hidden h-screen w-[220px] shrink-0 flex-col gap-6 bg-[#F3EBE1] p-6 lg:flex overflow-y-auto">
+    <div
+      className={cn(
+        "flex h-full flex-col gap-6 bg-[#F3EBE1] p-6 overflow-y-auto",
+        mobile ? "w-full" : "min-h-screen w-[220px]"
+      )}
+    >
       {/* Logo Area */}
       <div className="flex items-center gap-3">
         <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-[#D4A574] to-[#C4956A] text-white">
@@ -55,6 +66,7 @@ export function LeftSidebar() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={onNavigate}
               className={cn(
                 "flex h-8 items-center gap-3 rounded-md px-2 text-[15px] transition-colors",
                 isActive
@@ -79,6 +91,14 @@ export function LeftSidebar() {
       </div>
 
       <SearchCommand open={searchOpen} onOpenChange={setSearchOpen} />
+    </div>
+  )
+}
+
+export function LeftSidebar() {
+  return (
+    <aside className="sticky top-0 z-40 hidden h-screen w-[220px] shrink-0 lg:flex">
+      <LeftSidebarContent />
     </aside>
   )
 }

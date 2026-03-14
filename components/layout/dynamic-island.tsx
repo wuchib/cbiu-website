@@ -11,6 +11,8 @@ import { articleStore } from "@/lib/article-store"
 import { Link } from "@/i18n/routing"
 import { ArrowLeft } from "lucide-react"
 import { ReadingProgress } from "@/components/articles/reading-progress"
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
+import { LeftSidebarContent } from "@/components/layout/left-sidebar"
 
 const routeConfig: Record<string, { icon: string, desc: string, key: string }> = {
   '/': { icon: 'lucide:home', desc: '欢迎来到我的个人空间', key: 'home' },
@@ -52,15 +54,6 @@ export function DynamicIsland() {
     setMobileMenuOpen(false)
   }, [pathname])
 
-  const navItems = React.useMemo(() => [
-    { title: t("home"), href: "/", icon: "lucide:home" },
-    { title: t("articles"), href: "/articles", icon: "lucide:pen-line" },
-    { title: t("projects"), href: "/projects", icon: "lucide:folder-open" },
-    { title: t("share"), href: "/share", icon: "lucide:share-2" },
-    { title: t("todo"), href: "/todo", icon: "lucide:check-square" },
-    { title: t("friends"), href: "/friends", icon: "lucide:users" },
-  ], [t])
-
   const getRouteInfo = (path: string) => {
     if (path === '/') return routeConfig['/']
     const matched = Object.keys(routeConfig).find(key => key !== '/' && path.startsWith(key))
@@ -79,69 +72,42 @@ export function DynamicIsland() {
     mass: 1,
   } as const
 
+  const showArticleMeta = isArticleDetail && !isExpanded
+
   return (
     // relative 作为绝对定位按钮的锚点
-    <div className="relative sticky top-0 h-16 z-50 flex justify-center w-full pointer-events-none">
+    <div
+      className="relative sticky top-0 h-16 z-50 flex justify-center w-full pointer-events-none"
+    >
 
       {/* 移动端汉堡菜单按钮：绝对定位，不参与 header 文档流，文章详情页隐藏 */}
       {!isArticleDetail && (
         <div className="absolute left-3 top-1/2 -translate-y-1/2 lg:hidden pointer-events-auto z-40">
-          <button
-            onClick={() => setMobileMenuOpen((v) => !v)}
-            aria-label="Toggle menu"
-            className="flex items-center justify-center h-8 w-8 rounded-lg text-[#5C5147] hover:bg-[#E8DDD0] hover:text-[#2C2520] transition-colors"
-          >
-            <Icon icon={mobileMenuOpen ? "lucide:x" : "lucide:menu"} className="h-5 w-5" />
-          </button>
+          <Dialog open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+            <button
+              onClick={() => setMobileMenuOpen(true)}
+              aria-label="Open menu"
+              className="flex items-center justify-center h-8 w-8 rounded-lg text-[#5C5147] hover:bg-[#E8DDD0] hover:text-[#2C2520] transition-colors"
+            >
+              <Icon icon="lucide:menu" className="h-5 w-5" />
+            </button>
 
-          <AnimatePresence>
-            {mobileMenuOpen && (
-              <>
-                {/* 透明遮罩，点击关闭 */}
-                <div
-                  className="fixed inset-0 z-40"
-                  onClick={() => setMobileMenuOpen(false)}
-                />
-                <motion.div
-                  initial={{ opacity: 0, y: -6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute top-full left-0 mt-2 w-48 bg-[#F3EBE1] rounded-xl shadow-lg border border-[#D4C8BC] overflow-hidden z-50"
-                >
-                  {navItems.map((item) => {
-                    const isActive = pathname === item.href || (pathname !== "/" && pathname?.startsWith(item.href) && item.href !== "/")
-                    return (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className={cn(
-                          "flex items-center gap-3 px-4 py-2.5 text-[14px] transition-colors",
-                          isActive
-                            ? "bg-[#E8DDD0] text-[#2C2520] font-semibold"
-                            : "text-[#5C5147] hover:bg-[#E8DDD0] hover:text-[#2C2520]"
-                        )}
-                      >
-                        <Icon
-                          icon={item.icon}
-                          className={cn("h-4 w-4", isActive ? "text-[#C4956A]" : "text-[#8B7E74]")}
-                        />
-                        {item.title}
-                      </Link>
-                    )
-                  })}
-                </motion.div>
-              </>
-            )}
-          </AnimatePresence>
+            <DialogContent
+              variant="drawer-left"
+              className="border-[#D4C8BC] bg-[#F3EBE1]"
+            >
+              <DialogTitle className="sr-only">{t("home")} menu</DialogTitle>
+              <LeftSidebarContent mobile onNavigate={() => setMobileMenuOpen(false)} />
+            </DialogContent>
+          </Dialog>
         </div>
       )}
 
       <div
         className={cn(
           "relative z-50 flex items-center w-[70%] max-w-[80%] lg:w-full lg:max-w-full transition-all duration-300 ease-in-out pointer-events-auto",
-          "mx-auto"
+          "mx-auto",
+          isArticleDetail && "w-full max-w-full justify-between px-3 lg:px-0"
         )}
       >
         {/* 左侧：返回按钮容器 */}
@@ -149,11 +115,11 @@ export function DynamicIsland() {
           layout
           initial={false}
           animate={{
-            opacity: (isArticleDetail && !isExpanded) ? 1 : 0,
+            opacity: showArticleMeta ? 1 : 0,
           }}
           style={{
-            width: (isArticleDetail && !isExpanded) ? 200 : 0,
-            paddingLeft: (isArticleDetail && !isExpanded) ? 12 : 0
+            width: showArticleMeta ? "clamp(132px, 38vw, 200px)" : 0,
+            paddingLeft: showArticleMeta ? 12 : 0
           }}
           transition={springTransition}
           className="flex items-center overflow-hidden"
@@ -178,7 +144,8 @@ export function DynamicIsland() {
           className={cn(
             "bg-[#2C2520] text-[#F3EBE1] shadow-xl flex items-center overflow-hidden cursor-default pointer-events-auto origin-center",
             "border border-[#4A3F35]/30",
-            isExpanded ? "mx-0" : "mx-auto"
+            isExpanded ? "mx-0" : "mx-auto",
+            isArticleDetail && "hidden lg:flex"
           )}
         >
           <AnimatePresence mode="popLayout" initial={false}>
@@ -222,11 +189,11 @@ export function DynamicIsland() {
           layout
           initial={false}
           animate={{
-            opacity: (isArticleDetail && !isExpanded) ? 1 : 0,
+            opacity: showArticleMeta ? 1 : 0,
           }}
           style={{
-            width: (isArticleDetail && !isExpanded) ? 250 : 0,
-            paddingRight: (isArticleDetail && !isExpanded) ? 12 : 0
+            width: showArticleMeta ? "clamp(156px, 48vw, 250px)" : 0,
+            paddingRight: showArticleMeta ? 12 : 0
           }}
           transition={springTransition}
           className="flex items-center justify-end overflow-hidden"
