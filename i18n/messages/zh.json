@@ -143,5 +143,12 @@
       "prev": "上一页",
       "next": "下一页"
     }
+  },
+  "Projects": {
+    "source": "源码",
+    "demo": "演示",
+    "noProjects": "暂无项目",
+    "loading": "加载中...",
+    "loadMore": "加载更多"
   }
 }

@@ -20,10 +20,10 @@ export function UserNav() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="relative h-10 w-10 rounded-full ring-2 ring-white/20 transition-all hover:ring-white/40 hover:scale-105 dark:ring-white/10 dark:hover:ring-white/20">
-          <Avatar className="h-10 w-10">
+        <button className="relative h-7 w-7 rounded-full ring-1 ring-[#D4C8BC] transition-all hover:ring-[#C4956A]">
+          <Avatar className="h-7 w-7">
             <AvatarImage src={session.user.image || ''} alt={session.user.name || ''} />
-            <AvatarFallback className="bg-gradient-to-br from-primary/80 to-primary text-white font-semibold">
+            <AvatarFallback className="bg-gradient-to-br from-[#D4A574] to-[#C4956A] text-white text-[10px] font-semibold">
               {session.user.name?.[0] || 'U'}
             </AvatarFallback>
           </Avatar>

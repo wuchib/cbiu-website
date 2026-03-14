@@ -1,9 +1,6 @@
 import { notFound } from "next/navigation"
-import { Icon } from "@iconify/react"
-import { Button } from "@/components/ui/button"
-import { Link } from "@/i18n/routing"
-import { ArrowLeft } from "lucide-react"
 import { ArticleDetail } from "@/components/articles/article-detail"
+import { ArticleStoreUpdater } from "@/components/articles/article-store-updater"
 import { prisma } from "@/lib/prisma"
 
 // Force dynamic rendering to avoid static generation issues
@@ -39,6 +36,26 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
     notFound()
   }
 
+  // 查询上一篇（比当前更新的文章）
+  const prevArticle = await prisma.article.findFirst({
+    where: {
+      published: true,
+      publishedAt: { gt: article.publishedAt ?? undefined }
+    },
+    orderBy: { publishedAt: 'asc' },
+    select: { slug: true, title: true }
+  })
+
+  // 查询下一篇（比当前更旧的文章）
+  const nextArticle = await prisma.article.findFirst({
+    where: {
+      published: true,
+      publishedAt: { lt: article.publishedAt ?? undefined }
+    },
+    orderBy: { publishedAt: 'desc' },
+    select: { slug: true, title: true }
+  })
+
   // Map to the shape expected by ArticleDetail (compatible with Article interface)
   const formattedArticle = {
     ...article,
@@ -52,23 +69,20 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
   }
 
   return (
-    <div className="relative min-h-[calc(100vh-3.5rem)]">
-      {/* Background Element - wrapped to prevent scrollbar */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute right-0 top-0 z-0 opacity-5 dark:opacity-[0.02]">
-          <Icon icon="ph:article-medium-thin" width={600} height={600} />
-        </div>
+    <div className="relative min-h-[calc(100vh-3.5rem)] w-full max-w-none">
+      {/* 实时同步文章内容给全局 DynamicIsland 中的阅读进度组件 */}
+      <ArticleStoreUpdater content={article.content || ''} />
+
+      {/* 文章内容 */}
+      <div className="py-8">
+        <ArticleDetail
+          article={formattedArticle}
+          articleId={article.id}
+          prevArticle={prevArticle}
+          nextArticle={nextArticle}
+        />
       </div>
 
-      <div className="container relative mx-auto max-w-5xl px-4 py-24 z-10">
-        <Link href="/articles" className="inline-block mb-8">
-          <Button variant="ghost" className="pl-0 hover:bg-transparent hover:text-primary transition-colors">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Articles
-          </Button>
-        </Link>
-
-        <ArticleDetail article={formattedArticle} articleId={article.id} />
-      </div>
     </div>
   )
 }

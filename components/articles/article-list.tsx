@@ -3,11 +3,8 @@
 import { Link } from "@/i18n/routing"
 import { motion } from "framer-motion"
 import { Icon } from "@iconify/react"
-import { Card } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { ImageWithSkeleton } from "@/components/ui/image-with-skeleton"
 import { Article } from "@/lib/articles"
-import { useTranslations } from "next-intl"
+
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -18,9 +15,15 @@ interface ArticleListProps {
   initialHasMore: boolean
 }
 
+// 估算阅读时间（分钟）
+function estimateReadingTime(description?: string): number {
+  if (!description) return 3
+  const wordCount = description.length
+  // 中文大约每分钟阅读 300-500 字
+  return Math.max(1, Math.ceil(wordCount / 400))
+}
+
 export function ArticleList({ initialArticles, initialHasMore }: ArticleListProps) {
-  const t = useTranslations("Navigation")
-  const tArticles = useTranslations("Articles")
 
   const [articles, setArticles] = useState(initialArticles)
   const [page, setPage] = useState(1)
@@ -33,7 +36,7 @@ export function ArticleList({ initialArticles, initialHasMore }: ArticleListProp
     const nextPage = page + 1
     const res = await getPublicArticles(nextPage, 12)
     if (res.success) {
-      // @ts-ignore
+      // @ts-expect-error - response data type mismatch
       setArticles(prev => [...prev, ...res.data])
       setPage(nextPage)
       setHasMore(res.hasMore)
@@ -42,101 +45,86 @@ export function ArticleList({ initialArticles, initialHasMore }: ArticleListProp
   }
 
   return (
-    <div className="container relative mx-auto min-h-screen max-w-5xl px-4 py-32">
-      {/* Background decoration */}
-      <div className="absolute top-20 right-0 -z-10 opacity-5">
-        <Icon icon="ph:read-cv-logo-bold" className="h-96 w-96" />
-      </div>
+    <div className="container relative mx-auto min-h-screen max-w-5xl px-4">
+      <div>
+        {articles.map((article, index) => (
+          <motion.div
+            key={article.slug}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.08, duration: 0.4 }}
+          >
+            {/* 装饰性分隔符（非首项显示） */}
+            {index > 0 && (
+              <div className="h-[3px] w-[60px] rounded-sm bg-[#D4C8BC] my-6" />
+            )}
 
-
-
-      <div className="relative">
-        {/* Timeline Line (Right Side) */}
-        <div className="absolute right-8 top-0 bottom-0 w-px bg-border/50 hidden md:block" />
-
-        <div className="space-y-4 md:space-y-6">
-          {articles.map((article, index) => (
-            <motion.div
-              key={article.slug}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1, duration: 0.5 }}
-              className="group relative flex flex-col md:flex-row md:items-start md:gap-8"
+            <Link
+              href={`/articles/${article.slug}`}
+              className="group block py-5"
             >
-              {/* Timeline Dot */}
-              <div className="absolute right-[27px] top-6 z-10 hidden md:flex h-3 w-3 items-center justify-center rounded-full bg-background ring-2 ring-border transition-colors group-hover:ring-primary">
-                <div className="h-1.5 w-1.5 rounded-full bg-muted-foreground transition-colors group-hover:bg-primary" />
+              {/* 标题 */}
+              <h2 className="text-xl font-bold tracking-tight text-foreground transition-colors duration-200 group-hover:text-primary md:text-2xl">
+                {article.title}
+              </h2>
+
+              {/* 元信息：日期 + 阅读时间 */}
+              <div className="mt-2.5 flex items-center gap-3 text-[13px] text-muted-foreground">
+                <span className="flex items-center gap-1.5">
+                  <Icon icon="ph:calendar-blank" className="h-3.5 w-3.5" />
+                  {new Date(article.date).toLocaleDateString("zh-CN", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Icon icon="ph:clock" className="h-3.5 w-3.5" />
+                  {estimateReadingTime(article.description)} min
+                </span>
               </div>
 
-              {/* Article Content */}
-              <Link href={`/articles/${article.slug}`} className="flex-1">
-                <Card className="overflow-hidden border-border/40 bg-background/50 backdrop-blur-sm transition-all duration-300 hover:border-primary/50 hover:bg-muted/30 hover:shadow-lg hover:shadow-primary/5">
-                  <div className="flex flex-col sm:flex-row h-full">
-                    {/* Cover Image (Compact) */}
-                    <div className="relative h-32 w-full shrink-0 overflow-hidden sm:h-32 sm:w-48">
-                      {article.cover ? (
-                        <ImageWithSkeleton
-                          src={article.cover}
-                          alt={article.title}
-                          wrapperClassName="h-full w-full"
-                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center bg-secondary/30">
-                          <Icon icon="ph:article-medium" className="h-8 w-8 text-muted-foreground/30" />
-                        </div>
+              {/* 标签 */}
+              {article.tags && article.tags.length > 0 && (
+                <div className="mt-2 flex flex-wrap items-center gap-x-1.5 gap-y-1">
+                  {article.tags.map((tag, tagIndex) => (
+                    <span
+                      key={tag}
+                      className="text-[13px] text-primary/80 transition-colors group-hover:text-primary"
+                    >
+                      #{tag}
+                      {tagIndex < article.tags!.length - 1 && (
+                        <span className="ml-1.5 text-muted-foreground/40">,</span>
                       )}
-                    </div>
+                    </span>
+                  ))}
+                </div>
+              )}
 
-                    <div className="flex flex-1 flex-col p-4">
-                      <div className="flex items-center gap-2 text-[10px] text-muted-foreground mb-2">
-                        <span className="flex items-center gap-1">
-                          <Icon icon="ph:calendar-blank" className="h-3 w-3" />
-                          {new Date(article.date).toLocaleDateString()}
-                        </span>
-                        {article.tags && article.tags.length > 0 && (
-                          <>
-                            <span>•</span>
-                            <div className="flex gap-1">
-                              {article.tags.map(tag => (
-                                <Badge key={tag} variant="secondary" className="h-4 px-1 text-[9px] hover:bg-primary hover:text-primary-foreground">
-                                  {tag}
-                                </Badge>
-                              ))}
-                            </div>
-                          </>
-                        )}
-                      </div>
-
-                      <h2 className="mb-1 text-lg font-bold tracking-tight transition-colors group-hover:text-primary line-clamp-1">
-                        {article.title}
-                      </h2>
-
-                      <p className="line-clamp-2 text-xs text-muted-foreground">
-                        {article.description}
-                      </p>
-                    </div>
-                  </div>
-                </Card>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-
-        {hasMore && (
-          <div className="mt-12 flex justify-center pb-8">
-            <Button
-              variant="outline"
-              onClick={loadMore}
-              disabled={loading}
-              className="gap-2 min-w-[140px]"
-            >
-              {loading && <Icon icon="ph:spinner-gap" className="animate-spin w-4 h-4" />}
-              {loading ? "Loading..." : "Load More"}
-            </Button>
-          </div>
-        )}
+              {/* 摘要 */}
+              {article.description && (
+                <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-muted-foreground/70">
+                  {article.description}
+                </p>
+              )}
+            </Link>
+          </motion.div>
+        ))}
       </div>
+
+      {hasMore && (
+        <div className="mt-12 flex justify-center pb-8">
+          <Button
+            variant="outline"
+            onClick={loadMore}
+            disabled={loading}
+            className="gap-2 min-w-[140px]"
+          >
+            {loading && <Icon icon="ph:spinner-gap" className="animate-spin w-4 h-4" />}
+            {loading ? "Loading..." : "Load More"}
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

@@ -32,7 +32,9 @@ export const messages = {
       "description": "A collection of my open source contributions and personal projects.",
       "source": "Source",
       "demo": "Demo",
-      "noProjects": "No projects found. Check back later!"
+      "noProjects": "No projects found. Check back later!",
+      "loading": "Loading...",
+      "loadMore": "Load More"
     },
     "Articles": {
       "title": "Articles",
@@ -293,7 +295,9 @@ export const messages = {
       "description": "我的开源贡献和个人项目合集。",
       "source": "源码",
       "demo": "演示",
-      "noProjects": "暂无项目，敬请期待！"
+      "noProjects": "暂无项目，敬请期待！",
+      "loading": "加载中...",
+      "loadMore": "加载更多"
     },
     "Articles": {
       "title": "文章",
