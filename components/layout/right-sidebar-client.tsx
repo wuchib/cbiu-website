@@ -21,7 +21,12 @@ const tags = [
   { name: "徒步", count: 7 },
 ]
 
-const HEATMAP_COLORS = ["bg-[#E8DDD0]", "bg-[#D4A574]", "bg-[#C4956A]", "bg-[#B5844E]"] as const
+const HEATMAP_COLORS = [
+  "bg-[color:color-mix(in_srgb,var(--sidebar-accent)_92%,transparent)]",
+  "bg-[color:color-mix(in_srgb,var(--color-coffee-600)_55%,var(--sidebar-accent)_45%)]",
+  "bg-[var(--sidebar-primary)]",
+  "bg-[var(--color-coffee-500)]",
+] as const
 const HEATMAP_ROW_LABELS = ["一", "", "三", "", "五", "", "日"]
 
 type SidebarClientProps = {
@@ -53,7 +58,7 @@ function Heatmap({ mobile = false, weeks }: { mobile?: boolean; weeks: HeatmapCe
         {HEATMAP_ROW_LABELS.map((label, index) => (
           <div
             key={`${label}-${index}`}
-            className={`${labelClass} flex items-center font-medium tracking-[0.02em] text-[#8B7E74]`}
+            className={`${labelClass} flex items-center font-medium tracking-[0.02em] text-[color:color-mix(in_srgb,var(--sidebar-foreground)_75%,transparent)]`}
           >
             {label}
           </div>
@@ -69,36 +74,36 @@ function SidebarContent({
   weeks,
 }: SidebarClientProps & { mobile?: boolean }) {
   return (
-    <div className={mobile ? "flex flex-col gap-8 rounded-2xl bg-[#EFE4D8] p-5" : "flex flex-col gap-8"}>
+    <div className={mobile ? "flex flex-col gap-8 rounded-2xl border border-[var(--sidebar-border)] bg-[color:color-mix(in_srgb,var(--sidebar)_88%,var(--foreground)_12%)] p-5" : "flex flex-col gap-8"}>
       <div className="flex flex-col gap-4">
-        <span className="text-[12px] leading-none text-[#8B7E74]">最近 9 周共发布 {totalPublishedArticles} 篇文章</span>
+        <span className="text-[12px] leading-none text-[color:color-mix(in_srgb,var(--sidebar-foreground)_75%,transparent)]">最近 9 周共发布 {totalPublishedArticles} 篇文章</span>
         <Heatmap mobile={mobile} weeks={weeks} />
       </div>
 
       <div className="flex flex-col gap-3">
-        <span className="text-[15px] font-bold text-[#2C2520]">Tags</span>
+        <span className="text-[15px] font-bold text-[var(--foreground)]">Tags</span>
         <div className="flex flex-col gap-1.5">
           {tags.map((tag) => (
             <div
               key={tag.name}
-              className="group -mx-2 flex cursor-pointer items-center justify-between rounded-md px-2 py-1 transition-colors hover:bg-[#E8DDD0]"
+              className="group -mx-2 flex cursor-pointer items-center justify-between rounded-md px-2 py-1 transition-colors hover:bg-[var(--sidebar-accent)]"
             >
-              <span className="text-[14px] text-[#C4956A]">#{tag.name}</span>
-              <span className="text-[14px] text-[#8B7E74]">{tag.count}</span>
+              <span className="text-[14px] text-[var(--sidebar-primary)]">#{tag.name}</span>
+              <span className="text-[14px] text-[color:color-mix(in_srgb,var(--sidebar-foreground)_75%,transparent)]">{tag.count}</span>
             </div>
           ))}
-          <div className="group mt-2 -mx-2 flex cursor-pointer items-center justify-between rounded-md px-2 py-1 transition-colors hover:bg-[#E8DDD0]">
-            <span className="text-[14px] text-[#C4956A]">#More..</span>
-            <Icon icon="lucide:arrow-right" className="h-3 w-3 text-[#C4956A]" />
+          <div className="group mt-2 -mx-2 flex cursor-pointer items-center justify-between rounded-md px-2 py-1 transition-colors hover:bg-[var(--sidebar-accent)]">
+            <span className="text-[14px] text-[var(--sidebar-primary)]">#More..</span>
+            <Icon icon="lucide:arrow-right" className="h-3 w-3 text-[var(--sidebar-primary)]" />
           </div>
         </div>
       </div>
 
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        className="mt-auto flex justify-center rounded-md py-2 transition-colors hover:bg-[#E8DDD0]"
+        className="mt-auto flex justify-center rounded-md py-2 transition-colors hover:bg-[var(--sidebar-accent)]"
       >
-        <span className="text-[13px] font-bold text-[#C4956A]">TOP</span>
+        <span className="text-[13px] font-bold text-[var(--sidebar-primary)]">TOP</span>
       </button>
     </div>
   )
@@ -120,7 +125,7 @@ export function RightSidebarClient(props: SidebarClientProps) {
   if (isArticleDetail) return null
 
   return (
-    <aside className="sticky top-0 z-40 hidden h-screen w-[240px] shrink-0 overflow-y-auto bg-[#F3EBE1] p-6 lg:flex">
+    <aside className="sticky top-0 z-40 hidden h-screen w-[240px] shrink-0 overflow-y-auto border-l border-[var(--sidebar-border)] bg-[var(--sidebar)] p-6 lg:flex">
       <SidebarContent {...props} />
     </aside>
   )

@@ -57,7 +57,7 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className={`${cangErJinKai.variable} ${jetBrainsMono.variable} min-h-screen bg-[#F3EBE1] font-sans antialiased text-[#2C2520]`}>
+      <body className={`${cangErJinKai.variable} ${jetBrainsMono.variable} min-h-screen bg-background font-sans antialiased text-foreground`}>
         <SessionProvider>
           <NextIntlClientProvider messages={messages}>
             <ThemeProvider
@@ -73,7 +73,7 @@ export default async function LocaleLayout({
               >
                 <LeftSidebar />
                 <main className="flex-1 flex flex-col min-h-screen min-w-0">
-                  <header className="sticky top-0 z-40 w-full bg-[#F3EBE1]/60 backdrop-blur-md">
+                  <header className="sticky top-0 z-40 w-full bg-background/60 backdrop-blur-md">
                     <DynamicIsland />
                   </header>
                   <div className="flex-1 min-w-0 px-4 md:px-8">
