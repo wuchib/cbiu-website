@@ -21,23 +21,24 @@ export default async function TodoPage() {
   })
 
   return (
-    <main className="min-h-screen pb-20 bg-[#F3EBE1]">
+    <main className="min-h-screen bg-background pb-20">
       <div className="container max-w-5xl mx-auto px-6">
         {/* Table Content */}
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-both overflow-x-auto">
+        <div className="animate-in fill-mode-both overflow-x-auto fade-in slide-in-from-bottom-4 duration-700">
           {todos.length > 0 ? (
-            <table className="w-full border-collapse">
-              <tbody className="divide-y divide-[#E8DDD0]">
+            <div className="overflow-hidden rounded-3xl border border-border bg-[color:color-mix(in_srgb,var(--card)_92%,var(--foreground)_8%)] shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:shadow-[0_10px_30px_rgba(0,0,0,0.25)]">
+              <table className="w-full border-collapse">
+                <tbody className="divide-y divide-border">
                 {todos.map((todo) => {
                   const meta = STATUS_MAP[todo.status] || STATUS_MAP[0];
                   return (
                     <tr
                       key={todo.id}
-                      className="group hover:bg-[#E8DDD0]/30 transition-colors"
+                      className="group transition-colors hover:bg-accent/40"
                     >
                       {/* Name Column */}
                       <td className="py-5 pr-4 pl-2 min-w-[180px]">
-                        <div className="font-bold text-[16px] text-[#2C2520] group-hover:text-[#C4956A] transition-colors">
+                        <div className="text-[16px] font-bold text-foreground transition-colors group-hover:text-primary">
                           {todo.title}
                         </div>
                       </td>
@@ -51,7 +52,7 @@ export default async function TodoPage() {
 
                       {/* Date Column */}
                       <td className="py-5 px-4 whitespace-nowrap">
-                        <div className="flex items-center gap-2 text-[12px] text-[#8B7E74]">
+                        <div className="flex items-center gap-2 text-[12px] text-muted-foreground">
                           <Icon icon="ph:calendar-blank-duotone" className="w-4 h-4 opacity-70" />
                           <span>{format(todo.createdAt, 'yyyy-MM-dd')}</span>
                         </div>
@@ -59,19 +60,20 @@ export default async function TodoPage() {
 
                       {/* Description Column */}
                       <td className="py-5 px-4 min-w-[240px]">
-                        <p className="text-[14px] text-[#5C5147] leading-relaxed opacity-90">
+                        <p className="text-[14px] leading-relaxed text-muted-foreground opacity-90">
                           {todo.description || <span className="opacity-30 italic">暂无描述</span>}
                         </p>
                       </td>
                     </tr>
                   );
                 })}
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </div>
           ) : (
-            <div className="text-center py-20 px-4 rounded-3xl border border-dashed border-[#E8DDD0] bg-[#E8DDD0]/10">
-              <Icon icon="ph:check-square-offset-duotone" className="w-16 h-16 mx-auto mb-4 text-[#8B7E74]/30" />
-              <p className="text-[#8B7E74] text-lg font-article-canger">目前还没有任何待办事项</p>
+            <div className="rounded-3xl border border-dashed border-border bg-accent/15 px-4 py-20 text-center">
+              <Icon icon="ph:check-square-offset-duotone" className="mx-auto mb-4 h-16 w-16 text-muted-foreground/30" />
+              <p className="text-lg font-article-canger text-muted-foreground">目前还没有任何待办事项</p>
             </div>
           )}
         </div>
